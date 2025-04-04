@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "924997518061",
+    "project_id": "airwater-jinzy",
+    "storage_bucket": "airwater-jinzy.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:924997518061:android:98319bab927b8b72ba42e4",
+        "android_client_info": {
+          "package_name": "com.a1rjinzy.amysoftech"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCSsGTq5Kl5c96tkb8jPuQUcewlfalw8JA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

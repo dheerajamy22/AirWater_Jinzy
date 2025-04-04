@@ -9,6 +9,7 @@ import 'package:demo/encryption_file/encrp_data.dart';
 import 'package:demo/new_dashboard_2024/updated_dashboard_2024.dart';
 import 'package:demo/web_view/web_view_activity.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -156,7 +157,7 @@ class _Login_ActivityState extends State<Login_Activity> {
 
   @override
   void initState() {
-   // startStreaming();
+    // startStreaming();
     _initNetworkInfo();
     super.initState();
   }
@@ -552,21 +553,12 @@ class _Login_ActivityState extends State<Login_Activity> {
       isDismissible: true,
     );
     await pr.show();
-
-    SharedPreferences p = await SharedPreferences.getInstance();
-    String? myUrl = p.getString('url');
-
-    // print('base url corrently   ${EncryptData.decryptAES('YRsNkITarCrGJVm8M7zV1g==')}');
-    // LoginModelResponse _log_param =
-    //     LoginModelResponse(email: user_email.text, password: user_pass.text);
-    // //print(_log_param.toJson());
-
-    // var headers = {'Content-Type': 'application/json'};
-    // var data = json.encode({
-    //   "email": EncryptData.encryptAES(user_email.text),
-    //   "password": EncryptData.encryptAES(user_pass.text)
-    // });
-    // var dio = Dio();
+    String? fcm_token;
+    try {
+      FirebaseMessaging messaging = FirebaseMessaging.instance;
+      fcm_token = await messaging.getToken();
+    } catch (notificationError) {}
+    print('TTTOKENNNN $fcm_token');
 //
     var response = await http.post(
         Uri.parse(
@@ -574,15 +566,11 @@ class _Login_ActivityState extends State<Login_Activity> {
         ),
         body: {
           'email': EncryptData.encryptAES(user_email.text),
-          'password': EncryptData.encryptAES(user_pass.text)
+          'password': EncryptData.encryptAES(user_pass.text),
+          'fcm_token': '$fcm_token',
+          // 'email': user_email.text,
+          // 'password': user_pass.text,
         });
-
-    // if (response.statusCode == 200) {
-    //   print(response.body);
-
-    // } else {
-    //   print(response.body);
-    // }
     print(response.statusCode);
     print(response.body);
     var jsonObject = jsonDecode(response.body);
@@ -626,7 +614,7 @@ class _Login_ActivityState extends State<Login_Activity> {
         await preferences.setString("user_access_token", jsonObject['token']);
         await preferences.setString("login_check", "true");
 
-      //  SharedPreferences preferences = await SharedPreferences.getInstance();
+        //  SharedPreferences preferences = await SharedPreferences.getInstance();
         String? login_value = preferences.getString("login_check");
         print('login se $login_value');
 
@@ -639,6 +627,9 @@ class _Login_ActivityState extends State<Login_Activity> {
     } else if (response.statusCode == 401) {
       Navigator.of(context).pop();
       _showMyDialog(jsonObject['message'], Color(0xFF861F41), 'error');
+    } else if (response.statusCode == 500) {
+      Navigator.of(context).pop();
+      _showMyDialog('Something Went Wrong', Color(0xFF861F41), 'error');
     } else {
       print("else part");
       pr.hide().then((isHidden) {

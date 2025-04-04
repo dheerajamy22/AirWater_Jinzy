@@ -1,3 +1,5 @@
+import 'package:demo/new_leave_managerdashboard/manager_leaveworkflow.dart';
+import 'package:demo/workflow_request_panel/work_flow_request.dart';
 import 'package:flutter/material.dart';
 import 'package:demo/_login_part/login_activity.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -16,19 +18,57 @@ class _onboardingState extends State<onboarding> {
   PageController _controller = PageController();
   bool onlastpage = false;
 
-  void check_login_status() async {
+ void check_login_status() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String? login_value = preferences.getString("login_check");
-    print('ftfftft $login_value');
+    bool? fromNotification = preferences.getBool('fromNotification');
+    String? screenToNavigate = preferences.getString('notification_screen');
+    String? emp_code = preferences.getString('emp_code');
 
-    if (login_value == "true")
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => new upcoming_dash()));
+    // If app is opened from a notification
+
+    if (fromNotification == true) {
+      // Navigate to workfromhome
+
+      if (screenToNavigate == "leave") {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => manager_workflow(
+                      emp_code: '$emp_code',
+                    )));
+
+        preferences.setString('notification_screen', "");
+
+        preferences.setBool('fromNotification', false);
+      } else if (screenToNavigate == "attendance") {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => My_Work_flow_Request(
+                      emp_code: '$emp_code',
+                    )));
+
+        preferences.setString('notification_screen', "");
+        preferences.setBool('fromNotification', false);
+      }
+
+      // After navigating, set 'fromNotification' to false to avoid navigating again next time
+    } else {
+      // If user is logged in, navigate to upcoming_dash
+
+      if (login_value == "true") {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => upcoming_dash()));
+      }
+    }
   }
 
   @override
   void initState() {
-    check_login_status();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+      check_login_status();
+    });
     super.initState();
   }
 

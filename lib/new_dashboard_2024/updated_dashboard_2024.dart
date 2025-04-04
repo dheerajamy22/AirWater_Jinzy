@@ -18,8 +18,10 @@ import 'package:demo/myteam/team.dart';
 import 'package:demo/new_leave_managerdashboard/leave_workflowmethod.dart';
 import 'package:demo/new_leave_page_by_Vikas_Sir/leavelist.dart';
 import 'package:demo/new_leave_page_by_Vikas_Sir/leavelist_method.dart';
+import 'package:demo/purchase_request/purchaserqst.dart';
 import 'package:demo/wfh/maindash_wfh.dart';
 import 'package:demo/workflow_request_panel/all_attandance_aproved_page.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 //import 'package:face_camera/face_camera.dart';
 import 'package:flutter/material.dart';
@@ -359,12 +361,39 @@ class _upcoming_dashState extends State<upcoming_dash> {
             } else if (id == 7) {
             } else if (id == 8) {
               currentPage = DrawerSections.logout;
-              SharedPreferences preferences =
-                  await SharedPreferences.getInstance();
-              await preferences.setString("login_check", "false");
-              preferences.commit();
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => Login_Activity()));
+              final value = await showDialog<bool>(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: Text('Alert'),
+                      content: Text(
+                        'Do you want to Log out',
+                        style: TextStyle(fontSize: 16, fontFamily: 'i_medium'),
+                      ),
+                      actions: [
+                        ElevatedButton(
+                            onPressed: () => Navigator.of(context).pop(null),
+                            child: Text(
+                              'No',
+                              style: TextStyle(
+                                  fontSize: 14, fontFamily: 'i_medium'),
+                            )),
+                        ElevatedButton(
+                            onPressed: () => Navigator.of(context).pop(true),
+                            child: Text(
+                              'Yes',
+                              style: TextStyle(
+                                  fontSize: 14, fontFamily: 'i_medium'),
+                            )),
+                      ],
+                    );
+                  });
+
+              if (value != null) {
+                sendLogoutRequest();
+              } else {
+                return Future.value(false);
+              }
             }
           },
           child: Padding(
@@ -592,79 +621,16 @@ class _upcoming_dashState extends State<upcoming_dash> {
                                             new LatLng(lat, long),
                                             new LatLng(28.6247543, 77.3782848));
                                         if (in_out_visi == true) {
-                                          if (meter < 100.0) {
-                                            //_showcameradailog();
-                                            if (in_out_visi == true) {
-                                              if (checkIn == 0) {
-                                                checkIn++;
-                                                sendCheckIn_Checkout(
-                                                    'In', '', 'Inside', '');
-                                              }
-                                            } else {
-                                              if (checkOut == 0) {
-                                                checkOut++;
-                                                sendCheckIn_Checkout(
-                                                    'Out', '', '', 'Inside');
-                                              }
-                                            }
-                                            if (_capturedImage != null) {
-                                              setState(() {
-                                                _capturedImage = null;
-                                              });
-                                            }
-                                          } else {
-                                            if (in_out_visi == true) {
-                                              if (checkIn == 0) {
-                                                checkIn++;
-                                                sendCheckIn_Checkout(
-                                                    'In', '', 'Outside', '');
-                                              }
-                                            } else {
-                                              if (checkOut == 0) {
-                                                checkOut++;
-                                                sendCheckIn_Checkout(
-                                                    'Out', '', '', 'Outside');
-                                              }
-                                            }
-
-                                            /* _showMyDialog(
-                                                'Your current location don\'t match please try to reach in allocated location',
-                                                MyColor.dialog_error_color,
-                                                'error');*/
+                                          if (checkOut == 0) {
+                                            checkOut++;
+                                            sendCheckIn_Checkout(
+                                                'In', '', '', 'Inside');
                                           }
                                         } else {
-                                          if (meter < 100.0) {
-                                            if (checkOut == 0) {
-                                              if (in_out_visi == true) {
-                                                if (checkIn == 0) {
-                                                  checkIn++;
-                                                  sendCheckIn_Checkout(
-                                                      'In', '', 'Inside', '');
-                                                }
-                                              } else {
-                                                if (checkOut == 0) {
-                                                  checkOut++;
-                                                  sendCheckIn_Checkout(
-                                                      'Out', '', '', 'Inside');
-                                                }
-                                              }
-                                            }
-                                          } else {
-                                            if (checkOut == 0) {
-                                              if (in_out_visi == true) {
-                                                if (checkIn == 0) {
-                                                  checkIn++;
-                                                  sendCheckIn_Checkout(
-                                                      'In', '', 'Outside', '');
-                                                }
-                                              } else {
-                                                if (checkOut == 0) {
-                                                  checkOut++;
-                                                  sendCheckIn_Checkout(
-                                                      'Out', '', '', 'Outside');
-                                                }
-                                              }
-                                            }
+                                          if (checkOut == 0) {
+                                            checkOut++;
+                                            sendCheckIn_Checkout(
+                                                'Out', '', '', 'Inside');
                                           }
                                         }
                                       }
@@ -921,161 +887,6 @@ class _upcoming_dashState extends State<upcoming_dash> {
                                                       const CreteLeaveRequest(
                                                         self_select: 'Self',
                                                       )));
-                                          // if (reported_by == "1") {
-                                          //   showDialog(
-                                          //       context: context,
-                                          //       builder: (BuildContext) {
-                                          //         return AlertDialog(
-                                          //           scrollable: true,
-                                          //           content: Padding(
-                                          //             padding:
-                                          //                 const EdgeInsets.all(
-                                          //                     8.0),
-                                          //             child: Column(
-                                          //               children: [
-                                          //                 Row(
-                                          //                   mainAxisAlignment:
-                                          //                       MainAxisAlignment
-                                          //                           .spaceAround,
-                                          //                   children: [
-                                          //                     Flexible(
-                                          //                       child: InkWell(
-                                          //                         onTap: () {
-                                          //                           Navigator.pop(
-                                          //                               context);
-                                          //                           Navigator.push(
-                                          //                               context,
-                                          //                               MaterialPageRoute(
-                                          //                                   builder: (context) => const CreteLeaveRequest(
-                                          //                                         self_select: 'Self',
-                                          //                                       )));
-                                          //                         },
-                                          //                         child: Card(
-                                          //                           child:
-                                          //                               Container(
-                                          //                             height: MediaQuery.of(context)
-                                          //                                     .size
-                                          //                                     .height *
-                                          //                                 0.15,
-                                          //                             decoration:
-                                          //                                 BoxDecoration(
-                                          //                                     borderRadius: BorderRadius.circular(12)),
-                                          //                             child:
-                                          //                                 Column(
-                                          //                               mainAxisAlignment:
-                                          //                                   MainAxisAlignment.center,
-                                          //                               children: [
-                                          //                                 Center(
-                                          //                                   child:
-                                          //                                       SvgPicture.asset("assets/new_svgs/Self.svg"),
-                                          //                                 ),
-                                          //                                 const SizedBox(
-                                          //                                   height:
-                                          //                                       6,
-                                          //                                 ),
-                                          //                                 const Text(
-                                          //                                     "Self",
-                                          //                                     style: TextStyle(fontFamily: "pop", fontSize: 14))
-                                          //                               ],
-                                          //                             ),
-                                          //                           ),
-                                          //                         ),
-                                          //                       ),
-                                          //                     ),
-                                          //                     Flexible(
-                                          //                       child: InkWell(
-                                          //                         onTap: () {
-                                          //                           Navigator.pop(
-                                          //                               context);
-                                          //                           Navigator.push(
-                                          //                               context,
-                                          //                               MaterialPageRoute(
-                                          //                                   builder: (context) => const CreteLeaveRequest(
-                                          //                                         self_select: 'Onbehalf',
-                                          //                                       )));
-                                          //                         },
-                                          //                         child: Card(
-                                          //                           child:
-                                          //                               Container(
-                                          //                             height: MediaQuery.of(context)
-                                          //                                     .size
-                                          //                                     .height *
-                                          //                                 0.15,
-                                          //                             decoration:
-                                          //                                 BoxDecoration(
-                                          //                                     borderRadius: BorderRadius.circular(12)),
-                                          //                             child:
-                                          //                                 Column(
-                                          //                               mainAxisAlignment:
-                                          //                                   MainAxisAlignment.center,
-                                          //                               children: [
-                                          //                                 Center(
-                                          //                                   child:
-                                          //                                       SvgPicture.asset("assets/new_svgs/Onbehalf.svg"),
-                                          //                                 ),
-                                          //                                 const SizedBox(
-                                          //                                   height:
-                                          //                                       6,
-                                          //                                 ),
-                                          //                                 const Text(
-                                          //                                   "On-Behalf",
-                                          //                                   style:
-                                          //                                       TextStyle(fontFamily: "pop", fontSize: 14),
-                                          //                                 )
-                                          //                               ],
-                                          //                             ),
-                                          //                           ),
-                                          //                         ),
-                                          //                       ),
-                                          //                     )
-                                          //                   ],
-                                          //                 ),
-                                          //                 const SizedBox(
-                                          //                   height: 16,
-                                          //                 ),
-                                          //                 InkWell(
-                                          //                   onTap: () {
-                                          //                     Navigator.of(
-                                          //                             context)
-                                          //                         .pop();
-                                          //                   },
-                                          //                   child: Container(
-                                          //                     width:
-                                          //                         MediaQuery.of(
-                                          //                                 context)
-                                          //                             .size
-                                          //                             .width,
-                                          //                     height: 50,
-                                          //                     decoration: BoxDecoration(
-                                          //                         color: MyColor
-                                          //                             .mainAppColor,
-                                          //                         borderRadius:
-                                          //                             BorderRadius
-                                          //                                 .circular(
-                                          //                                     12)),
-                                          //                     child: const Center(
-                                          //                         child: Text(
-                                          //                       "Cancel",
-                                          //                       style: TextStyle(
-                                          //                           color: MyColor
-                                          //                               .white_color),
-                                          //                     )),
-                                          //                   ),
-                                          //                 )
-                                          //               ],
-                                          //             ),
-                                          //           ),
-                                          //         );
-                                          //       });
-                                          // } else {
-                                          //   Navigator.push(
-                                          //       context,
-                                          //       MaterialPageRoute(
-                                          //           builder: (context) =>
-                                          //               const CreteLeaveRequest(
-                                          //                 self_select: 'Self',
-                                          //               )));
-                                          // }
                                         } else {
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(const SnackBar(
@@ -1093,8 +904,14 @@ class _upcoming_dashState extends State<upcoming_dash> {
                                         alignment: Alignment.center,
                                         child: SvgPicture.asset(
                                           'assets/new_svgs/ApplyLeave.svg',
-                                           width: MediaQuery.of(context).size.width*0.065,
-                                        height: MediaQuery.of(context).size.height*0.03,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.065,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.03,
                                         ),
                                         decoration: BoxDecoration(
                                             borderRadius:
@@ -1142,8 +959,14 @@ class _upcoming_dashState extends State<upcoming_dash> {
                                         alignment: Alignment.center,
                                         child: SvgPicture.asset(
                                           'assets/new_svgs/ApplyWFH.svg',
-                                          width: MediaQuery.of(context).size.width*0.065,
-                                        height: MediaQuery.of(context).size.height*0.03,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.065,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.03,
                                         ),
                                         decoration: BoxDecoration(
                                             borderRadius:
@@ -1186,9 +1009,16 @@ class _upcoming_dashState extends State<upcoming_dash> {
                                                 0.06,
                                         alignment: Alignment.center,
                                         child: SvgPicture.asset(
-                                            'assets/new_svgs/Check_In_Out_1.svg',
-                                             width: MediaQuery.of(context).size.width*0.065,
-                                        height: MediaQuery.of(context).size.height*0.03,),
+                                          'assets/new_svgs/Check_In_Out_1.svg',
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.065,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.03,
+                                        ),
                                         decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(30),
@@ -1228,8 +1058,14 @@ class _upcoming_dashState extends State<upcoming_dash> {
                                         alignment: Alignment.center,
                                         child: SvgPicture.asset(
                                           'assets/new_svgs/Punch.svg',
-                                          width: MediaQuery.of(context).size.width*0.065,
-                                        height: MediaQuery.of(context).size.height*0.03,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.065,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.03,
                                         ),
                                         decoration: BoxDecoration(
                                             borderRadius:
@@ -1281,8 +1117,14 @@ class _upcoming_dashState extends State<upcoming_dash> {
                                           alignment: Alignment.center,
                                           child: SvgPicture.asset(
                                             'assets/new_svgs/Leave_Balance.svg',
-                                             width: MediaQuery.of(context).size.width*0.065,
-                                        height: MediaQuery.of(context).size.height*0.03,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.065,
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.03,
                                           ),
                                           decoration: BoxDecoration(
                                               borderRadius:
@@ -1333,8 +1175,14 @@ class _upcoming_dashState extends State<upcoming_dash> {
                                           alignment: Alignment.center,
                                           child: SvgPicture.asset(
                                             'assets/new_svgs/Leave_History.svg',
-                                            width: MediaQuery.of(context).size.width*0.065,
-                                        height: MediaQuery.of(context).size.height*0.03,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.065,
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.03,
                                           ),
                                           decoration: BoxDecoration(
                                               borderRadius:
@@ -1385,8 +1233,14 @@ class _upcoming_dashState extends State<upcoming_dash> {
                                           alignment: Alignment.center,
                                           child: SvgPicture.asset(
                                             'assets/new_svgs/my_team_icon.svg',
-                                             width: MediaQuery.of(context).size.width*0.035,
-                                        height: MediaQuery.of(context).size.height*0.02,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.035,
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.02,
                                           ),
                                           decoration: BoxDecoration(
                                               borderRadius:
@@ -1438,8 +1292,14 @@ class _upcoming_dashState extends State<upcoming_dash> {
                                           alignment: Alignment.center,
                                           child: SvgPicture.asset(
                                             'assets/new_svgs/half_day.svg',
-                                             width: MediaQuery.of(context).size.width*0.04,
-                                        height: MediaQuery.of(context).size.height*0.025,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.04,
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.025,
                                           ),
                                           decoration: BoxDecoration(
                                               borderRadius:
@@ -1491,8 +1351,14 @@ class _upcoming_dashState extends State<upcoming_dash> {
                                           alignment: Alignment.center,
                                           child: SvgPicture.asset(
                                             'assets/new_svgs/Punch.svg',
-                                             width: MediaQuery.of(context).size.width*0.065,
-                                        height: MediaQuery.of(context).size.height*0.03,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.065,
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.03,
                                           ),
                                           decoration: BoxDecoration(
                                               borderRadius:
@@ -1518,18 +1384,11 @@ class _upcoming_dashState extends State<upcoming_dash> {
                                     children: [
                                       InkWell(
                                         onTap: () {
-                                          if (empstatus == "Confirmed") {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        leavelist()));
-                                          } else {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(SnackBar(
-                                                    content: Text(
-                                                        "Not Applicable")));
-                                          }
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      purchaseRequest()));
                                         },
                                         child: Container(
                                           width: MediaQuery.of(context)
@@ -1543,8 +1402,14 @@ class _upcoming_dashState extends State<upcoming_dash> {
                                           alignment: Alignment.center,
                                           child: SvgPicture.asset(
                                             'assets/new_svgs/Leave_History.svg',
-                                            width: MediaQuery.of(context).size.width*0.065,
-                                        height: MediaQuery.of(context).size.height*0.03,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.065,
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.03,
                                           ),
                                           decoration: BoxDecoration(
                                               borderRadius:
@@ -2802,11 +2667,10 @@ class _upcoming_dashState extends State<upcoming_dash> {
         type +
         current_ip +
         '$_currentAddress');
-// var response = await http.post(Uri.parse('http://10.10.10.252/jinzy.co/appMDDAPI/Mobapp_API.php?action=EMP_CHECK_INOUT_REQUEST'), body: {
+
     var response =
         await http.post(Uri.parse('${baseurl.url}checkinout'), body: {
       'emp_code': EncryptData.decryptAES(user_emp_code),
-      //'e_id': '$e_id',
       'type': type,
       'ip': current_ip,
       'location': '$_currentAddress',
@@ -3219,6 +3083,43 @@ class _upcoming_dashState extends State<upcoming_dash> {
           context, MaterialPageRoute(builder: (context) => Login_Activity()));
     }
     // return filter_list;
+  }
+
+  void sendLogoutRequest() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    _customProgress('Please wait...');
+    String? id = pref.getString('id');
+    String? token = pref.getString('user_access_token');
+    String? fcm_token;
+    try {
+      FirebaseMessaging messaging = FirebaseMessaging.instance;
+      fcm_token = await messaging.getToken();
+    } catch (notificationError) {}
+    print('TTTOKENNNN $fcm_token');
+
+    var response = await http.post(Uri.parse('${baseurl.url}logout'),
+        body: {"fcm_token": "$fcm_token"},
+        headers: {'Authorization': 'Bearer $token'});
+    print('${response.statusCode}');
+    print('${response.body}');
+
+    if (response.statusCode == 200) {
+      var jsonObject = json.decode(response.body);
+
+      await pref.clear();
+
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => Login_Activity()));
+    } else if (response.statusCode == 404) {
+      var jsonObject = json.decode(response.body);
+
+      Navigator.pop(context);
+      _showMyDialog(jsonObject['message'], MyColor.dialog_error_color, 'error');
+    } else if (response.statusCode == 500) {
+      Navigator.pop(context);
+      _showMyDialog(
+          'Something went wrong', MyColor.dialog_error_color, 'error');
+    }
   }
 
   Future<void> _refreshitems() async {
