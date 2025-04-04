@@ -1,0 +1,2 @@
+E:/flutterproject/jinzy_airwater/android/app/.cxx/Debug/1u6r5p1m/armeabi-v7a/CMakeFiles/edit_cache.dir
+E:/flutterproject/jinzy_airwater/android/app/.cxx/Debug/1u6r5p1m/armeabi-v7a/CMakeFiles/rebuild_cache.dir

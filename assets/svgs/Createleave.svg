@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="192" height="192" viewBox="0 0 192 192">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="Rectangle_1390" data-name="Rectangle 1390" width="192" height="192" transform="translate(10559 -14282)" fill="none" stroke="#707070" stroke-width="1"/>
+    </clipPath>
+    <clipPath id="clip-path-2">
+      <rect id="Rectangle_1387" data-name="Rectangle 1387" width="166.19" height="170" fill="#0054a4"/>
+    </clipPath>
+  </defs>
+  <g id="Create_leave" data-name="Create leave" transform="translate(-10559 14282)" clip-path="url(#clip-path)">
+    <g id="Create_Leave-2" data-name="Create Leave" transform="translate(10572.262 -14270.824)">
+      <g id="Group_3025" data-name="Group 3025" clip-path="url(#clip-path-2)">
+        <path id="Path_30418" data-name="Path 30418" d="M198.507,131.57V46.511H160.064V8.058H94.438V30.785H86.872V0h2.9c24.361,0,48.722-.032,73.082.079A6.925,6.925,0,0,1,167.248,1.9q18.839,18.575,37.43,37.4a5.831,5.831,0,0,1,1.642,3.653q.134,46.874.064,93.749c0,.7-.082,1.4-.136,2.271H137.031v-7.4ZM167.989,14.141v24.3h24.333l-24.333-24.3" transform="translate(-40.201 0)" fill="#0054a4"/>
+        <path id="Path_30419" data-name="Path 30419" d="M84.922,259.825H.154c-.052-1-.142-1.947-.143-2.89Q0,235.181.009,213.428c.013-12.024,7.219-19.285,19.169-19.3q23.639-.031,47.278.006c9.235.021,15.571,4.62,18.018,13.1a18.546,18.546,0,0,1,.61,5.027q.069,22.559.022,45.118c0,.78-.114,1.559-.183,2.449M7.98,251.887H77.321v-2.847q0-18.122,0-36.244c-.007-7.067-3.7-10.822-10.71-10.831q-24.035-.03-48.069,0c-6.875.009-10.644,3.756-10.658,10.606q-.04,18.524,0,37.05c0,.7.062,1.4.1,2.267" transform="translate(0 -89.825)" fill="#0054a4"/>
+        <path id="Path_30420" data-name="Path 30420" d="M55.882,79.3A27.012,27.012,0,1,1,28.8,106.207,27.017,27.017,0,0,1,55.882,79.3m19.252,27a19.257,19.257,0,0,0-38.513.011,19.257,19.257,0,1,0,38.513-.011" transform="translate(-13.328 -36.696)" fill="#0054a4"/>
+        <rect id="Rectangle_1384" data-name="Rectangle 1384" width="65.48" height="7.435" transform="translate(81.302 58.169)" fill="#0054a4"/>
+        <rect id="Rectangle_1385" data-name="Rectangle 1385" width="65.465" height="7.403" transform="translate(81.313 77.464)" fill="#0054a4"/>
+        <rect id="Rectangle_1386" data-name="Rectangle 1386" width="57.71" height="7.331" transform="translate(89.146 96.762)" fill="#0054a4"/>
+      </g>
+    </g>
+  </g>
+</svg>
