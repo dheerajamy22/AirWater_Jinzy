@@ -6,7 +6,6 @@ class baseurl{
 
 //new dev jinzy after merging
 
-///checking for commits
 
 // static final String url="https://devjinzy.kefify.com/api/";
  static final String url="https://jinzyairwater.kefify.com/api/";
