@@ -19,6 +19,7 @@ import 'package:demo/new_leave_managerdashboard/leave_workflowmethod.dart';
 import 'package:demo/new_leave_page_by_Vikas_Sir/leavelist.dart';
 import 'package:demo/new_leave_page_by_Vikas_Sir/leavelist_method.dart';
 import 'package:demo/purchase_request/purchaserqst.dart';
+import 'package:demo/travel_expenses/create_travel_expenses.dart';
 import 'package:demo/wfh/maindash_wfh.dart';
 import 'package:demo/workflow_request_panel/all_attandance_aproved_page.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -1388,7 +1389,7 @@ class _upcoming_dashState extends State<upcoming_dash> {
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                      purchaseRequest()));
+                                                      Create_Travel_Activty()));
                                         },
                                         child: Container(
                                           width: MediaQuery.of(context)
@@ -1433,18 +1434,49 @@ class _upcoming_dashState extends State<upcoming_dash> {
                                   alignment: Alignment.center,
                                   child: Column(
                                     children: [
-                                      Container(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.13,
-                                        height:
-                                            MediaQuery.of(context).size.height *
-                                                0.06,
-                                        alignment: Alignment.center,
+                                      InkWell(
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      purchaseRequest()));
+                                        },
+                                        child: Container(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.13,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.06,
+                                          alignment: Alignment.center,
+                                          child: SvgPicture.asset(
+                                            'assets/new_svgs/my_team_icon.svg',
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.035,
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.02,
+                                          ),
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(30),
+                                              color: MyColor.green_color
+                                                  .withOpacity(0.8)),
+                                        ),
                                       ),
                                       Padding(
                                         padding:
                                             const EdgeInsets.only(top: 8.0),
+                                        child: Text(
+                                          'Purchase \n Request',
+                                          textAlign: TextAlign.center,
+                                        ),
                                       ),
                                     ],
                                   ),

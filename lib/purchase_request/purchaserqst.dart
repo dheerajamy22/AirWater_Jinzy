@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:demo/app_color/color_constants.dart';
 import 'package:demo/baseurl/base_url.dart';
 import 'package:demo/purchase_request/itemadd.dart';
+import 'package:demo/purchase_request/itemsearch.dart';
 import 'package:demo/purchase_request/models.dart';
 import 'package:demo/purchase_request/textfield.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +26,7 @@ class _purchaseRequestState extends State<purchaseRequest> {
   List<countryModel> countryList = [];
   List<entityModel> entityList = [];
   List<plantModel> plantList = [];
+  List<addItemModel> additemlist = [];
   String? businessLine,
       selectedProject,
       selectedDepartment,
@@ -92,7 +94,7 @@ class _purchaseRequestState extends State<purchaseRequest> {
       body: SingleChildScrollView(
         child: Padding(
           padding:
-              const EdgeInsets.only(left: 12, right: 12, top: 16, bottom: 16),
+              const EdgeInsets.only(left: 12, right: 12, top: 16, bottom: 30),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -497,30 +499,284 @@ class _purchaseRequestState extends State<purchaseRequest> {
                 ),
               ),
               const SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  InkWell(
+                    onTap: () async {
+                      addItemModel newItem = await Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => addItem()),
+                      );
+
+                      setState(() {
+                        additemlist.add(newItem);
+                      });
+                    },
+                    child: Container(
+                      height: MediaQuery.of(context).size.height * 0.03,
+                      width: MediaQuery.of(context).size.width * 0.2,
+                      decoration: BoxDecoration(
+                          color: const Color(0xFF0054A4),
+                          borderRadius: BorderRadius.circular(5)),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.add, color: MyColor.white_color, size: 16),
+                          const Text(
+                            'Item',
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontFamily: 'pop_m',
+                                color: MyColor.white_color),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 16,
+                  ),
+                  InkWell(
+                    onTap: () async {
+                      List<serachItemModel> data = await Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => searchItem()),
+                      );
+                      setState(() {
+                        for (var item in data) {
+                          // addItemModel array = addItemModel(
+                          //   itemname: item.name,
+                          //   itemcode: item.code,
+                          //   categoryname: item.category,
+                          //   unitname: item.unit,
+                          //   quantity: "1",
+                          //   estimateprice: "0", // Provide a default value
+                          //   netamount: "",
+                          // );
+
+                          addItemModel array = addItemModel(
+                            itemCode: item.code,
+                            itemName: item.name,
+                            category: item.category,
+                            unit: item.unit,
+                            quantity: 1,
+                            estimatePrice: "0",
+                            price: 0.0,
+                          );
+                          additemlist.add(array);
+                        }
+                      });
+                    },
+                    child: Container(
+                      height: MediaQuery.of(context).size.height * 0.03,
+                      width: MediaQuery.of(context).size.width * 0.25,
+                      decoration: BoxDecoration(
+                          color: const Color(0xFF0054A4),
+                          borderRadius: BorderRadius.circular(5)),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.search,
+                              color: MyColor.white_color, size: 16),
+                          const Text(
+                            'Search',
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontFamily: 'pop_m',
+                                color: MyColor.white_color),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              if (additemlist.isEmpty)
+                ...[
+
+              ]else ...[
+                Container(
+                  height: MediaQuery.of(context).size.height *
+                      0.3, // Set a specific height
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                      color: MyColor.white_color,
+                      borderRadius: BorderRadius.circular(5)),
+                  child: ListView.builder(
+                    itemCount: additemlist.length,
+                    itemBuilder: (context, index) {
+                      TextEditingController quantityController =
+                          TextEditingController(
+                              text: additemlist[index].quantity.toString());
+                      quantityController.text =
+                          additemlist[index].quantity.toString();
+                      TextEditingController estimatepriceController =
+                          TextEditingController(
+                              text:
+                                  additemlist[index].estimatePrice.toString());
+                      return Padding(
+                        padding: const EdgeInsets.only(left: 8.0, right: 8),
+                        child: Column(
+                          children: [
+                            Container(
+                              padding: EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  color: MyColor.background_light_blue),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Align(
+                                    alignment: Alignment.topRight,
+                                    child: InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          additemlist.removeAt(index);
+                                        });
+                                      },
+                                      child: Icon(Icons.delete,
+                                          color: MyColor.red_color, size: 16),
+                                    ),
+                                  ),
+                                  Text(
+                                      'Item Name: ${additemlist[index].itemName}',
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          fontFamily: 'pop',
+                                          color: Colors.black)),
+                                  Text(
+                                      'Item Code: ${additemlist[index].itemCode}',
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          fontFamily: 'pop',
+                                          color: Colors.black)),
+                                  Text(
+                                      'Category: ${additemlist[index].category}',
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          fontFamily: 'pop',
+                                          color: Colors.black)),
+                                  Text('Unit: ${additemlist[index].unit}',
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          fontFamily: 'pop',
+                                          color: Colors.black)),
+                                  Row(
+                                    children: [
+                                      Text("Quantity:",
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              fontFamily: 'pop',
+                                              color: Colors.black)),
+                                      Expanded(
+                                        child: TextField(
+                                          controller: quantityController,
+                                          keyboardType: TextInputType.number,
+                                          // decoration: InputDecoration(
+                                          //   border: InputBorder.none
+                                          // ),
+                                          onChanged: (value) {
+                                            setState(() {
+                                              additemlist[index].quantity =
+                                                  double.parse(value);
+                                              if (estimatepriceController
+                                                  .text.isNotEmpty) {
+                                                additemlist[index]
+                                                    .price = (double.parse(
+                                                        estimatepriceController
+                                                            .text) *
+                                                    double.parse(value));
+                                              }
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text("Estimate Price:",
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              fontFamily: 'pop',
+                                              color: Colors.black)),
+                                      Expanded(
+                                        child: TextField(
+                                          controller: estimatepriceController,
+                                          keyboardType: TextInputType.number,
+                                          // decoration: InputDecoration(
+                                          //   border: InputBorder.none
+                                          // ),
+                                          onChanged: (value) {
+                                            setState(() {
+                                              additemlist[index].estimatePrice =
+                                                  value.toString();
+                                              if (quantityController
+                                                  .text.isNotEmpty) {
+                                                additemlist[index].price =
+                                                    (double.parse(
+                                                            quantityController
+                                                                .text) *
+                                                        double.parse(value));
+                                              }
+                                              _total=_total+
+                                                  additemlist[index].price
+                                                      .toString();
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Text(
+                                      'Net Amount: ${additemlist[index].price}',
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          fontFamily: 'pop',
+                                          color: Colors.black)),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 6,
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+              const SizedBox(
+                height: 16,
+              ),
               Align(
-                alignment: Alignment.centerRight,
+                alignment: Alignment.center,
                 child: InkWell(
                   onTap: () {
-                    _itemAddDailog(context);
+                    if (validation()) {
+                      _sendPurchaseRequestData();
+                    }
                   },
                   child: Container(
-                    height: MediaQuery.of(context).size.height * 0.03,
-                    width: MediaQuery.of(context).size.width * 0.2,
+                    width: MediaQuery.of(context).size.width * 0.6,
+                    padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
                         color: const Color(0xFF0054A4),
                         borderRadius: BorderRadius.circular(5)),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.add, color: MyColor.white_color, size: 16),
-                        const Text(
-                          'Item',
+                    child: Center(
+                      child: Text("Save",
                           style: TextStyle(
-                              fontSize: 14,
+                              fontSize: 16,
                               fontFamily: 'pop_m',
-                              color: MyColor.white_color),
-                        ),
-                      ],
+                              color: MyColor.white_color)),
                     ),
                   ),
                 ),
@@ -531,24 +787,74 @@ class _purchaseRequestState extends State<purchaseRequest> {
       ),
     );
   }
-  void _itemAddDailog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Add Item'),
-          content: DropdownDialogContent(),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('Close',style: TextStyle(fontSize: 10),),
-            ),
-          ],
-        );
-      },
-    );
+
+  void _sendPurchaseRequestData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('user_access_token');
+
+    int businessLineId = _businessLineId != null ? int.parse(_businessLineId!) : 0; // or handle it appropriately
+int countryId = _selectedCountryId != null ? int.parse(_selectedCountryId!) : 0; // or handle it appropriately
+int departmentId = _selectedDepartmentId != null ? int.parse(_selectedDepartmentId!) : 0; // or handle it appropriately
+int entityId = _selectedEntityId != null ? int.parse(_selectedEntityId!) : 0; // or handle it appropriately
+int plantId = _selectedPlantId != null ? int.parse(_selectedPlantId!) : 0; // or handle it appropriately
+int projectId = _selectedProjectId != null ? int.parse(_selectedProjectId!) : 0; // or handle it appropriately
+
+  PurchaseRequest purchaseRequest = PurchaseRequest(
+    name: purchaseRequestTitle.text,
+    requestedDate: DateTime.now().toString().split(" ").first,
+    businessLineId: businessLineId,
+    countryId: countryId,
+    departmentId: departmentId,
+    entityId: entityId,
+    plantId: plantId,
+    projectId:  projectId,
+    lines: additemlist,
+  );
+
+
+    var response = await http
+        .post(Uri.parse('${baseurl.url}purchase-request-store'), headers: {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+    }, body: jsonEncode(purchaseRequest.toJson()),);
+  
+  print(response.statusCode);
+  print(response.body);
+  }
+
+  bool validation() {
+    if (purchaseRequestTitle.text.isEmpty) {
+      _showMyDialog('Please Enter Title', MyColor.dialog_error_color, 'error');
+      return false;
+    } else if (_businessLineId == "") {
+      _showMyDialog(
+          'Please Select Business Line', MyColor.dialog_error_color, 'error');
+      return false;
+    } else if (_selectedCountryId == "") {
+      _showMyDialog(
+          'Please Select Country', MyColor.dialog_error_color, 'error');
+      return false;
+    } else if (_selectedDepartmentId == "") {
+      _showMyDialog(
+          'Please Select Department', MyColor.dialog_error_color, 'error');
+      return false;
+    } else if (_selectedEntityId == "") {
+      _showMyDialog(
+          'Please Select Entity', MyColor.dialog_error_color, 'error');
+      return false;
+    } else if (_selectedPlantId == "") {
+      _showMyDialog(
+          'Please Select Facility', MyColor.dialog_error_color, 'error');
+      return false;
+    } else if (_selectedProjectId == "") {
+      _showMyDialog(
+          'Please Select Project', MyColor.dialog_error_color, 'error');
+      return false;
+    } else if (additemlist.isEmpty) {
+      _showMyDialog('Please Add Items', MyColor.dialog_error_color, 'error');
+      return false;
+    }
+    return true;
   }
 
   void getvalue() async {

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:demo/app_color/color_constants.dart';
 import 'package:demo/baseurl/base_url.dart';
 import 'package:demo/purchase_request/models.dart';
 import 'package:demo/purchase_request/textfield.dart';
@@ -7,12 +8,16 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-class DropdownDialogContent extends StatefulWidget {
+class addItem extends StatefulWidget {
+  const addItem({
+    Key? key,
+  });
+
   @override
-  _DropdownDialogContentState createState() => _DropdownDialogContentState();
+  State<addItem> createState() => _addItemState();
 }
 
-class _DropdownDialogContentState extends State<DropdownDialogContent> {
+class _addItemState extends State<addItem> {
   TextEditingController itemcode = TextEditingController();
   TextEditingController itemname = TextEditingController();
   TextEditingController quantity = TextEditingController();
@@ -22,114 +27,354 @@ class _DropdownDialogContentState extends State<DropdownDialogContent> {
   List<unitsModel> UnitList = [];
   String? selectedCategory, selectedCategoryId;
   String? selectedUnit, selectedUnitId;
+  String netamount = "";
+  List<addItemModel> addItemList = [];
 
   @override
   void initState() {
+quantity.text="1";
     getvalue();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          CustomTextField(
-            controller: itemcode,
-            hintText: "Item Code",
-            obscureText: false,
-            keyboardType: TextInputType.text,
-          ),
-          const SizedBox(
-            height: 8,
-          ),
-          CustomTextField(
-            controller: itemname,
-            hintText: "Item Name",
-            obscureText: false,
-            keyboardType: TextInputType.text,
-          ),
-          const SizedBox(
-            height: 8,
-          ),
-          Container(
-            padding: const EdgeInsets.only(left: 10),
-            height: MediaQuery.of(context).size.height * 0.06,
-            decoration: BoxDecoration(
-                border: Border.all(color: const Color(0xFF0054A4)),
-                borderRadius: BorderRadius.circular(5.0)),
-            child: DropdownButton<String>(
-              value: selectedCategory, // Use the correct variable
-              hint: Text("Please Select"),
-              isExpanded: true,
-              items: categoryList.map((_country) {
-                return DropdownMenuItem<String>(
-                  value: _country.id,
-                  child: Text(_country.name),
-                );
-              }).toList(),
-              onChanged: (value) {
-                setState(() {
-                  selectedCategory = value; // Update the correct variable
-                  for (var i in categoryList) {
-                    if (i.id == value) {
-                      selectedCategoryId = i.id;
-                    }
-                  }
-                });
+    return Scaffold(
+      backgroundColor: MyColor.new_light_gray,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(60.0),
+        child: AppBar(
+          elevation: 0.0,
+          backgroundColor: const Color(0xFF0054A4),
+          leading: IconButton(
+              onPressed: () {
+                Navigator.of(context).pop();
               },
-            ),
+              icon: const Icon(
+                Icons.arrow_back,
+                color: MyColor.white_color,
+              )),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                  padding: const EdgeInsets.only(right: 32.0),
+                  child: const Text(
+                    'Add Item',
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontFamily: 'pop',
+                        color: MyColor.white_color),
+                  )),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16.0),
+                    child: Image.asset(
+                      'assets/images/powered_by_tag.png',
+                      width: 90,
+                      height: 20,
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
-          SizedBox(height: 8),
-          Container(
-            padding: const EdgeInsets.only(left: 10),
-            height: MediaQuery.of(context).size.height * 0.06,
-            decoration: BoxDecoration(
-                border: Border.all(color: const Color(0xFF0054A4)),
-                borderRadius: BorderRadius.circular(5.0)),
-            child: DropdownButton<String>(
-              value: selectedUnit, // Use the correct variable
-              hint: Text("Please Select"),
-              isExpanded: true,
-              items: UnitList.map((_country) {
-                return DropdownMenuItem<String>(
-                  value: _country.id,
-                  child: Text(_country.name),
-                );
-              }).toList(),
-              onChanged: (value) {
-                setState(() {
-                  selectedUnit = value; // Update the correct variable
-                  for (var i in UnitList) {
-                    if (i.id == value) {
-                      selectedUnitId = i.id;
-                    }
-                  }
-                });
-              },
-            ),
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding:
+              const EdgeInsets.only(left: 12, right: 12, top: 16, bottom: 30),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                children: [
+                  Text("Item Code",
+                      style: TextStyle(
+                          fontSize: 14,
+                          fontFamily: 'pop',
+                          color: Colors.black)),
+                  Text(" *",
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontFamily: 'pop_m',
+                          color: Colors.red)),
+                ],
+              ),
+              const SizedBox(
+                height: 6,
+              ),
+              CustomTextField(
+                controller: itemcode,
+                hintText: "Item Code",
+                obscureText: false,
+                keyboardType: TextInputType.text,
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              Row(
+                children: [
+                  Text("Item Name",
+                      style: TextStyle(
+                          fontSize: 14,
+                          fontFamily: 'pop',
+                          color: Colors.black)),
+                  Text(" *",
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontFamily: 'pop_m',
+                          color: Colors.red)),
+                ],
+              ),
+              const SizedBox(
+                height: 6,
+              ),
+              CustomTextField(
+                controller: itemname,
+                hintText: "Item Name",
+                obscureText: false,
+                keyboardType: TextInputType.text,
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              Row(
+                children: [
+                  Text("Category",
+                      style: TextStyle(
+                          fontSize: 14,
+                          fontFamily: 'pop',
+                          color: Colors.black)),
+                  Text(" *",
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontFamily: 'pop_m',
+                          color: Colors.red)),
+                ],
+              ),
+              const SizedBox(
+                height: 6,
+              ),
+              Container(
+                padding: const EdgeInsets.only(left: 10),
+                height: MediaQuery.of(context).size.height * 0.06,
+                decoration: BoxDecoration(
+                    border: Border.all(color: const Color(0xFF0054A4)),
+                    borderRadius: BorderRadius.circular(5.0)),
+                child: DropdownButton<String>(
+                  value: selectedCategory, // Use the correct variable
+                  hint: Text("Select Category"),
+                  isExpanded: true,
+                  items: categoryList.map((_country) {
+                    return DropdownMenuItem<String>(
+                      value: _country.id,
+                      child: Text(_country.name),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      selectedCategory = value; // Update the correct variable
+                    });
+                  },
+                ),
+              ),
+              SizedBox(height: 8),
+              Row(
+                children: [
+                  Text("Unit",
+                      style: TextStyle(
+                          fontSize: 14,
+                          fontFamily: 'pop',
+                          color: Colors.black)),
+                  Text(" *",
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontFamily: 'pop_m',
+                          color: Colors.red)),
+                ],
+              ),
+              const SizedBox(
+                height: 6,
+              ),
+              Container(
+                padding: const EdgeInsets.only(left: 10),
+                height: MediaQuery.of(context).size.height * 0.06,
+                decoration: BoxDecoration(
+                    border: Border.all(color: const Color(0xFF0054A4)),
+                    borderRadius: BorderRadius.circular(5.0)),
+                child: DropdownButton<String>(
+                  value: selectedUnit, // Use the correct variable
+                  hint: Text("Select Unit"),
+                  isExpanded: true,
+                  items: UnitList.map((_country) {
+                    return DropdownMenuItem<String>(
+                      value: _country.id,
+                      child: Text(_country.name),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      selectedUnit = value; // Update the correct variable
+                    });
+                  },
+                ),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              Row(
+                children: [
+                  Text("Quantity",
+                      style: TextStyle(
+                          fontSize: 14,
+                          fontFamily: 'pop',
+                          color: Colors.black)),
+                  Text(" *",
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontFamily: 'pop_m',
+                          color: Colors.red)),
+                ],
+              ),
+              const SizedBox(
+                height: 6,
+              ),
+              CustomTextField(
+                controller: quantity,
+                hintText: "Enter Quantity",
+                obscureText: false,
+                keyboardType: TextInputType.number,
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              Row(
+                children: [
+                  Text("Estimate Price",
+                      style: TextStyle(
+                          fontSize: 14,
+                          fontFamily: 'pop',
+                          color: Colors.black)),
+                  Text(" *",
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontFamily: 'pop_m',
+                          color: Colors.red)),
+                ],
+              ),
+              const SizedBox(
+                height: 6,
+              ),
+              Container(
+                padding: const EdgeInsets.only(left: 10),
+                decoration: BoxDecoration(
+                    border: Border.all(color: const Color(0xFF0054A4)),
+                    borderRadius: BorderRadius.circular(5.0)),
+                child: TextField(
+                  controller: estimateprice,
+                  obscureText: false,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    hintText: "Enter Estimate Price",
+                    focusedBorder: InputBorder.none,
+                    border: InputBorder.none,
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      netamount = (double.parse(quantity.text) *
+                              double.parse(estimateprice.text))
+                          .toStringAsFixed(2);
+                      print(netamount);
+                    });
+                  },
+                ),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              Row(
+                children: [
+                  Text("Net Amount",
+                      style: TextStyle(
+                          fontSize: 14,
+                          fontFamily: 'pop',
+                          color: Colors.black)),
+                  Text(" *",
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontFamily: 'pop_m',
+                          color: Colors.red)),
+                ],
+              ),
+              const SizedBox(
+                height: 6,
+              ),
+              Container(
+                alignment: Alignment.centerLeft,
+                padding: const EdgeInsets.only(left: 10),
+                height: MediaQuery.of(context).size.height * 0.06,
+                decoration: BoxDecoration(
+                    border: Border.all(color: const Color(0xFF0054A4)),
+                    borderRadius: BorderRadius.circular(5.0)),
+                child: Text(netamount,
+                    style: TextStyle(
+                        fontSize: 14, fontFamily: 'pop', color: Colors.black)),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: InkWell(
+                  onTap: () {
+                    // addItemModel newItem = addItemModel(
+                    //     itemcode: itemcode.text,
+                    //     itemname: itemname.text,
+                    //     categoryname: selectedCategory!,
+                    //     unitname: selectedUnit!,
+                    //     quantity: quantity.text,
+                    //     estimateprice: estimateprice.text,
+                    //     netamount: netamount);
+
+                    addItemModel newItem = addItemModel(
+                      itemCode: itemcode.text,
+                      itemName: itemname.text,
+                      category: selectedCategory!,
+                      unit: selectedUnit!,
+                      quantity: double.parse(quantity.text),
+                      estimatePrice: estimateprice.text,
+                      price: double.parse(netamount),
+                    );
+
+                    setState(() {
+                      addItemList.add(newItem);
+                    });
+
+                    Navigator.pop(context, newItem);
+                  },
+                  child: Container(
+                    padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                        color: const Color(0xFF0054A4),
+                        borderRadius: BorderRadius.circular(5)),
+                    child: const Text(
+                      'Submit',
+                      style: TextStyle(
+                          fontSize: 14,
+                          fontFamily: 'pop_m',
+                          color: MyColor.white_color),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-          const SizedBox(
-            height: 8,
-          ),
-          CustomTextField(
-            controller: quantity,
-            hintText: "Enter Quantity",
-            obscureText: false,
-            keyboardType: TextInputType.text,
-          ),
-          const SizedBox(
-            height: 8,
-          ),
-          CustomTextField(
-            controller: estimateprice,
-            hintText: "Enter Estimate Price",
-            obscureText: false,
-            keyboardType: TextInputType.text,
-          ),
-        ],
+        ),
       ),
     );
   }
