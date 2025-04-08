@@ -24,5 +24,6 @@ class MyColor{
   static const dialog_error_color=Color(0xFF861F41);
   static const background_light_blue=Color(0xFFD8E6FD);
   static const new_backgroundColor19Apr = Color(0xFFF8F9FA);
+  static const black = Color(0xFF000000);
 
 }

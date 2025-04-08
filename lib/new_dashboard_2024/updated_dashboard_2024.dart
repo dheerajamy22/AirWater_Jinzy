@@ -9,7 +9,9 @@ import 'package:demo/_login_part/login_activity.dart';
 import 'package:demo/attendance_analysis/attendance_analysis.dart';
 import 'package:demo/baseurl/base_url.dart';
 import 'package:demo/birthday_anniversary/birth_ani.dart';
+import 'package:demo/create_overtime_request.dart';
 import 'package:demo/encryption_file/encrp_data.dart';
+import 'package:demo/expense_claim/expenseclaim.dart';
 import 'package:demo/halfday_leave/halfday_dash.dart';
 import 'package:demo/leave_process/create_leave_request.dart';
 import 'package:demo/miss_punch/miss_punch.dart';
@@ -937,18 +939,13 @@ class _upcoming_dashState extends State<upcoming_dash> {
                                   children: [
                                     InkWell(
                                       onTap: () {
-                                        if (empstatus == "Confirmed") {
+                                        
                                           Navigator.push(
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                      main_wfh()));
-                                        } else {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(SnackBar(
-                                                  content:
-                                                      Text("Not Applicable")));
-                                        }
+                                                      CreateOvertimeRequest()));
+                                     
                                       },
                                       child: Container(
                                         width:
@@ -1389,7 +1386,7 @@ class _upcoming_dashState extends State<upcoming_dash> {
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                      Create_Travel_Activty()));
+                                                      expenseClaim()));
                                         },
                                         child: Container(
                                           width: MediaQuery.of(context)

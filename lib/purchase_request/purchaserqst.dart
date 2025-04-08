@@ -1,10 +1,12 @@
 import 'dart:convert';
 
+import 'package:demo/_login_part/login_activity.dart';
 import 'package:demo/app_color/color_constants.dart';
 import 'package:demo/baseurl/base_url.dart';
+import 'package:demo/new_dashboard_2024/updated_dashboard_2024.dart';
 import 'package:demo/purchase_request/itemadd.dart';
 import 'package:demo/purchase_request/itemsearch.dart';
-import 'package:demo/purchase_request/models.dart';
+import 'package:demo/purchase_request/purchaserqstmodels.dart';
 import 'package:demo/purchase_request/textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -595,9 +597,7 @@ class _purchaseRequestState extends State<purchaseRequest> {
               const SizedBox(
                 height: 16,
               ),
-              const SizedBox(
-                height: 16,
-              ),
+             
               if (additemlist.isEmpty)
                 ...[
 
@@ -694,6 +694,7 @@ class _purchaseRequestState extends State<purchaseRequest> {
                                                             .text) *
                                                     double.parse(value));
                                               }
+                                              _calculateTotal();
                                             });
                                           },
                                         ),
@@ -726,9 +727,7 @@ class _purchaseRequestState extends State<purchaseRequest> {
                                                                 .text) *
                                                         double.parse(value));
                                               }
-                                              _total=_total+
-                                                  additemlist[index].price
-                                                      .toString();
+                                              _calculateTotal();
                                             });
                                           },
                                         ),
@@ -792,61 +791,97 @@ class _purchaseRequestState extends State<purchaseRequest> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('user_access_token');
 
-    int businessLineId = _businessLineId != null ? int.parse(_businessLineId!) : 0; // or handle it appropriately
-int countryId = _selectedCountryId != null ? int.parse(_selectedCountryId!) : 0; // or handle it appropriately
-int departmentId = _selectedDepartmentId != null ? int.parse(_selectedDepartmentId!) : 0; // or handle it appropriately
-int entityId = _selectedEntityId != null ? int.parse(_selectedEntityId!) : 0; // or handle it appropriately
-int plantId = _selectedPlantId != null ? int.parse(_selectedPlantId!) : 0; // or handle it appropriately
-int projectId = _selectedProjectId != null ? int.parse(_selectedProjectId!) : 0; // or handle it appropriately
+    int businessLineId = _businessLineId != null
+        ? int.parse(_businessLineId!)
+        : 0; // or handle it appropriately
+    int countryId = _selectedCountryId != null
+        ? int.parse(_selectedCountryId!)
+        : 0; // or handle it appropriately
+    int departmentId = _selectedDepartmentId != null
+        ? int.parse(_selectedDepartmentId!)
+        : 0; // or handle it appropriately
+    int entityId = _selectedEntityId != null
+        ? int.parse(_selectedEntityId!)
+        : 0; // or handle it appropriately
+    int plantId = _selectedPlantId != null
+        ? int.parse(_selectedPlantId!)
+        : 0; // or handle it appropriately
+    int projectId = _selectedProjectId != null
+        ? int.parse(_selectedProjectId!)
+        : 0; // or handle it appropriately
 
-  PurchaseRequest purchaseRequest = PurchaseRequest(
-    name: purchaseRequestTitle.text,
-    requestedDate: DateTime.now().toString().split(" ").first,
-    businessLineId: businessLineId,
-    countryId: countryId,
-    departmentId: departmentId,
-    entityId: entityId,
-    plantId: plantId,
-    projectId:  projectId,
-    lines: additemlist,
-  );
+    PurchaseRequest purchaseRequest = PurchaseRequest(
+      name: purchaseRequestTitle.text,
+      requestedDate: DateTime.now().toString().split(" ").first,
+      businessLineId: businessLineId,
+      countryId: countryId,
+      departmentId: departmentId,
+      entityId: entityId,
+      plantId: plantId,
+      projectId: projectId,
+      lines: additemlist,
+    );
 
+    var response = await http.post(
+      Uri.parse('${baseurl.url}purchase-request-store'),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(purchaseRequest.toJson()),
+    );
 
-    var response = await http
-        .post(Uri.parse('${baseurl.url}purchase-request-store'), headers: {
-      'Authorization': 'Bearer $token',
-      'Content-Type': 'application/json',
-    }, body: jsonEncode(purchaseRequest.toJson()),);
-  
-  print(response.statusCode);
-  print(response.body);
+    print(response.statusCode);
+    print(response.body);
+    var jsonObject = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      _showMyDialog(jsonObject['message'], MyColor.new_light_green, 'success');
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => upcoming_dash()));
+    } else if (response.statusCode == 401) {
+      print("Unauthorized");
+      _showMyDialog(jsonObject['message'], MyColor.dialog_error_color, 'error');
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => Login_Activity()));
+    } else if (response.statusCode == 500) {
+      print("Internal Server Error");
+      _showMyDialog('Something Went Wrong', Color(0xFF861F41), 'error');
+    } else if (response.statusCode == 404) {
+      print("Not Found");
+      _showMyDialog(jsonObject['message'], MyColor.dialog_error_color, 'error');
+    } else if (response.statusCode == 400) {
+      _showMyDialog(jsonObject['message'], MyColor.dialog_error_color, 'error');
+      print("Bad Request");
+    } else {
+      print("Unknown Error");
+    }
   }
 
   bool validation() {
     if (purchaseRequestTitle.text.isEmpty) {
       _showMyDialog('Please Enter Title', MyColor.dialog_error_color, 'error');
       return false;
-    } else if (_businessLineId == "") {
+    } else if (_businessLineId == null) {
       _showMyDialog(
           'Please Select Business Line', MyColor.dialog_error_color, 'error');
       return false;
-    } else if (_selectedCountryId == "") {
+    } else if (_selectedCountryId ==null) {
       _showMyDialog(
           'Please Select Country', MyColor.dialog_error_color, 'error');
       return false;
-    } else if (_selectedDepartmentId == "") {
+    } else if (_selectedDepartmentId == null) {
       _showMyDialog(
           'Please Select Department', MyColor.dialog_error_color, 'error');
       return false;
-    } else if (_selectedEntityId == "") {
+    } else if (_selectedEntityId == null) {
       _showMyDialog(
           'Please Select Entity', MyColor.dialog_error_color, 'error');
       return false;
-    } else if (_selectedPlantId == "") {
+    } else if (_selectedPlantId == null) {
       _showMyDialog(
           'Please Select Facility', MyColor.dialog_error_color, 'error');
       return false;
-    } else if (_selectedProjectId == "") {
+    } else if (_selectedProjectId == null) {
       _showMyDialog(
           'Please Select Project', MyColor.dialog_error_color, 'error');
       return false;
@@ -855,6 +890,16 @@ int projectId = _selectedProjectId != null ? int.parse(_selectedProjectId!) : 0;
       return false;
     }
     return true;
+  }
+
+  void _calculateTotal() {
+    double total = 0.0;
+    for (var item in additemlist) {
+      total += item.price; // Assuming price is already calculated
+    }
+    setState(() {
+      _total = total.toString(); // Update the _total variable
+    });
   }
 
   void getvalue() async {
