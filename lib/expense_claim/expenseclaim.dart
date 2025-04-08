@@ -536,28 +536,35 @@ class _expenseClaimState extends State<expenseClaim> {
                 padding: const EdgeInsets.only(left: 10),
                 height: MediaQuery.of(context).size.height * 0.06,
                 decoration: BoxDecoration(
-                    border: Border.all(color: const Color(0xFF0054A4)),
-                    borderRadius: BorderRadius.circular(5.0)),
-                child: DropdownButton<String>(
-                  value: selectedProject, // Use the correct variable
-                  hint: Text("Please Select"),
-                  isExpanded: true,
-                  items: projectList.map((project) {
-                    return DropdownMenuItem<String>(
-                      value: project.id,
-                      child: Text(project.name),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      selectedProject = value; // Update the correct variable
-                      for (var i in projectList) {
-                        if (i.id == value) {
-                          _selectedProjectId = i.id;
+                  border: Border.all(color: const Color(0xFF0054A4)),
+                  borderRadius: BorderRadius.circular(5.0),
+                ),
+                child: Center(
+                  child: DropdownButton<String>(
+                    value: selectedProject, 
+                    hint: Text("Please Select"),
+                    isExpanded: true,
+                    items: projectList.map((project) {
+                      return DropdownMenuItem<String>(
+                        value: project.description, 
+                        child: Text(project.description),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        selectedProject = value;
+                        for (var project in projectList) {
+                          if (project.description == value) {
+                          
+                            _selectedProjectId = project.id;
+                            print('Selected project ID: $_selectedProjectId');
+                          }
                         }
-                      }
-                    });
-                  },
+                      });
+                    },
+                    underline: SizedBox
+                        .shrink(), // Remove the underline by setting this
+                  ),
                 ),
               ),
               const SizedBox(height: 16),
@@ -805,301 +812,606 @@ class _expenseClaimState extends State<expenseClaim> {
     }
   }
 
-  void bottomDialog() async {
-    // Clear previous data
-    media.clear();
-    amount.clear();
-    selectedCurrency = null;
-    selectedExpenseCategory = null;
-    encodeImage = "";
+//   void bottomDialog() async {
+//     // Clear previous data
+//     media.clear();
+//     amount.clear();
+//     selectedCurrency = null;
+//     selectedExpenseCategory = null;
+//     encodeImage = "";
+//     await showModalBottomSheet(
+//       context: context,
+//       builder: (context) {
+//         return StatefulBuilder(builder: (context, setState) {
+//           return Container(
+//             padding: const EdgeInsets.only(top: 16.0, left: 5, right: 5),
+//             child: Column(
+//               crossAxisAlignment: CrossAxisAlignment.start,
+//               children: [
+//                 Text("Add Expense",
+//                     style: TextStyle(
+//                         fontSize: 16,
+//                         fontFamily: 'pop_m',
+//                         color: Colors.black)),
+//                 const SizedBox(height: 16),
+//                 Row(
+//                   mainAxisAlignment: MainAxisAlignment.spaceAround,
+//                   children: [
+//                     const SizedBox(width: 10),
+//                     Flexible(
+//                       child: Container(
+//                         height: 52,
+//                         alignment: Alignment.center,
+//                         decoration: BoxDecoration(
+//                             border: Border.all(color: Colors.blueAccent),
+//                             borderRadius: BorderRadius.circular(5)),
+//                         child: Padding(
+//                           padding: const EdgeInsets.only(left: 10, right: 10),
+//                           child: DropdownButton<String>(
+//                             value: selectedExpenseCategory,
+//                             hint: Text("Please Select"),
+//                             isExpanded: true,
+//                             items: ExpenseCategorylist.map((category) {
+//                               return DropdownMenuItem<String>(
+//                                 value: category.categoery_name,
+//                                 child: Text(category.categoery_name),
+//                               );
+//                             }).toList(),
+//                             onChanged: (value) {
+//                               setState(() {
+//                                 selectedExpenseCategory = value;
+//                                 // Update the corresponding ID
+//                                 _selectedExpenseCategoryId =
+//                                     ExpenseCategorylist.firstWhere((cat) =>
+//                                             cat.categoery_name == value)
+//                                         .id
+//                                         .toString();
+//                               });
+//                             },
+//                           ),
+//                         ),
+//                       ),
+//                     ),
+//                     const SizedBox(width: 10),
+//                     Flexible(
+//                       child: Container(
+//                         height: MediaQuery.of(context).size.height * 0.06,
+//                         decoration: BoxDecoration(
+//                             border: Border.all(color: const Color(0xFF0054A4)),
+//                             borderRadius: BorderRadius.circular(5.0)),
+//                         child: Padding(
+//                           padding: const EdgeInsets.only(right: 8.0),
+//                           child: TextField(
+//                             controller: FromedateInput,
+//                             decoration: const InputDecoration(
+//                               focusedBorder: InputBorder.none,
+//                               border: InputBorder.none,
+//                               icon: Icon(
+//                                 Icons.calendar_today,
+//                                 color: Color(0xFF0054A4),
+//                               ),
+//                               hintText: "From date",
+//                               hintStyle: TextStyle(
+//                                   color: Colors.grey,
+//                                   fontFamily: "pop",
+//                                   fontSize: 14),
+//                             ),
+//                             style: const TextStyle(
+//                                 color: Colors.black,
+//                                 fontSize: 16,
+//                                 fontFamily: 'pop'),
+//                             readOnly: true,
+//                             onTap: () async {
+//                               DateTime? pickedDate = await showDatePicker(
+//                                 context: context,
+//                                 initialDate: DateTime.now(),
+//                                 firstDate: DateTime(2000),
+//                                 lastDate: DateTime(2100),
+//                               );
 
-    await showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        return StatefulBuilder(builder: (context, setState) {
-          return Container(
-            padding: const EdgeInsets.only(top: 16.0, left: 5, right: 5),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("Add Expense",
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontFamily: 'pop_m',
-                        color: Colors.black)),
-                const SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    const SizedBox(width: 10),
-                    Flexible(
-                      child: Container(
-                        height: 52,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.blueAccent),
-                            borderRadius: BorderRadius.circular(5)),
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 10, right: 10),
-                          child: DropdownButton<String>(
-                            value: selectedExpenseCategory,
-                            hint: Text("Please Select"),
-                            isExpanded: true,
-                            items: ExpenseCategorylist.map((category) {
-                              return DropdownMenuItem<String>(
-                                value: category.categoery_name,
-                                child: Text(category.categoery_name),
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                selectedExpenseCategory = value;
-                                // Update the corresponding ID
-                                _selectedExpenseCategoryId =
-                                    ExpenseCategorylist.firstWhere((cat) =>
-                                            cat.categoery_name == value)
-                                        .id
-                                        .toString();
-                              });
-                            },
-                          ),
+//                               if (pickedDate != null) {
+//                                 String formattedDate =
+//                                     DateFormat('yyyy-MM-dd').format(pickedDate);
+//                                 setState(() {
+//                                   FromedateInput.text = formattedDate;
+//                                 });
+//                               }
+//                             },
+//                           ),
+//                         ),
+//                       ),
+//                     ),
+//                   ],
+//                 ),
+//                 const SizedBox(height: 16),
+//                 Expanded(
+//                   child: Column(
+//                     children: [
+//                       Row(
+//                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//                         children: [
+//                           const SizedBox(width: 10),
+//                           Flexible(
+//                             child: CustomTextField(
+//                               controller: amount,
+//                               hintText: "Amount",
+//                               obscureText: false,
+//                               keyboardType: TextInputType.number,
+//                             ),
+//                           ),
+//                           const SizedBox(width: 10),
+//                           Flexible(
+//                             child: Container(
+//                               height: 52,
+//                               alignment: Alignment.center,
+//                               decoration: BoxDecoration(
+//                                   border: Border.all(color: Colors.blueAccent),
+//                                   borderRadius: BorderRadius.circular(5)),
+//                               child: Padding(
+//                                 padding:
+//                                     const EdgeInsets.only(left: 10, right: 10),
+//                                 child: DropdownButton<String>(
+//                                   value: selectedCurrency,
+//                                   hint: Text("Please Currency"),
+//                                   isExpanded: true,
+//                                   items: currencyList.map((category) {
+//                                     return DropdownMenuItem<String>(
+//                                       value: category.currency_name,
+//                                       child: Text(category.currency_name),
+//                                     );
+//                                   }).toList(),
+//                                   onChanged: (value) {
+//                                     setState(() {
+//                                       selectedCurrency = value;
+//                                       _slectedCurrencyId = currencyList
+//                                           .firstWhere((curr) =>
+//                                               curr.currency_name == value)
+//                                           .id
+//                                           .toString();
+//                                     });
+//                                   },
+//                                 ),
+//                               ),
+//                             ),
+//                           ),
+//                           const SizedBox(width: 10),
+//                         ],
+//                       ),
+//                       Row(
+//                         mainAxisAlignment: MainAxisAlignment.spaceAround,
+//                         children: [
+//                           Wrap(
+//                             children: [
+//                               iconTextButto('Camera', Color(0xFF0054A4),
+//                                   () async {
+//                                 final images = await ImagePicker()
+//                                     .pickImage(source: ImageSource.camera);
+//                                 if (images != null) {
+//                                   final bytes =
+//                                       File(images.path).readAsBytesSync();
+//                                   encodeImage = base64Encode(bytes);
+//                                   File file = File(images.path);
+//                                   setState(() {
+//                                     media.add({'type': 'images', 'file': file});
+//                                   });
+//                                 }
+//                               },
+//                                   const Icon(Icons.camera_alt,
+//                                       color: MyColor.white_color),
+//                                   context),
+//                               iconTextButto('Gallery', Color(0xFF0054A4),
+//                                   () async {
+//                                 final images = await ImagePicker()
+//                                     .pickImage(source: ImageSource.gallery);
+//                                 if (images != null) {
+//                                   final bytes =
+//                                       File(images.path).readAsBytesSync();
+//                                   encodeImage = base64Encode(bytes);
+//                                   File file = File(images.path);
+//                                   setState(() {
+//                                     media.add({'type': 'images', 'file': file});
+//                                   });
+//                                 }
+//                               },
+//                                   const Icon(Icons.photo,
+//                                       color: MyColor.white_color),
+//                                   context),
+//                             ],
+//                           ),
+//                           Padding(
+//                             padding: const EdgeInsets.all(8.0),
+//                             child: ClipRRect(
+//                               borderRadius: BorderRadius.circular(10),
+//                               child: Container(
+//                                 alignment: Alignment.center,
+//                                 height: 120,
+//                                 width: 120,
+//                                 decoration:
+//                                     BoxDecoration(color: Colors.grey[350]),
+//                                 child: ListView.builder(
+//                                   scrollDirection: Axis.horizontal,
+//                                   itemCount: media.length,
+//                                   itemBuilder: (context, index) {
+//                                     return attachmentWidget(media[index]);
+//                                   },
+//                                 ),
+//                               ),
+//                             ),
+//                           ),
+//                         ],
+//                       ),
+//                       Padding(
+//                         padding:
+//                             const EdgeInsets.only(top: 16, left: 10, right: 10),
+//                         child: InkWell(
+//                           child: Container(
+//                             height: 52,
+//                             alignment: Alignment.center,
+//                             decoration: BoxDecoration(
+//                               color: const Color(0xFF0054A4),
+//                               borderRadius: BorderRadius.circular(5),
+//                             ),
+//                             child: const Text(
+//                               'Submit',
+//                               style: TextStyle(
+//                                   color: Colors.white,
+//                                   fontSize: 16,
+//                                   fontFamily: 'pop'),
+//                             ),
+//                           ),
+//                           onTap: () async{
+//                            if (dialogValidation()) {
+
+
+
+
+//   setState(() {
+//   //     Line data = Line(
+//   //   tblExpenseCatId: int.parse(_selectedExpenseCategoryId!),
+//   //   date: FromedateInput.text.toString(),
+//   //   amount: double.parse(amount.text),
+//   //   currencyId: int.parse(_slectedCurrencyId!),
+//   //   attachement: encodeImage,
+//   // );
+//   //   line.add(data);
+
+//     showlines array = showlines(
+//       tblExpenseCatname: selectedExpenseCategory!,
+//       date: FromedateInput.text.toString(),
+//       amount: double.parse(amount.text),
+//       currencyname: selectedCurrency!,
+//       img: encodeImage,
+//     );
+
+//     showlinesList.add(array); // Add new item to showlinesList
+//   });
+
+//   print('Line count: ${line.length}');
+//   print('Show Line count: ${showlinesList.length}');
+//    await Future.delayed(Duration(milliseconds: 100));
+//   Navigator.pop(context); // Close the bottom sheet
+// } else {
+//   print("Please fill all fields.");
+// }
+
+//                           },
+//                         ),
+//                       ),
+//                     ],
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           );
+//         });
+//       },
+//     );
+//   }
+
+void bottomDialog() async {
+  // Clear previous data
+  media.clear();
+  amount.clear();
+  selectedCurrency = null;
+  selectedExpenseCategory = null;
+  encodeImage = "";
+
+  // Show the bottom sheet and handle the result using .then()
+  await showModalBottomSheet(
+    context: context,
+    builder: (context) {
+      return StatefulBuilder(builder: (context, setState) {
+        return Container(
+          padding: const EdgeInsets.only(top: 16.0, left: 5, right: 5),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("Add Expense", style: TextStyle(fontSize: 16, fontFamily: 'pop_m', color: Colors.black)),
+              const SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  const SizedBox(width: 10),
+                  Flexible(
+                    child: Container(
+                      height: 52,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.blueAccent),
+                          borderRadius: BorderRadius.circular(5)),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 10, right: 10),
+                        child: DropdownButton<String>(
+                          value: selectedExpenseCategory,
+                          hint: Text("Please Select"),
+                          isExpanded: true,
+                          items: ExpenseCategorylist.map((category) {
+                            return DropdownMenuItem<String>(
+                              value: category.categoery_name,
+                              child: Text(category.categoery_name),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              selectedExpenseCategory = value;
+                              // Update the corresponding ID
+                              _selectedExpenseCategoryId =
+                                  ExpenseCategorylist.firstWhere((cat) =>
+                                          cat.categoery_name == value)
+                                      .id
+                                      .toString();
+                            });
+                          },
                         ),
                       ),
                     ),
-                    const SizedBox(width: 10),
-                    Flexible(
-                      child: Container(
-                        height: MediaQuery.of(context).size.height * 0.06,
-                        decoration: BoxDecoration(
-                            border: Border.all(color: const Color(0xFF0054A4)),
-                            borderRadius: BorderRadius.circular(5.0)),
-                        child: Padding(
-                          padding: const EdgeInsets.only(right: 8.0),
-                          child: TextField(
-                            controller: FromedateInput,
-                            decoration: const InputDecoration(
-                              focusedBorder: InputBorder.none,
-                              border: InputBorder.none,
-                              icon: Icon(
-                                Icons.calendar_today,
-                                color: Color(0xFF0054A4),
-                              ),
-                              hintText: "From date",
-                              hintStyle: TextStyle(
-                                  color: Colors.grey,
-                                  fontFamily: "pop",
-                                  fontSize: 14),
+                  ),
+                  const SizedBox(width: 10),
+                  Flexible(
+                    child: Container(
+                      height: MediaQuery.of(context).size.height * 0.06,
+                      decoration: BoxDecoration(
+                          border: Border.all(color: const Color(0xFF0054A4)),
+                          borderRadius: BorderRadius.circular(5.0)),
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: TextField(
+                          controller: FromedateInput,
+                          decoration: const InputDecoration(
+                            focusedBorder: InputBorder.none,
+                            border: InputBorder.none,
+                            icon: Icon(
+                              Icons.calendar_today,
+                              color: Color(0xFF0054A4),
                             ),
-                            style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 16,
-                                fontFamily: 'pop'),
-                            readOnly: true,
-                            onTap: () async {
-                              DateTime? pickedDate = await showDatePicker(
-                                context: context,
-                                initialDate: DateTime.now(),
-                                firstDate: DateTime(2000),
-                                lastDate: DateTime(2100),
-                              );
+                            hintText: "From date",
+                            hintStyle: TextStyle(
+                                color: Colors.grey,
+                                fontFamily: "pop",
+                                fontSize: 14),
+                          ),
+                          style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 16,
+                              fontFamily: 'pop'),
+                          readOnly: true,
+                          onTap: () async {
+                            DateTime? pickedDate = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(2000),
+                              lastDate: DateTime(2100),
+                            );
 
-                              if (pickedDate != null) {
-                                String formattedDate =
-                                    DateFormat('yyyy-MM-dd').format(pickedDate);
-                                setState(() {
-                                  FromedateInput.text = formattedDate;
-                                });
-                              }
-                            },
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                Expanded(
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          const SizedBox(width: 10),
-                          Flexible(
-                            child: CustomTextField(
-                              controller: amount,
-                              hintText: "Amount",
-                              obscureText: false,
-                              keyboardType: TextInputType.number,
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          Flexible(
-                            child: Container(
-                              height: 52,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.blueAccent),
-                                  borderRadius: BorderRadius.circular(5)),
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 10, right: 10),
-                                child: DropdownButton<String>(
-                                  value: selectedCurrency,
-                                  hint: Text("Please Currency"),
-                                  isExpanded: true,
-                                  items: currencyList.map((category) {
-                                    return DropdownMenuItem<String>(
-                                      value: category.currency_name,
-                                      child: Text(category.currency_name),
-                                    );
-                                  }).toList(),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      selectedCurrency = value;
-                                      _slectedCurrencyId = currencyList
-                                          .firstWhere((curr) =>
-                                              curr.currency_name == value)
-                                          .id
-                                          .toString();
-                                    });
-                                  },
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Wrap(
-                            children: [
-                              iconTextButto('Camera', Color(0xFF0054A4),
-                                  () async {
-                                final images = await ImagePicker()
-                                    .pickImage(source: ImageSource.camera);
-                                if (images != null) {
-                                  final bytes =
-                                      File(images.path).readAsBytesSync();
-                                  encodeImage = base64Encode(bytes);
-                                  File file = File(images.path);
-                                  setState(() {
-                                    media.add({'type': 'images', 'file': file});
-                                  });
-                                }
-                              },
-                                  const Icon(Icons.camera_alt,
-                                      color: MyColor.white_color),
-                                  context),
-                              iconTextButto('Gallery', Color(0xFF0054A4),
-                                  () async {
-                                final images = await ImagePicker()
-                                    .pickImage(source: ImageSource.gallery);
-                                if (images != null) {
-                                  final bytes =
-                                      File(images.path).readAsBytesSync();
-                                  encodeImage = base64Encode(bytes);
-                                  File file = File(images.path);
-                                  setState(() {
-                                    media.add({'type': 'images', 'file': file});
-                                  });
-                                }
-                              },
-                                  const Icon(Icons.photo,
-                                      color: MyColor.white_color),
-                                  context),
-                            ],
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: Container(
-                                alignment: Alignment.center,
-                                height: 120,
-                                width: 120,
-                                decoration:
-                                    BoxDecoration(color: Colors.grey[350]),
-                                child: ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: media.length,
-                                  itemBuilder: (context, index) {
-                                    return attachmentWidget(media[index]);
-                                  },
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Padding(
-                        padding:
-                            const EdgeInsets.only(top: 16, left: 10, right: 10),
-                        child: InkWell(
-                          child: Container(
-                            height: 52,
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              color: const Color(0xFF0054A4),
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: const Text(
-                              'Submit',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontFamily: 'pop'),
-                            ),
-                          ),
-                          onTap: () {
-                            if (dialogValidation()) {
-                              print("file $encodeImage");
-                              Line data = Line(
-                                tblExpenseCatId:
-                                    int.parse(_selectedExpenseCategoryId!),
-                                date: FromedateInput.text.toString(),
-                                amount: double.parse(amount.text),
-                                currencyId: int.parse(_slectedCurrencyId!),
-                                attachement: encodeImage,
-                              );
-
+                            if (pickedDate != null) {
+                              String formattedDate =
+                                  DateFormat('yyyy-MM-dd').format(pickedDate);
                               setState(() {
-                                line.add(data);
-                                showlines array = showlines(
-                                  tblExpenseCatname: selectedExpenseCategory!,
-                                  date: FromedateInput.text.toString(),
-                                  amount: double.parse(amount.text),
-                                  currencyname: selectedCurrency!,
-                                  img: encodeImage,
-                                );
-
-                                showlinesList.add(array);
+                                FromedateInput.text = formattedDate;
                               });
-
-                              print('Line count: ${line.length}');
-                              print('Show Line count: ${showlinesList.length}');
-                              Navigator.pop(context); // Close the bottom sheet
-                            } else {
-                              // Handle validation errors
-                              print("Please fill all fields.");
                             }
                           },
                         ),
                       ),
-                    ],
+                    ),
                   ),
-                ),
-              ],
-            ),
-          );
-        });
-      },
-    );
-  }
+                ],
+              ),
+              const SizedBox(height: 16),
+              Expanded(
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        const SizedBox(width: 10),
+                        Flexible(
+                          child: CustomTextField(
+                            controller: amount,
+                            hintText: "Amount",
+                            obscureText: false,
+                            keyboardType: TextInputType.number,
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Flexible(
+                          child: Container(
+                            height: 52,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                                border: Border.all(color: Colors.blueAccent),
+                                borderRadius: BorderRadius.circular(5)),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 10, right: 10),
+                              child: DropdownButton<String>(
+                                value: selectedCurrency,
+                                hint: Text("Please Currency"),
+                                isExpanded: true,
+                                items: currencyList.map((category) {
+                                  return DropdownMenuItem<String>(
+                                    value: category.currency_name,
+                                    child: Text(category.currency_name),
+                                  );
+                                }).toList(),
+                                onChanged: (value) {
+                                  setState(() {
+                                    selectedCurrency = value;
+                                    _slectedCurrencyId = currencyList
+                                        .firstWhere((curr) =>
+                                            curr.currency_name == value)
+                                        .id
+                                        .toString();
+                                  });
+                                },
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Wrap(
+                          children: [
+                            iconTextButto('Camera', Color(0xFF0054A4),
+                                () async {
+                              final images = await ImagePicker()
+                                  .pickImage(source: ImageSource.camera);
+                              if (images != null) {
+                                final bytes =
+                                    File(images.path).readAsBytesSync();
+                                encodeImage = base64Encode(bytes);
+                                File file = File(images.path);
+                                setState(() {
+                                  media.add({'type': 'images', 'file': file});
+                                });
+                              }
+                            },
+                                const Icon(Icons.camera_alt,
+                                    color: MyColor.white_color),
+                                context),
+                            iconTextButto('Gallery', Color(0xFF0054A4),
+                                () async {
+                              final images = await ImagePicker()
+                                  .pickImage(source: ImageSource.gallery);
+                              if (images != null) {
+                                final bytes =
+                                    File(images.path).readAsBytesSync();
+                                encodeImage = base64Encode(bytes);
+                                File file = File(images.path);
+                                setState(() {
+                                  media.add({'type': 'images', 'file': file});
+                                });
+                              }
+                            },
+                                const Icon(Icons.photo,
+                                    color: MyColor.white_color),
+                                context),
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Container(
+                              alignment: Alignment.center,
+                              height: 120,
+                              width: 120,
+                              decoration:
+                                  BoxDecoration(color: Colors.grey[350]),
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: media.length,
+                                itemBuilder: (context, index) {
+                                  return attachmentWidget(media[index]);
+                                },
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16, left: 10, right: 10),
+                      child: InkWell(
+                        child: Container(
+                          height: 52,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF0054A4),
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: const Text(
+                            'Submit',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontFamily: 'pop'),
+                          ),
+                        ),
+                        onTap: () {
+                          if (dialogValidation()) {
+                            // Create a new Line object with the provided data
+                            Line data = Line(
+                              tblExpenseCatId: int.parse(_selectedExpenseCategoryId!),
+                              date: FromedateInput.text.toString(),
+                              amount: double.parse(amount.text),
+                              currencyId: int.parse(_slectedCurrencyId!),
+                              attachement: encodeImage,
+                            );
 
-  bool dialogValidation() {
+                            // Close the dialog and return the created data
+                            Navigator.pop(context, data); // Pass the data back when dialog closes
+                          } else {
+                            print("Please fill all fields.");
+                          }
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      });
+    },
+  ).then((result) {
+    if (result != null) {
+      try {
+        double parsedAmount = double.parse(amount.text); // Ensure it's a valid number
+
+        // If everything is valid, continue with adding the result
+        setState(() {
+          line.add(result);  // Add the result data
+          showlines array = showlines(
+            tblExpenseCatname: selectedExpenseCategory!,
+            date: FromedateInput.text.toString(),
+            amount: parsedAmount,  // Use the validated amount
+            currencyname: selectedCurrency!,
+            img: encodeImage,
+          );
+          showlinesList.add(array);  // Add to showlinesList
+        });
+
+        print("Data saved successfully!");
+        print("Line count: ${line.length}");
+        print("Show Line count: ${showlinesList.length}");
+      } catch (e) {
+        print("Error: Invalid amount format");
+        // Show an error or handle invalid format
+      }
+    } else {
+      print("No data was returned from the dialog.");
+    }
+  });
+}
+
+
+   bool dialogValidation() {
     if (amount.text.isEmpty) {
       _showMyDialog('Please Enter Amount', MyColor.dialog_error_color, 'error');
 

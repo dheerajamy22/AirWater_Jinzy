@@ -484,7 +484,7 @@ class _purchaseRequestState extends State<purchaseRequest> {
                   isExpanded: true,
                   items: projectList.map((project) {
                     return DropdownMenuItem<String>(
-                      value: project.id,
+                      value: project.name,
                       child: Text(project.name),
                     );
                   }).toList(),

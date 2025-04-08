@@ -1311,7 +1311,7 @@ class _CreteLeaveRequestState extends State<CreteLeaveRequest> {
     print(leave_code_id);
 
     var request =
-        http.MultipartRequest('POST', Uri.parse('${baseurl.url}leaveRequest'));
+        http.MultipartRequest('POST', Uri.parse('${baseurl.url}leave-request'));
 
     // Add the parameters to the request
 
