@@ -84,30 +84,30 @@ class _misspunchState extends State<misspunch> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                "Location",
-                style: TextStyle(fontFamily: "pop_m", fontSize: 16),
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height * 0.05,
-                alignment: Alignment.centerLeft,
-                padding: EdgeInsets.only(left: 8),
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black26),
-                    borderRadius: BorderRadius.circular(8)),
-                child: Text(
-                  '${_locality}',
-                  style: TextStyle(
-                      color: Colors.black, fontFamily: 'pop', fontSize: 14),
-                ),
-              ),
-              const SizedBox(
-                height: 16,
-              ),
+              // Text(
+              //   "Location",
+              //   style: TextStyle(fontFamily: "pop_m", fontSize: 16),
+              // ),
+              // const SizedBox(
+              //   height: 8,
+              // ),
+              // Container(
+              //   width: MediaQuery.of(context).size.width,
+              //   height: MediaQuery.of(context).size.height * 0.05,
+              //   alignment: Alignment.centerLeft,
+              //   padding: EdgeInsets.only(left: 8),
+              //   decoration: BoxDecoration(
+              //       border: Border.all(color: Colors.black26),
+              //       borderRadius: BorderRadius.circular(8)),
+              //   child: Text(
+              //     '${_locality}',
+              //     style: TextStyle(
+              //         color: Colors.black, fontFamily: 'pop', fontSize: 14),
+              //   ),
+              // ),
+              // const SizedBox(
+              //   height: 16,
+              // ),
               Text("Punch Type",
                   style: TextStyle(fontFamily: "pop_m", fontSize: 16)),
               const SizedBox(
