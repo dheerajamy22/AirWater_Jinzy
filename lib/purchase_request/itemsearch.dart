@@ -2,9 +2,7 @@ import 'dart:convert';
 
 import 'package:demo/app_color/color_constants.dart';
 import 'package:demo/baseurl/base_url.dart';
-import 'package:demo/purchase_request/itemadd.dart';
 import 'package:demo/purchase_request/purchaserqstmodels.dart';
-import 'package:demo/purchase_request/purchaserqst.dart';
 import 'package:demo/purchase_request/textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -18,12 +16,14 @@ class searchItem extends StatefulWidget {
 }
 
 class _searchItemState extends State<searchItem> {
+  TextEditingController searchController = TextEditingController();
+  List<serachItemModel> allitems = [];
   List<serachItemModel> searchitemList = [];
   List<serachItemModel> selectedItems = [];
-  List<categoryModel> categoryList =[];
-  String? selectedcategoty,selecteditem;
-  String? _Selectedcategoryid,_selecteditemid; 
-  
+  List<categoryModel> categoryList = [];
+  List<itemgroup> itemgroupList = [];
+  String? selectedcategory, selecteditem;
+
   @override
   void initState() {
     getitem();
@@ -126,9 +126,7 @@ class _searchItemState extends State<searchItem> {
                   ),
                   InkWell(
                     onTap: () {
-
-_showSearchDialog();
-
+                      _showSearchDialog();
                     },
                     child: Container(
                       height: MediaQuery.of(context).size.height * 0.03,
@@ -233,89 +231,183 @@ _showSearchDialog();
   }
 
   void _showSearchDialog() {
- 
-    TextEditingController searchController = TextEditingController();
-
     showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Search'),
-          content: SingleChildScrollView(
-            child: Column(
-              children: [
-                Text("Purchase Request Title",
-                    style: TextStyle(
-                        fontSize: 14, fontFamily: 'pop', color: Colors.black)),
-                CustomTextField(
-                  controller: searchController,
+        context: context,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+            builder: (context, setState) {
+              return AlertDialog(
+                shape: BeveledRectangleBorder(
+                    borderRadius: BorderRadius.circular(4)),
+                content: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Align(
+                        alignment: Alignment.center,
+                        child: Text("Filters",
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontFamily: 'pop_m',
+                                color: Colors.black)),
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      Text("Purchase Request Title",
+                          style: TextStyle(
+                              fontSize: 14,
+                              fontFamily: 'pop',
+                              color: Colors.black)),
+                      const SizedBox(height: 5),
+                      CustomTextField(
+                        controller: searchController,
+                      ),
+                      const SizedBox(height: 10),
+                      Text("Category",
+                          style: TextStyle(
+                              fontSize: 14,
+                              fontFamily: 'pop',
+                              color: Colors.black)),
+                      const SizedBox(height: 5),
+                      Container(
+                        padding: const EdgeInsets.only(left: 10),
+                        height: MediaQuery.of(context).size.height * 0.06,
+                        decoration: BoxDecoration(
+                            border: Border.all(color: const Color(0xFF0054A4)),
+                            borderRadius: BorderRadius.circular(5.0)),
+                        child: DropdownButton<String>(
+                          value: selectedcategory, // Use the correct variable
+                          hint: Text("Select Category"),
+                          isExpanded: true,
+                          items: categoryList.map((line) {
+                            return DropdownMenuItem<String>(
+                              value: line.name,
+                              child: Text(line.name),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              selectedcategory = value;
+                            });
+                          },
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Text("Item Group",
+                          style: TextStyle(
+                              fontSize: 14,
+                              fontFamily: 'pop',
+                              color: Colors.black)),
+                      const SizedBox(height: 5),
+                      Container(
+                        padding: const EdgeInsets.only(left: 10),
+                        height: MediaQuery.of(context).size.height * 0.06,
+                        decoration: BoxDecoration(
+                            border: Border.all(color: const Color(0xFF0054A4)),
+                            borderRadius: BorderRadius.circular(5.0)),
+                        child: DropdownButton<String>(
+                          value: selecteditem, // Use the correct variable
+                          hint: Text("Select Item Group"),
+                          isExpanded: true,
+                          items: itemgroupList.map((item) {
+                            return DropdownMenuItem<String>(
+                              value: item.name,
+                              child: Text(item.name),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              selecteditem = value;
+                            });
+                          },
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                // Reset filters
+                                setState(() {
+                                  selectedcategory = null;
+                                  selecteditem = null;
+                                  searchController.clear();
+                                  print("allitem lenght ${allitems.length}");
+                                  // Optionally, you can reset the searchitemList to its original state
+                                  rollback();
+                                });
+                                Navigator.of(context).pop();
+                              },
+                              child: Container(
+                                padding: EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                    color: Colors
+                                        .red, // Change color for reset button
+                                    borderRadius: BorderRadius.circular(5)),
+                                child: Text("Reset Filters",
+                                    style:
+                                        TextStyle(color: MyColor.white_color)),
+                              ),
+                            ),
+                            SizedBox(width: 10),
+                            InkWell(
+                              onTap: () {
+                                applyfilters();
+                                Navigator.of(context).pop();
+                              },
+                              child: Container(
+                                padding: EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                    color: const Color(0xFF0054A4),
+                                    borderRadius: BorderRadius.circular(5)),
+                                child: Text("Apply Filters",
+                                    style:
+                                        TextStyle(color: MyColor.white_color)),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
-                const SizedBox(height: 10),
-                Container(
-                padding: const EdgeInsets.only(left: 10),
-                height: MediaQuery.of(context).size.height * 0.06,
-                decoration: BoxDecoration(
-                    border: Border.all(color: const Color(0xFF0054A4)),
-                    borderRadius: BorderRadius.circular(5.0)),
-                child: DropdownButton<String>(
-                  value: selectedcategoty, // Use the correct variable
-                  hint: Text("Please Category"),
-                  isExpanded: true,
-                  items: categoryList.map((line) {
-                    return DropdownMenuItem<String>(
-                      value: line.id,
-                      child: Text(line.name),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      selectedcategoty = value; // Update the correct variable
-                      for (var i in categoryList) {
-                        if (i.id == value) {
-                          _Selectedcategoryid = i.id;
-                        }
-                      }
-                    });
-                  },
-                ),
-              ),
-              const SizedBox(height: 10),
-              Container(
-                padding: const EdgeInsets.only(left: 10),
-                height: MediaQuery.of(context).size.height * 0.06,
-                decoration: BoxDecoration(
-                    border: Border.all(color: const Color(0xFF0054A4)),
-                    borderRadius: BorderRadius.circular(5.0)),
-                child: DropdownButton<String>(
-                  value: selectedcategoty, // Use the correct variable
-                  hint: Text("Please Category"),
-                  isExpanded: true,
-                  items: searchitemList.map((item) {
-                    return DropdownMenuItem<String>(
-                      value: item.itemgroup,
-                      child: Text(item.itemgroup),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      selectedcategoty = value; // Update the correct variable
-                      for (var i in searchitemList) {
-                        if (i.id == value) {
-                          _Selectedcategoryid = i.id.toString();
-                        }
-                      }
-                    });
-                  },
-                ),
-              ),
+              );
+            },
+          );
+        });
+  }
 
-              ],
-            ),
-          ),
-          
-        );
-      },
-    );
+  void rollback() {
+    setState(() {
+      searchitemList = allitems;
+      print('lenth after reset ${searchitemList.length}');
+    });
+  }
+
+  void applyfilters() {
+    List<serachItemModel> filteredList = allitems;
+
+    // Check if selected category is not null or empty
+    if (selectedcategory != null &&
+        selectedcategory!.isNotEmpty &&
+        selecteditem != null &&
+        selecteditem!.isNotEmpty) {
+      print(selectedcategory);
+      print(selecteditem);
+      filteredList = filteredList
+          .where((item) =>
+              item.category == selectedcategory ||
+              item.itemgroup == selecteditem)
+          .toList();
+    }
+    setState(() {
+      searchitemList = filteredList;
+      print(searchitemList.length); // Print the length of the filtered list
+    });
   }
 
   void getitem() async {
@@ -339,6 +431,7 @@ _showSearchDialog();
             category: i['category']);
         setState(() {
           searchitemList.add(data);
+          allitems.add(data);
         });
       }
       for (var i in jsonObject['category']) {
@@ -348,6 +441,13 @@ _showSearchDialog();
         );
         setState(() {
           categoryList.add(data);
+        });
+      }
+
+      for (var i in jsonObject['item_group']) {
+        itemgroup data = itemgroup(name: i['name'], code: i['code']);
+        setState(() {
+          itemgroupList.add(data);
         });
       }
     } else if (response.statusCode == 401) {

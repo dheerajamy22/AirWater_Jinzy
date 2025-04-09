@@ -143,7 +143,6 @@ class unitsModel {
   }
 }
 
-
 class addItemModel {
   String itemCode;
   String itemName;
@@ -214,7 +213,7 @@ class PurchaseRequest {
   }
 }
 
-class serachItemModel{
+class serachItemModel {
   final int id;
   final String name;
   final String code;
@@ -239,4 +238,13 @@ class serachItemModel{
       category: json['category'],
     );
   }
+}
+
+class itemgroup {
+  String name;
+  String code;
+  itemgroup({
+    required this.name,
+    required this.code,
+  });
 }

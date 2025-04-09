@@ -9,6 +9,7 @@ import 'package:demo/purchase_request/itemsearch.dart';
 import 'package:demo/purchase_request/purchaserqstmodels.dart';
 import 'package:demo/purchase_request/textfield.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -20,6 +21,7 @@ class purchaseRequest extends StatefulWidget {
 }
 
 class _purchaseRequestState extends State<purchaseRequest> {
+  bool _isLoading = false;
   TextEditingController purchaseRequestTitle = TextEditingController();
   String _total = "";
   List<projectModel> projectList = [];
@@ -93,701 +95,722 @@ class _purchaseRequestState extends State<purchaseRequest> {
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding:
-              const EdgeInsets.only(left: 12, right: 12, top: 16, bottom: 30),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("Purchase Request",
-                  style: TextStyle(
-                      fontSize: 16, fontFamily: 'pop_m', color: Colors.black)),
-              const SizedBox(
-                height: 10,
-              ),
-              Row(
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            child: Padding(
+              padding:
+                  const EdgeInsets.only(left: 12, right: 12, top: 16, bottom: 30),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Purchase Request Title",
+                  Text("Purchase Request",
                       style: TextStyle(
-                          fontSize: 14,
-                          fontFamily: 'pop',
-                          color: Colors.black)),
-                  Text(" *",
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontFamily: 'pop_m',
-                          color: Colors.red)),
-                ],
-              ),
-              const SizedBox(
-                height: 6,
-              ),
-              CustomTextField(
-                controller: purchaseRequestTitle,
-                hintText: "Enter Purchase Request Title",
-                obscureText: false,
-                keyboardType: TextInputType.text,
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Flexible(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Text("Requested Date",
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    fontFamily: 'pop',
-                                    color: Colors.black)),
-                            Text(" *",
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    fontFamily: 'pop_m',
-                                    color: Colors.red)),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 6,
-                        ),
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          padding: const EdgeInsets.only(left: 10),
-                          height: MediaQuery.of(context).size.height * 0.06,
-                          decoration: BoxDecoration(
-                              border:
-                                  Border.all(color: const Color(0xFF0054A4)),
-                              borderRadius: BorderRadius.circular(5.0)),
-                          child: Text(
-                              DateTime.now().toString().split(" ").first,
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  fontFamily: 'pop',
-                                  color: Colors.black)),
-                        ),
-                      ],
-                    ),
+                          fontSize: 16, fontFamily: 'pop_m', color: Colors.black)),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    children: [
+                      Text("Purchase Request Title",
+                          style: TextStyle(
+                              fontSize: 14,
+                              fontFamily: 'pop',
+                              color: Colors.black)),
+                      Text(" *",
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontFamily: 'pop_m',
+                              color: Colors.red)),
+                    ],
                   ),
                   const SizedBox(
-                    width: 16,
+                    height: 6,
                   ),
-                  Flexible(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Text("Total",
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    fontFamily: 'pop',
-                                    color: Colors.black)),
-                            Text(" *",
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    fontFamily: 'pop_m',
-                                    color: Colors.red)),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 6,
-                        ),
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          padding: const EdgeInsets.only(left: 10),
-                          height: MediaQuery.of(context).size.height * 0.06,
-                          decoration: BoxDecoration(
-                              border:
-                                  Border.all(color: const Color(0xFF0054A4)),
-                              borderRadius: BorderRadius.circular(5.0)),
-                          child: Text(_total,
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  fontFamily: 'pop',
-                                  color: Colors.black)),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              Text("Financial Dimension",
-                  style: TextStyle(
-                      fontSize: 16, fontFamily: 'pop_m', color: Colors.black)),
-              const SizedBox(
-                height: 16,
-              ),
-              // Business Line Dropdown
-              Row(
-                children: [
-                  Text("Business Line",
-                      style: TextStyle(
-                          fontSize: 14,
-                          fontFamily: 'pop',
-                          color: Colors.black)),
-                  Text(" *",
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontFamily: 'pop_m',
-                          color: Colors.red)),
-                ],
-              ),
-              const SizedBox(height: 6),
-              Container(
-                padding: const EdgeInsets.only(left: 10),
-                height: MediaQuery.of(context).size.height * 0.06,
-                decoration: BoxDecoration(
-                    border: Border.all(color: const Color(0xFF0054A4)),
-                    borderRadius: BorderRadius.circular(5.0)),
-                child: DropdownButton<String>(
-                  value: businessLine, // Use the correct variable
-                  hint: Text("Please Select"),
-                  isExpanded: true,
-                  items: businesslineList.map((line) {
-                    return DropdownMenuItem<String>(
-                      value: line.id,
-                      child: Text(line.description),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      businessLine = value; // Update the correct variable
-                      for (var i in businesslineList) {
-                        if (i.id == value) {
-                          _businessLineId = i.id;
-                        }
-                      }
-                    });
-                  },
-                ),
-              ),
-              const SizedBox(height: 16),
-
-              // Country Dropdown
-              Row(
-                children: [
-                  Text("Country",
-                      style: TextStyle(
-                          fontSize: 14,
-                          fontFamily: 'pop',
-                          color: Colors.black)),
-                  Text(" *",
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontFamily: 'pop_m',
-                          color: Colors.red)),
-                ],
-              ),
-              const SizedBox(height: 6),
-              Container(
-                padding: const EdgeInsets.only(left: 10),
-                height: MediaQuery.of(context).size.height * 0.06,
-                decoration: BoxDecoration(
-                    border: Border.all(color: const Color(0xFF0054A4)),
-                    borderRadius: BorderRadius.circular(5.0)),
-                child: DropdownButton<String>(
-                  value: selectedCountry, // Use the correct variable
-                  hint: Text("Please Select"),
-                  isExpanded: true,
-                  items: countryList.map((_country) {
-                    return DropdownMenuItem<String>(
-                      value: _country.id,
-                      child: Text(_country.dynamics_code),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      selectedCountry = value; // Update the correct variable
-                      for (var i in countryList) {
-                        if (i.id == value) {
-                          _selectedCountryId = i.id;
-                        }
-                      }
-                    });
-                  },
-                ),
-              ),
-              const SizedBox(height: 16),
-
-              // Department Dropdown
-              Row(
-                children: [
-                  Text("Department",
-                      style: TextStyle(
-                          fontSize: 14,
-                          fontFamily: 'pop',
-                          color: Colors.black)),
-                  Text(" *",
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontFamily: 'pop_m',
-                          color: Colors.red)),
-                ],
-              ),
-              const SizedBox(height: 6),
-              Container(
-                padding: const EdgeInsets.only(left: 10),
-                height: MediaQuery.of(context).size.height * 0.06,
-                decoration: BoxDecoration(
-                    border: Border.all(color: const Color(0xFF0054A4)),
-                    borderRadius: BorderRadius.circular(5.0)),
-                child: DropdownButton<String>(
-                  value: selectedDepartment, // Use the correct variable
-                  hint: Text("Please Select"),
-                  isExpanded: true,
-                  items: departmentList.map((depart) {
-                    return DropdownMenuItem<String>(
-                      value: depart.id,
-                      child: Text(depart.dept_name),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      selectedDepartment = value; // Update the correct variable
-                      for (var i in departmentList) {
-                        if (i.id == value) {
-                          _selectedDepartmentId = i.id;
-                        }
-                      }
-                    });
-                  },
-                ),
-              ),
-              const SizedBox(height: 16),
-
-              // Entity Dropdown
-              Row(
-                children: [
-                  Text("Entity",
-                      style: TextStyle(
-                          fontSize: 14,
-                          fontFamily: 'pop',
-                          color: Colors.black)),
-                  Text(" *",
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontFamily: 'pop_m',
-                          color: Colors.red)),
-                ],
-              ),
-              const SizedBox(height: 6),
-              Container(
-                padding: const EdgeInsets.only(left: 10),
-                height: MediaQuery.of(context).size.height * 0.06,
-                decoration: BoxDecoration(
-                    border: Border.all(color: const Color(0xFF0054A4)),
-                    borderRadius: BorderRadius.circular(5.0)),
-                child: DropdownButton<String>(
-                  value: selectedEntity, // Use the correct variable
-                  hint: Text("Please Select"),
-                  isExpanded: true,
-                  items: entityList.map((_entity) {
-                    return DropdownMenuItem<String>(
-                      value: _entity.id,
-                      child: Text(_entity.description),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      selectedEntity = value; // Update the correct variable
-                      for (var i in entityList) {
-                        if (i.id == value) {
-                          _selectedEntityId = i.id;
-                        }
-                      }
-                    });
-                  },
-                ),
-              ),
-              const SizedBox(height: 16),
-
-              // Facility Dropdown
-              Row(
-                children: [
-                  Text("Facility",
-                      style: TextStyle(
-                          fontSize: 14,
-                          fontFamily: 'pop',
-                          color: Colors.black)),
-                  Text(" *",
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontFamily: 'pop_m',
-                          color: Colors.red)),
-                ],
-              ),
-              const SizedBox(height: 6),
-              Container(
-                padding: const EdgeInsets.only(left: 10),
-                height: MediaQuery.of(context).size.height * 0.06,
-                decoration: BoxDecoration(
-                    border: Border.all(color: const Color(0xFF0054A4)),
-                    borderRadius: BorderRadius.circular(5.0)),
-                child: DropdownButton<String>(
-                  value: selectedPlant, // Use the correct variable
-                  hint: Text("Please Select"),
-                  isExpanded: true,
-                  items: plantList.map((fac) {
-                    return DropdownMenuItem<String>(
-                      value: fac.id,
-                      child: Text(fac.description),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      selectedPlant = value; // Update the correct variable
-                      for (var i in plantList) {
-                        if (i.id == value) {
-                          _selectedPlantId = i.id;
-                        }
-                      }
-                    });
-                  },
-                ),
-              ),
-              const SizedBox(height: 16),
-
-              // Project Dropdown
-              Row(
-                children: [
-                  Text("Project",
-                      style: TextStyle(
-                          fontSize: 14,
-                          fontFamily: 'pop',
-                          color: Colors.black)),
-                  Text(" *",
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontFamily: 'pop_m',
-                          color: Colors.red)),
-                ],
-              ),
-              const SizedBox(height: 6),
-              Container(
-                padding: const EdgeInsets.only(left: 10),
-                height: MediaQuery.of(context).size.height * 0.06,
-                decoration: BoxDecoration(
-                    border: Border.all(color: const Color(0xFF0054A4)),
-                    borderRadius: BorderRadius.circular(5.0)),
-                child: DropdownButton<String>(
-                  value: selectedProject, // Use the correct variable
-                  hint: Text("Please Select"),
-                  isExpanded: true,
-                  items: projectList.map((project) {
-                    return DropdownMenuItem<String>(
-                      value: project.name,
-                      child: Text(project.name),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      selectedProject = value; // Update the correct variable
-                      for (var i in projectList) {
-                        if (i.id == value) {
-                          _selectedProjectId = i.id;
-                        }
-                      }
-                    });
-                  },
-                ),
-              ),
-              const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  InkWell(
-                    onTap: () async {
-                      addItemModel newItem = await Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => addItem()),
-                      );
-
-                      setState(() {
-                        additemlist.add(newItem);
-                      });
-                    },
-                    child: Container(
-                      height: MediaQuery.of(context).size.height * 0.03,
-                      width: MediaQuery.of(context).size.width * 0.2,
-                      decoration: BoxDecoration(
-                          color: const Color(0xFF0054A4),
-                          borderRadius: BorderRadius.circular(5)),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.add, color: MyColor.white_color, size: 16),
-                          const Text(
-                            'Item',
-                            style: TextStyle(
-                                fontSize: 14,
-                                fontFamily: 'pop_m',
-                                color: MyColor.white_color),
-                          ),
-                        ],
-                      ),
-                    ),
+                  CustomTextField(
+                    controller: purchaseRequestTitle,
+                    hintText: "Enter Purchase Request Title",
+                    obscureText: false,
+                    keyboardType: TextInputType.text,
                   ),
                   const SizedBox(
-                    width: 16,
+                    height: 16,
                   ),
-                  InkWell(
-                    onTap: () async {
-                      List<serachItemModel> data = await Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => searchItem()),
-                      );
-                      setState(() {
-                        for (var item in data) {
-                          // addItemModel array = addItemModel(
-                          //   itemname: item.name,
-                          //   itemcode: item.code,
-                          //   categoryname: item.category,
-                          //   unitname: item.unit,
-                          //   quantity: "1",
-                          //   estimateprice: "0", // Provide a default value
-                          //   netamount: "",
-                          // );
-
-                          addItemModel array = addItemModel(
-                            itemCode: item.code,
-                            itemName: item.name,
-                            category: item.category,
-                            unit: item.unit,
-                            quantity: 1,
-                            estimatePrice: "0",
-                            price: 0.0,
-                          );
-                          additemlist.add(array);
-                        }
-                      });
-                    },
-                    child: Container(
-                      height: MediaQuery.of(context).size.height * 0.03,
-                      width: MediaQuery.of(context).size.width * 0.25,
-                      decoration: BoxDecoration(
-                          color: const Color(0xFF0054A4),
-                          borderRadius: BorderRadius.circular(5)),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.search,
-                              color: MyColor.white_color, size: 16),
-                          const Text(
-                            'Search',
-                            style: TextStyle(
-                                fontSize: 14,
-                                fontFamily: 'pop_m',
-                                color: MyColor.white_color),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-             
-              if (additemlist.isEmpty)
-                ...[
-
-              ]else ...[
-                Container(
-                  height: MediaQuery.of(context).size.height *
-                      0.3, // Set a specific height
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                      color: MyColor.white_color,
-                      borderRadius: BorderRadius.circular(5)),
-                  child: ListView.builder(
-                    itemCount: additemlist.length,
-                    itemBuilder: (context, index) {
-                      TextEditingController quantityController =
-                          TextEditingController(
-                              text: additemlist[index].quantity.toString());
-                      quantityController.text =
-                          additemlist[index].quantity.toString();
-                      TextEditingController estimatepriceController =
-                          TextEditingController(
-                              text:
-                                  additemlist[index].estimatePrice.toString());
-                      return Padding(
-                        padding: const EdgeInsets.only(left: 8.0, right: 8),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Flexible(
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Container(
-                              padding: EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  color: MyColor.background_light_blue),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Align(
-                                    alignment: Alignment.topRight,
-                                    child: InkWell(
-                                      onTap: () {
-                                        setState(() {
-                                          additemlist.removeAt(index);
-                                        });
-                                      },
-                                      child: Icon(Icons.delete,
-                                          color: MyColor.red_color, size: 16),
-                                    ),
-                                  ),
-                                  Text(
-                                      'Item Name: ${additemlist[index].itemName}',
-                                      style: TextStyle(
-                                          fontSize: 14,
-                                          fontFamily: 'pop',
-                                          color: Colors.black)),
-                                  Text(
-                                      'Item Code: ${additemlist[index].itemCode}',
-                                      style: TextStyle(
-                                          fontSize: 14,
-                                          fontFamily: 'pop',
-                                          color: Colors.black)),
-                                  Text(
-                                      'Category: ${additemlist[index].category}',
-                                      style: TextStyle(
-                                          fontSize: 14,
-                                          fontFamily: 'pop',
-                                          color: Colors.black)),
-                                  Text('Unit: ${additemlist[index].unit}',
-                                      style: TextStyle(
-                                          fontSize: 14,
-                                          fontFamily: 'pop',
-                                          color: Colors.black)),
-                                  Row(
-                                    children: [
-                                      Text("Quantity:",
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              fontFamily: 'pop',
-                                              color: Colors.black)),
-                                      Expanded(
-                                        child: TextField(
-                                          controller: quantityController,
-                                          keyboardType: TextInputType.number,
-                                          // decoration: InputDecoration(
-                                          //   border: InputBorder.none
-                                          // ),
-                                          onChanged: (value) {
-                                            setState(() {
-                                              additemlist[index].quantity =
-                                                  double.parse(value);
-                                              if (estimatepriceController
-                                                  .text.isNotEmpty) {
-                                                additemlist[index]
-                                                    .price = (double.parse(
-                                                        estimatepriceController
-                                                            .text) *
-                                                    double.parse(value));
-                                              }
-                                              _calculateTotal();
-                                            });
-                                          },
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text("Estimate Price:",
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              fontFamily: 'pop',
-                                              color: Colors.black)),
-                                      Expanded(
-                                        child: TextField(
-                                          controller: estimatepriceController,
-                                          keyboardType: TextInputType.number,
-                                          // decoration: InputDecoration(
-                                          //   border: InputBorder.none
-                                          // ),
-                                          onChanged: (value) {
-                                            setState(() {
-                                              additemlist[index].estimatePrice =
-                                                  value.toString();
-                                              if (quantityController
-                                                  .text.isNotEmpty) {
-                                                additemlist[index].price =
-                                                    (double.parse(
-                                                            quantityController
-                                                                .text) *
-                                                        double.parse(value));
-                                              }
-                                              _calculateTotal();
-                                            });
-                                          },
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Text(
-                                      'Net Amount: ${additemlist[index].price}',
-                                      style: TextStyle(
-                                          fontSize: 14,
-                                          fontFamily: 'pop',
-                                          color: Colors.black)),
-                                ],
-                              ),
+                            Row(
+                              children: [
+                                Text("Requested Date",
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        fontFamily: 'pop',
+                                        color: Colors.black)),
+                                Text(" *",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontFamily: 'pop_m',
+                                        color: Colors.red)),
+                              ],
                             ),
                             const SizedBox(
                               height: 6,
                             ),
+                            Container(
+                              alignment: Alignment.centerLeft,
+                              padding: const EdgeInsets.only(left: 10),
+                              height: MediaQuery.of(context).size.height * 0.06,
+                              decoration: BoxDecoration(
+                                  border:
+                                      Border.all(color: const Color(0xFF0054A4)),
+                                  borderRadius: BorderRadius.circular(5.0)),
+                              child: Text(
+                                  DateTime.now().toString().split(" ").first,
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontFamily: 'pop',
+                                      color: Colors.black)),
+                            ),
                           ],
                         ),
-                      );
-                    },
+                      ),
+                      const SizedBox(
+                        width: 16,
+                      ),
+                      Flexible(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Text("Total",
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        fontFamily: 'pop',
+                                        color: Colors.black)),
+                                Text(" *",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontFamily: 'pop_m',
+                                        color: Colors.red)),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 6,
+                            ),
+                            Container(
+                              alignment: Alignment.centerLeft,
+                              padding: const EdgeInsets.only(left: 10),
+                              height: MediaQuery.of(context).size.height * 0.06,
+                              decoration: BoxDecoration(
+                                  border:
+                                      Border.all(color: const Color(0xFF0054A4)),
+                                  borderRadius: BorderRadius.circular(5.0)),
+                              child: Text(_total,
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontFamily: 'pop',
+                                      color: Colors.black)),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ],
-              const SizedBox(
-                height: 16,
-              ),
-              Align(
-                alignment: Alignment.center,
-                child: InkWell(
-                  onTap: () {
-                    if (validation()) {
-                      _sendPurchaseRequestData();
-                    }
-                  },
-                  child: Container(
-                    width: MediaQuery.of(context).size.width * 0.6,
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                        color: const Color(0xFF0054A4),
-                        borderRadius: BorderRadius.circular(5)),
-                    child: Center(
-                      child: Text("Save",
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  Text("Financial Dimension",
+                      style: TextStyle(
+                          fontSize: 16, fontFamily: 'pop_m', color: Colors.black)),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  // Business Line Dropdown
+                  Row(
+                    children: [
+                      Text("Business Line",
+                          style: TextStyle(
+                              fontSize: 14,
+                              fontFamily: 'pop',
+                              color: Colors.black)),
+                      Text(" *",
                           style: TextStyle(
                               fontSize: 16,
                               fontFamily: 'pop_m',
-                              color: MyColor.white_color)),
+                              color: Colors.red)),
+                    ],
+                  ),
+                  const SizedBox(height: 6),
+                  Container(
+                    padding: const EdgeInsets.only(left: 10),
+                    height: MediaQuery.of(context).size.height * 0.06,
+                    decoration: BoxDecoration(
+                        border: Border.all(color: const Color(0xFF0054A4)),
+                        borderRadius: BorderRadius.circular(5.0)),
+                    child: DropdownButton<String>(
+                      value: businessLine, // Use the correct variable
+                      hint: Text("Please Select"),
+                      isExpanded: true,
+                      items: businesslineList.map((line) {
+                        return DropdownMenuItem<String>(
+                          value: line.id,
+                          child: Text(line.description),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          businessLine = value; // Update the correct variable
+                          for (var i in businesslineList) {
+                            if (i.id == value) {
+                              _businessLineId = i.id;
+                            }
+                          }
+                        });
+                      },
                     ),
                   ),
-                ),
-              )
-            ],
+                  const SizedBox(height: 16),
+          
+                  // Country Dropdown
+                  Row(
+                    children: [
+                      Text("Country",
+                          style: TextStyle(
+                              fontSize: 14,
+                              fontFamily: 'pop',
+                              color: Colors.black)),
+                      Text(" *",
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontFamily: 'pop_m',
+                              color: Colors.red)),
+                    ],
+                  ),
+                  const SizedBox(height: 6),
+                  Container(
+                    padding: const EdgeInsets.only(left: 10),
+                    height: MediaQuery.of(context).size.height * 0.06,
+                    decoration: BoxDecoration(
+                        border: Border.all(color: const Color(0xFF0054A4)),
+                        borderRadius: BorderRadius.circular(5.0)),
+                    child: DropdownButton<String>(
+                      value: selectedCountry, // Use the correct variable
+                      hint: Text("Please Select"),
+                      isExpanded: true,
+                      items: countryList.map((_country) {
+                        return DropdownMenuItem<String>(
+                          value: _country.id,
+                          child: Text(_country.dynamics_code),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          selectedCountry = value; // Update the correct variable
+                          for (var i in countryList) {
+                            if (i.id == value) {
+                              _selectedCountryId = i.id;
+                            }
+                          }
+                        });
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+          
+                  // Department Dropdown
+                  Row(
+                    children: [
+                      Text("Department",
+                          style: TextStyle(
+                              fontSize: 14,
+                              fontFamily: 'pop',
+                              color: Colors.black)),
+                      Text(" *",
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontFamily: 'pop_m',
+                              color: Colors.red)),
+                    ],
+                  ),
+                  const SizedBox(height: 6),
+                  Container(
+                    padding: const EdgeInsets.only(left: 10),
+                    height: MediaQuery.of(context).size.height * 0.06,
+                    decoration: BoxDecoration(
+                        border: Border.all(color: const Color(0xFF0054A4)),
+                        borderRadius: BorderRadius.circular(5.0)),
+                    child: DropdownButton<String>(
+                      value: selectedDepartment, // Use the correct variable
+                      hint: Text("Please Select"),
+                      isExpanded: true,
+                      items: departmentList.map((depart) {
+                        return DropdownMenuItem<String>(
+                          value: depart.id,
+                          child: Text(depart.dept_name),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          selectedDepartment = value; // Update the correct variable
+                          for (var i in departmentList) {
+                            if (i.id == value) {
+                              _selectedDepartmentId = i.id;
+                            }
+                          }
+                        });
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+          
+                  // Entity Dropdown
+                  Row(
+                    children: [
+                      Text("Entity",
+                          style: TextStyle(
+                              fontSize: 14,
+                              fontFamily: 'pop',
+                              color: Colors.black)),
+                      Text(" *",
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontFamily: 'pop_m',
+                              color: Colors.red)),
+                    ],
+                  ),
+                  const SizedBox(height: 6),
+                  Container(
+                    padding: const EdgeInsets.only(left: 10),
+                    height: MediaQuery.of(context).size.height * 0.06,
+                    decoration: BoxDecoration(
+                        border: Border.all(color: const Color(0xFF0054A4)),
+                        borderRadius: BorderRadius.circular(5.0)),
+                    child: DropdownButton<String>(
+                      value: selectedEntity, // Use the correct variable
+                      hint: Text("Please Select"),
+                      isExpanded: true,
+                      items: entityList.map((_entity) {
+                        return DropdownMenuItem<String>(
+                          value: _entity.id,
+                          child: Text(_entity.description),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          selectedEntity = value; // Update the correct variable
+                          for (var i in entityList) {
+                            if (i.id == value) {
+                              _selectedEntityId = i.id;
+                            }
+                          }
+                        });
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+          
+                  // Facility Dropdown
+                  Row(
+                    children: [
+                      Text("Facility",
+                          style: TextStyle(
+                              fontSize: 14,
+                              fontFamily: 'pop',
+                              color: Colors.black)),
+                      Text(" *",
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontFamily: 'pop_m',
+                              color: Colors.red)),
+                    ],
+                  ),
+                  const SizedBox(height: 6),
+                  Container(
+                    padding: const EdgeInsets.only(left: 10),
+                    height: MediaQuery.of(context).size.height * 0.06,
+                    decoration: BoxDecoration(
+                        border: Border.all(color: const Color(0xFF0054A4)),
+                        borderRadius: BorderRadius.circular(5.0)),
+                    child: DropdownButton<String>(
+                      value: selectedPlant, // Use the correct variable
+                      hint: Text("Please Select"),
+                      isExpanded: true,
+                      items: plantList.map((fac) {
+                        return DropdownMenuItem<String>(
+                          value: fac.id,
+                          child: Text(fac.description),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          selectedPlant = value; // Update the correct variable
+                          for (var i in plantList) {
+                            if (i.id == value) {
+                              _selectedPlantId = i.id;
+                            }
+                          }
+                        });
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+          
+                  // Project Dropdown
+                  Row(
+                    children: [
+                      Text("Project",
+                          style: TextStyle(
+                              fontSize: 14,
+                              fontFamily: 'pop',
+                              color: Colors.black)),
+                      Text(" *",
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontFamily: 'pop_m',
+                              color: Colors.red)),
+                    ],
+                  ),
+                  const SizedBox(height: 6),
+                  Container(
+                    padding: const EdgeInsets.only(left: 10),
+                    height: MediaQuery.of(context).size.height * 0.06,
+                    decoration: BoxDecoration(
+                        border: Border.all(color: const Color(0xFF0054A4)),
+                        borderRadius: BorderRadius.circular(5.0)),
+                    child: DropdownButton<String>(
+                      value: selectedProject, // Use the correct variable
+                      hint: Text("Please Select"),
+                      isExpanded: true,
+                      items: projectList.map((project) {
+                        return DropdownMenuItem<String>(
+                          value: project.description,
+                          child: Text(project.description),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          selectedProject = value; // Update the correct variable
+                          print(selectedProject);
+                          for (var i in projectList) {
+                            if (i.description == value) {
+
+                              _selectedProjectId = i.id;
+                              print("check $_selectedProjectId");
+                            }
+                          }
+                        });
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      InkWell(
+                        onTap: () async {
+                          addItemModel newItem = await Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => addItem()),
+                          );
+          
+                          setState(() {
+                            additemlist.add(newItem);
+                          });
+                        },
+                        child: Container(
+                          height: MediaQuery.of(context).size.height * 0.03,
+                          width: MediaQuery.of(context).size.width * 0.2,
+                          decoration: BoxDecoration(
+                              color: const Color(0xFF0054A4),
+                              borderRadius: BorderRadius.circular(5)),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.add, color: MyColor.white_color, size: 16),
+                              const Text(
+                                'Item',
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    fontFamily: 'pop_m',
+                                    color: MyColor.white_color),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 16,
+                      ),
+                      InkWell(
+                        onTap: () async {
+                          List<serachItemModel>? data = await Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => searchItem()),
+                          );
+          
+                          // Check if data is not null before proceeding
+                          if (data != null) {
+                            setState(() {
+                              for (var item in data) {
+                                addItemModel array = addItemModel(
+                                  itemCode: item.code,
+                                  itemName: item.name,
+                                  category: item.category,
+                                  unit: item.unit,
+                                  quantity: 1,
+                                  estimatePrice: "0",
+                                  price: 0.0,
+                                );
+                                additemlist.add(array);
+                              }
+                            });
+                          } else {
+                            // Optionally handle the case where no data was returned
+                            print("No items were selected.");
+                          }
+                        },
+                        child: Container(
+                          height: MediaQuery.of(context).size.height * 0.03,
+                          width: MediaQuery.of(context).size.width * 0.25,
+                          decoration: BoxDecoration(
+                              color: const Color(0xFF0054A4),
+                              borderRadius: BorderRadius.circular(5)),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.search,
+                                  color: MyColor.white_color, size: 16),
+                              const Text(
+                                'Search',
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    fontFamily: 'pop_m',
+                                    color: MyColor.white_color),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+          
+                  if (additemlist.isEmpty)
+                    ...[
+          
+                  ]else ...[
+                    Container(
+                      height: MediaQuery.of(context).size.height *
+                          0.3, // Set a specific height
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                          color: MyColor.white_color,
+                          borderRadius: BorderRadius.circular(5)),
+                      child: ListView.builder(
+                        itemCount: additemlist.length,
+                        itemBuilder: (context, index) {
+                          TextEditingController quantityController =
+                              TextEditingController(
+                                  text: additemlist[index].quantity.toString());
+                          quantityController.text =
+                              additemlist[index].quantity.toString();
+                          TextEditingController estimatepriceController =
+                              TextEditingController(
+                                  text:
+                                      additemlist[index].estimatePrice.toString());
+                          return Padding(
+                            padding: const EdgeInsets.only(left: 8.0, right: 8),
+                            child: Column(
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      color: MyColor.background_light_blue),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Align(
+                                        alignment: Alignment.topRight,
+                                        child: InkWell(
+                                          onTap: () {
+                                            setState(() {
+                                              additemlist.removeAt(index);
+                                            });
+                                          },
+                                          child: Icon(Icons.delete,
+                                              color: MyColor.red_color, size: 16),
+                                        ),
+                                      ),
+                                      Text(
+                                          'Item Name: ${additemlist[index].itemName}',
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              fontFamily: 'pop',
+                                              color: Colors.black)),
+                                      Text(
+                                          'Item Code: ${additemlist[index].itemCode}',
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              fontFamily: 'pop',
+                                              color: Colors.black)),
+                                      Text(
+                                          'Category: ${additemlist[index].category}',
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              fontFamily: 'pop',
+                                              color: Colors.black)),
+                                      Text('Unit: ${additemlist[index].unit}',
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              fontFamily: 'pop',
+                                              color: Colors.black)),
+                                      Row(
+                                        children: [
+                                          Text("Quantity:",
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontFamily: 'pop',
+                                                  color: Colors.black)),
+                                          Expanded(
+                                            child: TextField(
+                                              controller: quantityController,
+                                              keyboardType: TextInputType.number,
+                                              // decoration: InputDecoration(
+                                              //   border: InputBorder.none
+                                              // ),
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  additemlist[index].quantity =
+                                                      double.parse(value);
+                                                  if (estimatepriceController
+                                                      .text.isNotEmpty) {
+                                                    additemlist[index]
+                                                        .price = (double.parse(
+                                                            estimatepriceController
+                                                                .text) *
+                                                        double.parse(value));
+                                                  }
+                                                  _calculateTotal();
+                                                });
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text("Estimate Price:",
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontFamily: 'pop',
+                                                  color: Colors.black)),
+                                          Expanded(
+                                            child: TextField(
+                                              controller: estimatepriceController,
+                                              keyboardType: TextInputType.number,
+                                              // decoration: InputDecoration(
+                                              //   border: InputBorder.none
+                                              // ),
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  additemlist[index].estimatePrice =
+                                                      value.toString();
+                                                  if (quantityController
+                                                      .text.isNotEmpty) {
+                                                    additemlist[index].price =
+                                                        (double.parse(
+                                                                quantityController
+                                                                    .text) *
+                                                            double.parse(value));
+                                                  }
+                                                  _calculateTotal();
+                                                });
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Text(
+                                          'Net Amount: ${additemlist[index].price}',
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              fontFamily: 'pop',
+                                              color: Colors.black)),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 6,
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  Align(
+                    alignment: Alignment.center,
+                    child: InkWell(
+                      onTap: () {
+                        if (validation()) {
+                          _sendPurchaseRequestData();
+                        }
+                      },
+                      child: Container(
+                        width: MediaQuery.of(context).size.width * 0.6,
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                            color: const Color(0xFF0054A4),
+                            borderRadius: BorderRadius.circular(5)),
+                        child: Center(
+                          child: Text("Save",
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontFamily: 'pop_m',
+                                  color: MyColor.white_color)),
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
           ),
-        ),
+          if (_isLoading) // Step 3: Conditionally render the loading widget
+          Center(
+            child: SpinKitWave(
+              size: 50,
+              itemBuilder: (BuildContext context, int index) {
+                return DecoratedBox(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: MyColor.mainAppColor,
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
 
   void _sendPurchaseRequestData() async {
+       setState(() {
+    _isLoading = true; // Start loading
+  });
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('user_access_token');
 
@@ -830,7 +853,9 @@ class _purchaseRequestState extends State<purchaseRequest> {
       },
       body: jsonEncode(purchaseRequest.toJson()),
     );
-
+setState(() {
+    _isLoading = false; // Stop loading
+  });
     print(response.statusCode);
     print(response.body);
     var jsonObject = jsonDecode(response.body);
@@ -865,7 +890,7 @@ class _purchaseRequestState extends State<purchaseRequest> {
       _showMyDialog(
           'Please Select Business Line', MyColor.dialog_error_color, 'error');
       return false;
-    } else if (_selectedCountryId ==null) {
+    } else if (_selectedCountryId == null) {
       _showMyDialog(
           'Please Select Country', MyColor.dialog_error_color, 'error');
       return false;
