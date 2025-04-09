@@ -31,7 +31,7 @@ class _attendanceanalysisState extends State<attendanceanalysis> {
   List<CheckIn_OutLogsModel> checkin_out_log_list = [];
   String _selected = DateFormat('MMM yyyy').format(DateTime.now());
   DateTime selectedDate = DateTime.now();
-  String late="",absent="",total="",progress="";
+  String late = "", absent = "", total = "", progress = "";
   int selectedMonthIndex = DateTime.now().month - 1; // Current month
   int selectedYear = DateTime.now().year; // Current year
 
@@ -55,6 +55,7 @@ class _attendanceanalysisState extends State<attendanceanalysis> {
     super.initState();
     getCheckIn_OutLogs();
   }
+
   callme() async {
     await Future.delayed(Duration(seconds: 3));
     setState(() {
@@ -104,7 +105,8 @@ class _attendanceanalysisState extends State<attendanceanalysis> {
             ],
           )),
       body: Padding(
-        padding: const EdgeInsets.only(left: 12, right: 12, top: 16, bottom: 16),
+        padding:
+            const EdgeInsets.only(left: 12, right: 12, top: 16, bottom: 16),
         child: Column(
           children: [
             Row(
@@ -135,7 +137,7 @@ class _attendanceanalysisState extends State<attendanceanalysis> {
                               height: 4,
                             ),
                             Text(
-                             total.toString(),
+                              total.toString(),
                               style: TextStyle(fontFamily: "pop", fontSize: 16),
                             ),
                             Text(
@@ -217,7 +219,7 @@ class _attendanceanalysisState extends State<attendanceanalysis> {
                               height: 4,
                             ),
                             Text(
-                             absent.toString(),
+                              absent.toString(),
                               style: TextStyle(fontFamily: "pop", fontSize: 16),
                             ),
                             Text(
@@ -235,67 +237,66 @@ class _attendanceanalysisState extends State<attendanceanalysis> {
             const SizedBox(
               height: 24,
             ),
-           Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      child: Text("Attendance Log",
-                          style: TextStyle(fontFamily: 'pop_m', fontSize: 16)),
-                    ),
-                    Row(
-                      children: [
-                        IconButton(
-                          icon: Icon(
-                            Icons.chevron_left,
-                            size: 14,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              if (selectedMonthIndex == 0) {
-                                selectedMonthIndex = months.length - 1;
-                                selectedYear -= 1;
-                              } else {
-                                selectedMonthIndex -= 1;
-                              }
-                            });
-                            getCheckIn_OutLogs();
-                          },
-                        ),
-                        // Month Selector
-                        Text(
-                          '${months[selectedMonthIndex].split(' ').last} ${selectedYear.toString()}',
-                          style: TextStyle(fontFamily: "pop", fontSize: 14),
-                        ),
-
-                        // Next Month Button
-                        Visibility(
-                          visible: DateFormat("MMM yyyy")
-                                      .format(DateTime.now()) ==
-                                  '${months[selectedMonthIndex].split(' ').last} ${selectedYear.toString()}'
-                              ? false
-                              : true,
-                          child: IconButton(
-                            icon: Icon(
-                              Icons.chevron_right,
-                              size: 14,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                if (selectedMonthIndex == months.length - 1) {
-                                  selectedMonthIndex = 0;
-                                  selectedYear += 1;
-                                } else {
-                                  selectedMonthIndex += 1;
-                                }
-                              });
-                              getCheckIn_OutLogs();
-                            },
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  child: Text("Attendance Log",
+                      style: TextStyle(fontFamily: 'pop_m', fontSize: 16)),
                 ),
+                Row(
+                  children: [
+                    IconButton(
+                      icon: Icon(
+                        Icons.chevron_left,
+                        size: 14,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          if (selectedMonthIndex == 0) {
+                            selectedMonthIndex = months.length - 1;
+                            selectedYear -= 1;
+                          } else {
+                            selectedMonthIndex -= 1;
+                          }
+                        });
+                        getCheckIn_OutLogs();
+                      },
+                    ),
+                    // Month Selector
+                    Text(
+                      '${months[selectedMonthIndex].split(' ').last} ${selectedYear.toString()}',
+                      style: TextStyle(fontFamily: "pop", fontSize: 14),
+                    ),
+
+                    // Next Month Button
+                    Visibility(
+                      visible: DateFormat("MMM yyyy").format(DateTime.now()) ==
+                              '${months[selectedMonthIndex].split(' ').last} ${selectedYear.toString()}'
+                          ? false
+                          : true,
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.chevron_right,
+                          size: 14,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            if (selectedMonthIndex == months.length - 1) {
+                              selectedMonthIndex = 0;
+                              selectedYear += 1;
+                            } else {
+                              selectedMonthIndex += 1;
+                            }
+                          });
+                          getCheckIn_OutLogs();
+                        },
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
             const SizedBox(
               height: 16,
             ),
@@ -385,14 +386,15 @@ class _attendanceanalysisState extends State<attendanceanalysis> {
                 ),
               ],
             ),
-            if (progress=='') Padding(
-              padding: const EdgeInsets.only(top: 24.0),
-              child: Center(
-                  child: CircularProgressIndicator(
-                    color: MyColor.mainAppColor,
-                  )),
-            )else  if(checkin_out_log_list.length==0)...[
-
+            if (progress == '')
+              Padding(
+                padding: const EdgeInsets.only(top: 24.0),
+                child: Center(
+                    child: CircularProgressIndicator(
+                  color: MyColor.mainAppColor,
+                )),
+              )
+            else if (checkin_out_log_list.length == 0) ...[
               Container(
                 alignment: Alignment.center,
                 padding: EdgeInsets.only(top: 80),
@@ -414,8 +416,7 @@ class _attendanceanalysisState extends State<attendanceanalysis> {
                   ],
                 ),
               ),
-              
-            ]else...[
+            ] else ...[
               Expanded(
                 child: ListView.builder(
                     itemCount: checkin_out_log_list.length,
@@ -453,8 +454,8 @@ class _attendanceanalysisState extends State<attendanceanalysis> {
                                           fontFamily: "pop",
                                           fontSize: 12,
                                           color: checkin_out_log_list[index]
-                                              .attstatus ==
-                                              'Present'
+                                                      .attstatus ==
+                                                  'Present'
                                               ? MyColor.yellow_color
                                               : MyColor.green_color)),
                                 ),
@@ -504,25 +505,31 @@ class _attendanceanalysisState extends State<attendanceanalysis> {
     String? e_id = pref.getString('e_id');
     String? user_emp_code = pref.getString('user_emp_code');
     String? token = pref.getString('user_access_token');
-     print(months[selectedMonthIndex].toString().split(" ").first);
+    print(months[selectedMonthIndex].toString().split(" ").first);
     print(selectedYear);
-    var response = await http.post(Uri.parse('${baseurl.url}attendacelog'),
-        body: {'month_number': '${months[selectedMonthIndex].toString().split(" ").first}', 'year': selectedYear.toString()},
-        headers: {'Authorization': 'Bearer $token'});
+    var response =
+        await http.post(Uri.parse('${baseurl.url}attendacelog'), body: {
+      'month_number':
+          '${months[selectedMonthIndex].toString().split(" ").first}',
+      'year': selectedYear.toString()
+    }, headers: {
+      'Authorization': 'Bearer $token'
+    });
     checkin_out_log_list.clear();
     print('Attandance Log ' + response.body);
+    print(response.statusCode);
 
     if (response.statusCode == 200) {
       var jsonObject = json.decode(response.body);
 
       if (jsonObject['status'] == '1') {
-       // checkin_out_log_list.clear();
+        // checkin_out_log_list.clear();
         var checkInArray = jsonObject['data'];
-    setState(() {
-      total=jsonObject['totalattendance'];
-      late=jsonObject['latecheckin'];
-      absent=jsonObject['absent'];
-    });
+        setState(() {
+          total = jsonObject['totalattendance'];
+          late = jsonObject['latecheckin'];
+          absent = jsonObject['absent'];
+        });
 
         for (var logs in checkInArray) {
           CheckIn_OutLogsModel logsModel = CheckIn_OutLogsModel(
@@ -537,20 +544,54 @@ class _attendanceanalysisState extends State<attendanceanalysis> {
         }
       } else {
         setState(() {
-          checkin_out_log_list==[];
-           setState(() {
-      total=jsonObject['totalattendance'];
-      late=jsonObject['latecheckin'];
-      absent=jsonObject['absent'];
-    });
-
+          checkin_out_log_list == [];
+          setState(() {
+            total = jsonObject['totalattendance'];
+            late = jsonObject['latecheckin'];
+            absent = jsonObject['absent'];
+          });
         });
       }
     } else if (response.statusCode == 401) {
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => Login_Activity()));
+    } else if (response.statusCode == 500) {
+      _showMyDialog('Something Went Wrong', Color(0xFF861F41), 'error');
     }
 
     return checkin_out_log_list;
+  }
+
+  Future<void> _showMyDialog(
+      String msg, Color color_dynamic, String success) async {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Row(
+        children: [
+          if (success == 'success') ...[
+            Icon(
+              Icons.check,
+              color: MyColor.white_color,
+            ),
+          ] else ...[
+            Icon(
+              Icons.error,
+              color: MyColor.white_color,
+            ),
+          ],
+          SizedBox(
+            width: 8,
+          ),
+          Flexible(
+              child: Text(
+            msg,
+            style: TextStyle(color: MyColor.white_color),
+            maxLines: 2,
+          ))
+        ],
+      ),
+      backgroundColor: color_dynamic,
+      behavior: SnackBarBehavior.floating,
+      elevation: 3,
+    ));
   }
 }

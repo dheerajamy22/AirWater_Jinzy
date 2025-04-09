@@ -86,7 +86,7 @@ class _halfdayDashState extends State<halfdayDash> {
   }
   @override
   void initState() {
-    callme();
+    // callme();
     getlist();
     getemplist("Onbehalf");
     //s
@@ -404,6 +404,9 @@ class _halfdayDashState extends State<halfdayDash> {
     print(response.statusCode);
     print(response.body);
     if (response.statusCode == 200) {
+       setState(() {
+      progress = '1';
+    });
       var jsonobject = jsonDecode(response.body);
       if (jsonobject['status'] == "1") {
         var jsonarray = jsonobject['data'];
@@ -423,11 +426,24 @@ class _halfdayDashState extends State<halfdayDash> {
         }
       }
     } else if (response.statusCode == 401) {
+       setState(() {
+      progress = '1';
+    });
       SharedPreferences preferences = await SharedPreferences.getInstance();
       await preferences.setString("login_check", "false");
       preferences.commit();
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => Login_Activity()));
+    }else if(response.statusCode==500){
+       setState(() {
+      progress = '1';
+    });
+      _showMyDialog('Something Went Wrong', Color(0xFF861F41), 'error');
+    }else if(response.statusCode==404){
+      setState(() {
+      progress = '1';
+    });
+      _showMyDialog('Something Went Wrong', Color(0xFF861F41), 'error');
     }
   }
 

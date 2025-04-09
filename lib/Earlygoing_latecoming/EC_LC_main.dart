@@ -26,7 +26,7 @@ class _EGLCDashState extends State<EGLCDash> {
   void initState() {
     // TODO: implement initState
     getlist();
-    callme();
+    // callme();
     super.initState();
   }
 
@@ -254,12 +254,16 @@ class _EGLCDashState extends State<EGLCDash> {
     SharedPreferences pref = await SharedPreferences.getInstance();
     String token = pref.getString('user_access_token')!;
     EGLClist.clear();
-    var response = await http.post(Uri.parse('${baseurl.url}lceglist'),
+    var response = await http.post(Uri.parse('${baseurl.url}late-comming-earyly-going-list'),
         headers: {'Authorization': 'Bearer $token'},
-        body: {'model_name': "LateCEarlyGo"});
+        // body: {'model_name': "LateCEarlyGo"}
+        );
     print(response.statusCode);
     print(response.body);
     if (response.statusCode == 200) {
+       setState(() {
+      progress = '1';
+    });
       var jsonobject = jsonDecode(response.body);
       if (jsonobject['status'] == "1") {
         var jsonarray = jsonobject['data'];
@@ -278,11 +282,54 @@ class _EGLCDashState extends State<EGLCDash> {
         }
       }
     } else if (response.statusCode == 401) {
+       setState(() {
+      progress = '1';
+    });
       SharedPreferences preferences = await SharedPreferences.getInstance();
       await preferences.setString("login_check", "false");
       preferences.commit();
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => Login_Activity()));
+    }else if(response.statusCode==500){
+       setState(() {
+      progress = '1';
+    });
+       _showMyDialog('Something went wrong', Color(0xFF861F41), 'error');
     }
   }
+
+  Future<void> _showMyDialog(
+      String msg, Color color_dynamic, String success) async {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Row(
+        children: [
+          if (success == 'success') ...[
+            Icon(
+              Icons.check,
+              color: MyColor.white_color,
+            ),
+          ] else ...[
+            Icon(
+              Icons.error,
+              color: MyColor.white_color,
+            ),
+          ],
+          SizedBox(
+            width: 8,
+          ),
+          Flexible(
+              child: Text(
+            msg,
+            style: TextStyle(color: MyColor.white_color),
+            maxLines: 2,
+          ))
+        ],
+      ),
+      backgroundColor: color_dynamic,
+      behavior: SnackBarBehavior.floating,
+      elevation: 3,
+    ));
+  }
+
+
 }

@@ -30,7 +30,7 @@ class _leavelistState extends State<leavelist> {
 
   @override
   void initState() {
-    callme();
+   // callme();
     getleavelist('All');
 
     super.initState();
@@ -56,6 +56,9 @@ class _leavelistState extends State<leavelist> {
     );
     print(response.body);
     if (response.statusCode == 200) {
+       setState(() {
+      progress = '1';
+    });
       var jsonObject = jsonDecode(response.body);
       if (jsonObject['status'] == "1") {
         // leaverqst_details.clear();
@@ -111,6 +114,9 @@ class _leavelistState extends State<leavelist> {
         }
       } else {}
     } else if (response.statusCode == 401) {
+       setState(() {
+      progress = '1';
+    });
       SharedPreferences preferences = await SharedPreferences.getInstance();
       await preferences.setString("login_check", "false");
       preferences.commit();

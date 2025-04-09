@@ -263,9 +263,9 @@ class _birthday_anniversaryState extends State<birthday_anniversary> {
     String? e_id = p.getString('e_id');
     String? token = p.getString('user_access_token');
 
-    var response = await http.get(
+    var response = await http.post(
         Uri.parse(
-            '${baseurl.url}birthday_View?entity_id=${EncryptData.decryptAES(e_id.toString())}'),
+            '${baseurl.url}birthday-list'),
         headers: {'Authorization': 'Bearer $token'});
 
     var jsonData = json.decode(response.body);
@@ -304,7 +304,7 @@ class _birthday_anniversaryState extends State<birthday_anniversary> {
     // String? token = p.getString('user_access_token');
     var response = await http.get(
         Uri.parse(
-            '${baseurl.url}anniversary_View?entity_id=${EncryptData.decryptAES(e_id.toString())}'),
+            '${baseurl.url}anniversary-list'),
         headers: {'Authorization': 'Bearer $token'});
 
     print('annivesary  ' + response.body);
@@ -313,10 +313,10 @@ class _birthday_anniversaryState extends State<birthday_anniversary> {
     if (response.statusCode == 200) {
       if (jsonData['status'] == "1") {
         var jsonArray = jsonData['AnniversaryList'];
-        UpComing_AnniversaryModel aniData;
+     
         for (var data in jsonArray) {
-          aniData = UpComing_AnniversaryModel(
-              emp_name: data['name'],
+       UpComing_AnniversaryModel   aniData = UpComing_AnniversaryModel(
+              emp_name: data['emp_fname'],
               emp_anidate: data['emp_joining_date'],
               profile_photo: data['emp_photo'],
               cake_icon: data['cake_icon'],

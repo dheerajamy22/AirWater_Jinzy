@@ -323,7 +323,7 @@ class _EG_LCState extends State<EG_LC> {
     SharedPreferences pref = await SharedPreferences.getInstance();
     String? token = pref.getString('user_access_token');
     var response = await http
-        .post(Uri.parse('${baseurl.url}latecommingrequest'), headers: {
+        .post(Uri.parse('${baseurl.url}late-comming-earyly-going-request'), headers: {
       'Authorization': 'Bearer $token'
     }, body: {
       'type': requesttype,

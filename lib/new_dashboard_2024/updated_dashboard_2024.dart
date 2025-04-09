@@ -2090,7 +2090,7 @@ class _upcoming_dashState extends State<upcoming_dash> {
     String? token = pr.getString('user_access_token');
     print('${token}');
     var response = await http
-        .post(Uri.parse('${baseurl.url}WebLog-CheckIn-OutDetails'), body: {
+        .post(Uri.parse('${baseurl.url}attendence-log'), body: {
       'emp_code': EncryptData.decryptAES(user_emp_code!),
     }, headers: {
       'Authorization': 'Bearer $token'
@@ -2385,25 +2385,25 @@ class _upcoming_dashState extends State<upcoming_dash> {
   }
 
   Future<void> _leavebalance(List<BalanceLeaveModel> balancelist) {
-    bool _leavebalance_visi = true;
+    bool leavebalanceVisi = true;
     return showDialog(
         context: context,
         barrierDismissible: false,
         builder: (BuildContext) {
           return StatefulBuilder(builder: (context, setState) {
             return AlertDialog(
-                scrollable: true,
-                shape: RoundedRectangleBorder(
+                //scrollable: true,
+                shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10))),
                 content: SizedBox(
                   width: double.maxFinite,
-                  height: 370,
+                  height: MediaQuery.of(context).size.height * 0.51,
                   child: Column(
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
+                          const Text(
                             "Leave Balance",
                             style: TextStyle(fontFamily: "pop_m", fontSize: 16),
                           ),
@@ -2411,81 +2411,85 @@ class _upcoming_dashState extends State<upcoming_dash> {
                               onPressed: () {
                                 Navigator.pop(context);
                               },
-                              icon: Icon(Icons.close)),
+                              icon: const Icon(Icons.close)),
                         ],
                       ),
                       const SizedBox(
                         height: 16,
                       ),
-                      ListView.builder(
-                          shrinkWrap: true,
-                          scrollDirection: Axis.vertical,
-                          itemCount: balancelist.length,
-                          itemBuilder: (
-                            context,
-                            index,
-                          ) {
-                            return Column(
-                              children: [
-                                Align(
-                                    alignment: Alignment.topLeft,
-                                    child: Text(
-                                      "${balance_list[index].lc_name}",
-                                      style: TextStyle(
-                                          fontFamily: "pop_m", fontSize: 16),
-                                    )),
-                                const SizedBox(
-                                  height: 8,
-                                ),
-                                LinearProgressBar(
-                                  maxSteps: int.parse(
-                                      balancelist[index].totalbalance),
-                                  progressType:
-                                      LinearProgressBar.progressTypeLinear,
-                                  // Use Dots progress
-                                  currentStep: int.parse(balancelist[index]
-                                      .usedleave
-                                      .split('.')
-                                      .first),
-                                  backgroundColor: MyColor.mainAppColor,
-                                  progressColor: Colors.grey,
-                                  minHeight: 3,
-                                ),
-                                const SizedBox(
-                                  height: 4,
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Visibility(
-                                      visible: _leavebalance_visi == true
-                                          ? false
-                                          : true,
-                                      child: Text(
-                                        "${balance_list[index].usedleave}",
-                                        style: TextStyle(
-                                            fontFamily: "pop_m",
-                                            fontSize: 16,
-                                            color: Colors.black38),
-                                      ),
-                                    ),
-                                    Visibility(
-                                      visible: _leavebalance_visi,
-                                      child: Text(
-                                        "${balance_list[index].balance}",
-                                        style: TextStyle(
-                                            fontFamily: "pop_m",
-                                            fontSize: 16,
-                                            color: MyColor.mainAppColor),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            );
-                          }),
                       SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.3,
+                        child: ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.vertical,
+                            // physics: NeverScrollableScrollPhysics(),
+                            itemCount: balancelist.length,
+                            itemBuilder: (
+                              context,
+                              index,
+                            ) {
+                              return Column(
+                                children: [
+                                  Align(
+                                      alignment: Alignment.topLeft,
+                                      child: Text(
+                                        balance_list[index].lc_name,
+                                        style: const TextStyle(
+                                            fontFamily: "pop_m", fontSize: 16),
+                                      )),
+                                  const SizedBox(
+                                    height: 8,
+                                  ),
+                                  LinearProgressBar(
+                                    maxSteps: int.parse(
+                                        balancelist[index].totalbalance),
+                                    progressType:
+                                        LinearProgressBar.progressTypeLinear,
+                                    // Use Dots progress
+                                    currentStep: int.parse(balancelist[index]
+                                        .usedleave
+                                        .split('.')
+                                        .first),
+                                    backgroundColor: MyColor.mainAppColor,
+                                    progressColor: Colors.grey,
+                                    minHeight: 3,
+                                  ),
+                                  const SizedBox(
+                                    height: 4,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Visibility(
+                                        visible: leavebalanceVisi == true
+                                            ? false
+                                            : true,
+                                        child: Text(
+                                          balance_list[index].usedleave,
+                                          style: const TextStyle(
+                                              fontFamily: "pop_m",
+                                              fontSize: 16,
+                                              color: Colors.black38),
+                                        ),
+                                      ),
+                                      Visibility(
+                                        visible: leavebalanceVisi,
+                                        child: Text(
+                                          balance_list[index].balance,
+                                          style: const TextStyle(
+                                              fontFamily: "pop_m",
+                                              fontSize: 16,
+                                              color: MyColor.mainAppColor),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              );
+                            }),
+                      ),
+                      const SizedBox(
                         height: 16,
                       ),
                       Row(
@@ -2494,20 +2498,20 @@ class _upcoming_dashState extends State<upcoming_dash> {
                           InkWell(
                             onTap: () {
                               setState(() {
-                                _leavebalance_visi = false;
+                                leavebalanceVisi = false;
                               });
-                              print(_leavebalance_visi);
+                              print(leavebalanceVisi);
                             },
                             child: Container(
                               height: MediaQuery.of(context).size.height * 0.03,
                               width: MediaQuery.of(context).size.width * 0.2,
                               decoration: BoxDecoration(
                                   border: Border.all(
-                                      color: _leavebalance_visi == true
+                                      color: leavebalanceVisi == true
                                           ? Colors.transparent
                                           : Colors.black38),
                                   borderRadius: BorderRadius.circular(8)),
-                              child: Center(
+                              child: const Center(
                                 child: Text(
                                   "Used",
                                   style: TextStyle(
@@ -2522,20 +2526,20 @@ class _upcoming_dashState extends State<upcoming_dash> {
                           InkWell(
                             onTap: () {
                               setState(() {
-                                _leavebalance_visi = true;
+                                leavebalanceVisi = true;
                               });
-                              print(_leavebalance_visi);
+                              print(leavebalanceVisi);
                             },
                             child: Container(
                               height: MediaQuery.of(context).size.height * 0.03,
                               width: MediaQuery.of(context).size.width * 0.2,
                               decoration: BoxDecoration(
                                   border: Border.all(
-                                      color: _leavebalance_visi == true
+                                      color: leavebalanceVisi == true
                                           ? MyColor.mainAppColor
                                           : Colors.transparent),
                                   borderRadius: BorderRadius.circular(8)),
-                              child: Center(
+                              child: const Center(
                                 child: Text(
                                   "Available",
                                   style: TextStyle(
@@ -2547,7 +2551,7 @@ class _upcoming_dashState extends State<upcoming_dash> {
                           )
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 16,
                       ),
                       InkWell(
@@ -2555,7 +2559,7 @@ class _upcoming_dashState extends State<upcoming_dash> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => CreteLeaveRequest(
+                                  builder: (context) => const CreteLeaveRequest(
                                         self_select: 'Self',
                                       )));
                         },
@@ -2565,7 +2569,7 @@ class _upcoming_dashState extends State<upcoming_dash> {
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20),
                               color: MyColor.mainAppColor),
-                          child: Center(
+                          child: const Center(
                             child: Text(
                               "Apply",
                               style: TextStyle(
@@ -2767,17 +2771,17 @@ class _upcoming_dashState extends State<upcoming_dash> {
       empstatus = p.getString('empstatus');
     });
 
-    var response = await http.get(
+    var response = await http.post(
         Uri.parse(
-            '${baseurl.url}birthday_View?entity_id=${EncryptData.decryptAES(e_id.toString())}'),
+            '${baseurl.url}birthday-list'),
         headers: {'Authorization': 'Bearer $token'});
-
+   print('bdayc  ' + response.body);
     var jsonData = json.decode(response.body);
     if (response.statusCode == 200) {
       if (jsonData['status'] == "1") {
         var jsonArray = jsonData['BirthdayList'];
 
-        print('bdayc  ' + response.body);
+     
         for (var data in jsonArray) {
           BirthdayModel birthdayModel = BirthdayModel(
               name: data['name'],
@@ -2879,7 +2883,7 @@ class _upcoming_dashState extends State<upcoming_dash> {
     SharedPreferences p = await SharedPreferences.getInstance();
     String? token = p.getString('user_access_token');
     var response = await http.get(
-      Uri.parse("${baseurl.url}leavebalance"),
+      Uri.parse("${baseurl.url}leave-balance"),
       headers: {
         'Authorization': 'Bearer $token',
       },
