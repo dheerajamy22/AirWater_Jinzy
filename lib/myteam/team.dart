@@ -8,6 +8,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../_login_part/login_activity.dart';
 import '../app_color/color_constants.dart';
 
 class myteam extends StatefulWidget {
@@ -32,6 +33,9 @@ class _myteamState extends State<myteam> {
     print('Team Data ' + response.body);
 
     if (response.statusCode == 200) {
+      setState(() {
+        progress = '1';
+      });
       var jsonObject = json.decode(response.body);
       if (jsonObject['status'] == '1') {
         var listJsonArray = jsonObject['team'];
@@ -49,7 +53,22 @@ class _myteamState extends State<myteam> {
           });
         }
       } else {}
-    } else {}
+    }
+    else if (response.statusCode == 401) {
+      setState(() {
+        progress = '1';
+      });
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      await preferences.setString("login_check", "false");
+      preferences.commit();
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => Login_Activity()));
+    }
+    else {
+      setState(() {
+        progress = '1';
+      });
+    }
 
     return team_list;
   }
@@ -58,7 +77,7 @@ class _myteamState extends State<myteam> {
 
   @override
   void initState() {
-    callme();
+   // callme();
     super.initState();
     getTeamRequest();
   }

@@ -51,16 +51,14 @@ class _attendanceanalysisState extends State<attendanceanalysis> {
   ];
   @override
   void initState() {
-    callme();
+    //callme();
     super.initState();
     getCheckIn_OutLogs();
   }
 
   callme() async {
     await Future.delayed(Duration(seconds: 3));
-    setState(() {
-      progress = '1';
-    });
+
   }
 
   Future<void> _selectMonthAndYear(BuildContext context) async {
@@ -520,6 +518,9 @@ class _attendanceanalysisState extends State<attendanceanalysis> {
     print(response.statusCode);
 
     if (response.statusCode == 200) {
+      setState(() {
+        progress = '1';
+      });
       var jsonObject = json.decode(response.body);
 
       if (jsonObject['status'] == '1') {
@@ -552,11 +553,19 @@ class _attendanceanalysisState extends State<attendanceanalysis> {
           });
         });
       }
-    } else if (response.statusCode == 401) {
+    }
+    else if (response.statusCode == 401) {
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => Login_Activity()));
     } else if (response.statusCode == 500) {
+      setState(() {
+        progress = '1';
+      });
       _showMyDialog('Something Went Wrong', Color(0xFF861F41), 'error');
+    }else{
+      setState(() {
+        progress = '1';
+      });
     }
 
     return checkin_out_log_list;

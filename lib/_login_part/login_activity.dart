@@ -624,7 +624,7 @@ class _Login_ActivityState extends State<Login_Activity> {
         await pr.hide();
         _showMyDialog(jsonObject['message'], Color(0xFF861F41), 'error');
       }
-    } else if (response.statusCode == 401) {
+    } else if (response.statusCode == 422) {
       Navigator.of(context).pop();
       _showMyDialog(jsonObject['message'], Color(0xFF861F41), 'error');
     } else if (response.statusCode == 500) {
@@ -632,7 +632,7 @@ class _Login_ActivityState extends State<Login_Activity> {
       _showMyDialog('Something Went Wrong', Color(0xFF861F41), 'error');
     } else {
       print("else part");
-      pr.hide().then((isHidden) {
+    pr.hide().then((isHidden) {
         print(isHidden);
       });
     }
