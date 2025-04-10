@@ -1143,24 +1143,19 @@ void bottomDialog() async {
    bool dialogValidation() {
     if (amount.text.isEmpty) {
       _showMyDialog('Please Enter Amount', MyColor.dialog_error_color, 'error');
-
       return false;
     } else if (FromedateInput.text.isEmpty) {
       _showMyDialog('Please Select Date', MyColor.dialog_error_color, 'error');
-
       return false;
     } else if (selectedExpenseCategory == null) {
       _showMyDialog('Please Select Expense Category',
           MyColor.dialog_error_color, 'error');
-
       return false;
     } else if (selectedCurrency == null) {
       _showMyDialog(
           'Please Select Currency', MyColor.dialog_error_color, 'error');
-
       return false;
     }
-
     return true;
   }
 

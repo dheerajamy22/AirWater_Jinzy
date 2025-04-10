@@ -6,8 +6,6 @@ class UpComing_AnniversaryModel {
   final String cake_icon;
   final String emp_pos_name;
 
-  //
-
   UpComing_AnniversaryModel(
       {required this.emp_name,
         required this.emp_anidate,
