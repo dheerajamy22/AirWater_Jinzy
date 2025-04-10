@@ -16,7 +16,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 class CreteLeaveRequest extends StatefulWidget {
   final String self_select;
 
@@ -31,7 +30,7 @@ class _CreteLeaveRequestState extends State<CreteLeaveRequest> {
   final _LeaveServices = Create_Leave_ApiServices();
   LeaveTypeModule? module;
   List<XFile> selecteMultiImagesList = <XFile>[];
-  List<String> rejoiningDateArray=[];
+  List<String> rejoiningDateArray = [];
   var _countries = [];
   var team_names = [];
   File? image_file;
@@ -41,7 +40,10 @@ class _CreteLeaveRequestState extends State<CreteLeaveRequest> {
   bool isCountrySelected = false;
   String emp_code = "", leave_code_id = "";
   int no_of_leave = 0;
-  String leave_balance = "", datevalid = "",rejoining_date="",documentvalid="";
+  String leave_balance = "",
+      datevalid = "",
+      rejoining_date = "",
+      documentvalid = "";
   List<String> rqst_type = ["Self", "Onbehalf"];
   String leave_behalf = "Self";
   String name = "";
@@ -83,6 +85,7 @@ class _CreteLeaveRequestState extends State<CreteLeaveRequest> {
           LeaveTypeModule leaveTypeModule = LeaveTypeModule(
               lc_id: leaveType['lc_id'].toString(),
               lc_name: leaveType['lc_name'],
+              halfdayallowed:leaveType['halfdayallowed'],
               balance: leaveType['balance']);
 
           leaveTypeList.add(leaveTypeModule);
@@ -93,8 +96,8 @@ class _CreteLeaveRequestState extends State<CreteLeaveRequest> {
       SharedPreferences preferences = await SharedPreferences.getInstance();
       await preferences.setString("login_check", "false");
       preferences.commit();
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) =>  Login_Activity()));
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => Login_Activity()));
     }
 
     return leaveTypeList;
@@ -151,8 +154,8 @@ class _CreteLeaveRequestState extends State<CreteLeaveRequest> {
       SharedPreferences preferences = await SharedPreferences.getInstance();
       await preferences.setString("login_check", "false");
       preferences.commit();
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) =>  Login_Activity()));
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => Login_Activity()));
     }
   }
 
@@ -218,84 +221,6 @@ class _CreteLeaveRequestState extends State<CreteLeaveRequest> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // if (widget.self_select != 'Self') ...[
-              //   Container(
-              //     width: MediaQuery.of(context).size.width,
-              //     height: MediaQuery.of(context).size.height * 0.06,
-              //     alignment: Alignment.centerLeft,
-              //     padding: const EdgeInsets.only(left: 8, right: 8),
-              //     decoration: BoxDecoration(
-              //         border: Border.all(color: MyColor.mainAppColor),
-              //         borderRadius: BorderRadius.circular(5)),
-              //     child: DropdownButton<String>(
-              //         underline: Container(),
-              //         hint: Text("Select employee"),
-              //         icon: const Icon(Icons.keyboard_arrow_down),
-              //         isDense: true,
-              //         isExpanded: true,
-              //         alignment: Alignment.centerLeft,
-              //         items: team_names.map((ctry) {
-              //           return DropdownMenuItem<String>(
-              //               value: ctry["emp_name"].toString(),
-              //               child: Text(ctry["emp_name"].toString()));
-              //         }).toList(),
-              //         value: team_emp_name,
-              //         onChanged: (value) {
-              //           setState(() {
-              //             team_emp_name = value!;
-              //             // print('dropDownId ' + "YDH");
-
-              //             for (int i = 0; i < team_names.length; i++) {
-              //               if (team_names[i]["emp_name"] == value) {
-              //                 emp_id = team_names[i]["emp_id"].toString();
-              //                 print("vxjvjvcjhcvj  $team_emp_name");
-              //                 print('dropDownId ' + emp_id.toString());
-              //               }
-              //             }
-              //             // isCountrySelected = true;
-              //           });
-              //         }),
-              //   ),
-              //   const SizedBox(
-              //     height: 16,
-              //   ),
-              // ],
-
-              // Container(
-              //   width: MediaQuery.of(context).size.width,
-              //   height: MediaQuery.of(context).size.height * 0.06,
-              //   alignment: Alignment.centerLeft,
-              //   padding: const EdgeInsets.only(left: 8, right: 8),
-              //   decoration: BoxDecoration(
-              //       border: Border.all(color: MyColor.mainAppColor),
-              //       borderRadius: BorderRadius.circular(5)),
-              //   child: DropdownButton(
-              //     value: leave_plan,
-              //     hint: const Text("Requesting Type"),
-              //     isDense: true,
-              //     isExpanded: true,
-              //     underline: Container(),
-              //     icon: const Icon(Icons.keyboard_arrow_down),
-              //     items: leave_planned.map((String items) {
-              //       return DropdownMenuItem(
-              //         value: items,
-              //         child: Text(items),
-              //       );
-              //     }).toList(),
-              //     // After selecting the desired option,it will
-              //     // change button value to selected value
-              //     onChanged: submit_visi == true
-              //         ? null
-              //         : (String? newValue) {
-              //             setState(() {
-              //               country = null;
-              //               leave_plan = newValue!;
-              //               print(leave_plan);
-              //               getAllLeaveList();
-              //             });
-              //           },
-              //   ),
-              // ),
               Container(
                 height: 52,
                 alignment: Alignment.centerLeft,
@@ -327,7 +252,6 @@ class _CreteLeaveRequestState extends State<CreteLeaveRequest> {
                           ? null
                           : (value) {
                               setState(() {
-
                                 leave_balance_visi = true;
                                 country = value!;
                                 for (int i = 0; i < _countries.length; i++) {
@@ -347,7 +271,7 @@ class _CreteLeaveRequestState extends State<CreteLeaveRequest> {
                                   }
                                 }
                                 isCountrySelected = true;
-                                if(documentvalid!="Yes"){
+                                if (documentvalid != "Yes") {
                                   selecteMultiImagesList.clear();
                                 }
                               });
@@ -370,48 +294,7 @@ class _CreteLeaveRequestState extends State<CreteLeaveRequest> {
                           color: MyColor.mainAppColor),
                     ),
                   )),
-              // const SizedBox(
-              //   height: 16,
-              // ),
 
-              // Visibility(
-              //   visible: leave_code_id == "AL" ? true : false,
-              //   child: Container(
-              //     height: 52,
-              //     alignment: Alignment.centerLeft,
-              //     decoration: BoxDecoration(
-              //       border: Border.all(color: const Color(0xFF0054A4)),
-              //       borderRadius: BorderRadius.circular(5),
-              //     ),
-              //     child: Padding(
-              //       padding: const EdgeInsets.only(
-              //         left: 10,
-              //         right: 10,
-              //       ),
-              //       child: DropdownButton<String>(
-              //           underline: Container(),
-              //           hint: const Text("Select Annual Leave Type"),
-              //           style: const TextStyle(
-              //               color: Colors.grey,
-              //               fontFamily: "pop",
-              //               fontSize: 14),
-              //           icon: const Icon(Icons.keyboard_arrow_down),
-              //           isDense: true,
-              //           isExpanded: true,
-              //           alignment: Alignment.centerLeft,
-              //           items: Annual_Leave.map((type) {
-              //             return DropdownMenuItem<String>(
-              //                 value: type, child: Text(type));
-              //           }).toList(),
-              //           value: annualLeave,
-              //           onChanged: (value) {
-              //             setState(() {
-              //               annualLeave = value!;
-              //             });
-              //           }),
-              //     ),
-              //   ),
-              // ),
               const SizedBox(
                 height: 16,
               ),
@@ -450,11 +333,10 @@ class _CreteLeaveRequestState extends State<CreteLeaveRequest> {
                               fontFamily: 'pop'),
                           readOnly: true,
                           onTap: () async {
-
                             if (leave_code_id == '') {
-                              _showMyDialog(
-                                  'Please Select leave Code', const Color(0xFF861F41), 'error');
-                            }else{
+                              _showMyDialog('Please Select leave Code',
+                                  const Color(0xFF861F41), 'error');
+                            } else {
                               DateTime? pickedDate = await showDatePicker(
                                   context: context,
                                   initialDate: TodateInput == ""
@@ -472,7 +354,7 @@ class _CreteLeaveRequestState extends State<CreteLeaveRequest> {
                                 print(
                                     pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
                                 String formattedDate =
-                                DateFormat('yyyy-MM-dd').format(pickedDate);
+                                    DateFormat('yyyy-MM-dd').format(pickedDate);
                                 print(
                                     formattedDate); //formatted date output using intl package =>  2021-03-16
 
@@ -481,8 +363,8 @@ class _CreteLeaveRequestState extends State<CreteLeaveRequest> {
                                   if (FromedateInput.text != '' &&
                                       TodateInput.text != '') {
                                     int noOfDay = daysBetween(
-                                        DateTime.parse(FromedateInput.text),
-                                        DateTime.parse(TodateInput.text)) +
+                                            DateTime.parse(FromedateInput.text),
+                                            DateTime.parse(TodateInput.text)) +
                                         1;
                                     is_true = true;
                                     no_of_leave = noOfDay;
@@ -492,7 +374,6 @@ class _CreteLeaveRequestState extends State<CreteLeaveRequest> {
                                 });
                               } else {}
                             }
-
                           },
                         ),
                       ),
@@ -647,7 +528,7 @@ class _CreteLeaveRequestState extends State<CreteLeaveRequest> {
                   readOnly: true,
                   onTap: () async {
                     // If RejoiningDate is empty, use the current date, else parse from the current text.
-                    DateTime initialDate = rejoining_date==""
+                    DateTime initialDate = rejoining_date == ""
                         ? DateTime.now()
                         : DateTime.parse(rejoining_date);
 
@@ -656,10 +537,12 @@ class _CreteLeaveRequestState extends State<CreteLeaveRequest> {
                       context: context,
                       initialDate: initialDate,
                       firstDate: initialDate, // No previous dates allowed
-                      lastDate: DateTime(2100), // You can set any last possible date
+                      lastDate:
+                          DateTime(2100), // You can set any last possible date
                       selectableDayPredicate: (date) {
                         // Format date to string
-                        String dateString = DateFormat('yyyy-MM-dd').format(date);
+                        String dateString =
+                            DateFormat('yyyy-MM-dd').format(date);
 
                         // Return false if the date is in the disabledDates list (making it unselectable)
                         return !rejoiningDateArray.contains(dateString);
@@ -668,7 +551,8 @@ class _CreteLeaveRequestState extends State<CreteLeaveRequest> {
 
                     if (_pickdate != null) {
                       // Format the picked date as 'yyyy-MM-dd'
-                      String formattedDate = DateFormat('yyyy-MM-dd').format(_pickdate);
+                      String formattedDate =
+                          DateFormat('yyyy-MM-dd').format(_pickdate);
 
                       // Update the TextField with the selected date
                       setState(() {
@@ -707,34 +591,7 @@ class _CreteLeaveRequestState extends State<CreteLeaveRequest> {
                   maxLines: 5,
                 ),
               ),
-              // const SizedBox(
-              //   height: 16,
-              // ),
-              // const Text("Visiting Country",
-              //     style: TextStyle(fontFamily: "pop_m", fontSize: 16)),
-              // const SizedBox(
-              //   height: 8,
-              // ),
-              // Container(
-              //   width: MediaQuery.of(context).size.width,
-              //   alignment: Alignment.bottomLeft,
-              //   padding: const EdgeInsets.only(left: 8),
-              //   decoration: BoxDecoration(
-              //       border: Border.all(color: const Color(0xFF0054A4)),
-              //       borderRadius: BorderRadius.circular(5)),
-              //   child: TextField(
-              //     controller: VisitingCountryInput,
-              //     decoration: const InputDecoration(
-              //         // labelText: 'Description',
-              //         border: InputBorder.none,
-              //         hintText: 'Enter Country',
-              //         hintStyle: TextStyle(
-              //             color: Colors.grey, fontFamily: "pop", fontSize: 14)),
-              //     keyboardType: TextInputType.multiline,
-              //     minLines: 1,
-              //     maxLines: 5,
-              //   ),
-              // ),
+
               const SizedBox(
                 height: 16,
               ),
@@ -761,93 +618,9 @@ class _CreteLeaveRequestState extends State<CreteLeaveRequest> {
                       hintStyle: TextStyle(
                           color: Colors.grey, fontFamily: "pop", fontSize: 14)),
                   keyboardType: TextInputType.number,
-                  
                 ),
               ),
-              // const SizedBox(
-              //   height: 16,
-              // ),
-              // const Text("Contact No.2",
-              //     style: TextStyle(fontFamily: "pop_m", fontSize: 16)),
-              // const SizedBox(
-              //   height: 8,
-              // ),
-              // Container(
-              //   width: MediaQuery.of(context).size.width,
-              //   alignment: Alignment.bottomLeft,
-              //   padding: const EdgeInsets.only(left: 8),
-              //   decoration: BoxDecoration(
-              //       border: Border.all(color: const Color(0xFF0054A4)),
-              //       borderRadius: BorderRadius.circular(5)),
-              //   child: TextField(
-              //     controller: Contract2Input,
-              //     decoration: const InputDecoration(
-              //         // labelText: 'Description',
-              //         border: InputBorder.none,
-              //         hintText: 'Enter Number',
-              //         hintStyle: TextStyle(
-              //             color: Colors.grey, fontFamily: "pop", fontSize: 14)),
-              //     keyboardType: TextInputType.multiline,
-              //     minLines: 1,
-              //     maxLines: 5,
-              //   ),
-              // ),
-              // const SizedBox(
-              //   height: 16,
-              // ),
-              // const Text("Visiting Country Contact No.1",
-              //     style: TextStyle(fontFamily: "pop_m", fontSize: 16)),
-              // const SizedBox(
-              //   height: 8,
-              // ),
-              // Container(
-              //   width: MediaQuery.of(context).size.width,
-              //   alignment: Alignment.bottomLeft,
-              //   padding: const EdgeInsets.only(left: 8),
-              //   decoration: BoxDecoration(
-              //       border: Border.all(color: const Color(0xFF0054A4)),
-              //       borderRadius: BorderRadius.circular(5)),
-              //   child: TextField(
-              //     controller: VistingCountryContact1Input,
-              //     decoration: const InputDecoration(
-              //         // labelText: 'Description',
-              //         border: InputBorder.none,
-              //         hintText: 'Enter Number',
-              //         hintStyle: TextStyle(
-              //             color: Colors.grey, fontFamily: "pop", fontSize: 14)),
-              //     keyboardType: TextInputType.multiline,
-              //     minLines: 1,
-              //     maxLines: 5,
-              //   ),
-              // ),
-              // const SizedBox(
-              //   height: 16,
-              // ),
-              // const Text("Visting CountryContact No.2",
-              //     style: TextStyle(fontFamily: "pop_m", fontSize: 16)),
-              // const SizedBox(
-              //   height: 8,
-              // ),
-              // Container(
-              //   width: MediaQuery.of(context).size.width,
-              //   alignment: Alignment.bottomLeft,
-              //   padding: const EdgeInsets.only(left: 8),
-              //   decoration: BoxDecoration(
-              //       border: Border.all(color: const Color(0xFF0054A4)),
-              //       borderRadius: BorderRadius.circular(5)),
-              //   child: TextField(
-              //     controller: VistingCountryContact2Input,
-              //     decoration: const InputDecoration(
-              //         // labelText: 'Description',
-              //         border: InputBorder.none,
-              //         hintText: 'Enter Number',
-              //         hintStyle: TextStyle(
-              //             color: Colors.grey, fontFamily: "pop", fontSize: 14)),
-              //     keyboardType: TextInputType.multiline,
-              //     minLines: 1,
-              //     maxLines: 5,
-              //   ),
-              // ),
+
               const SizedBox(
                 height: 16,
               ),
@@ -880,7 +653,7 @@ class _CreteLeaveRequestState extends State<CreteLeaveRequest> {
                 height: 16,
               ),
               Visibility(
-                visible: documentvalid=="Yes"?true:false,
+                visible: documentvalid == "Yes" ? true : false,
                 child: Align(
                   alignment: Alignment.centerRight,
                   child: InkWell(
@@ -1042,23 +815,6 @@ class _CreteLeaveRequestState extends State<CreteLeaveRequest> {
                         if (validation()) {
                           _leaveRequest();
                         }
-
-                        // if (validation()) {
-                        //   if (no_of_leave > maxdays!) {
-                        //     _showMyDialog(
-                        //         'Please Select maximun $maxdays and minimum $mindays only',
-                        //         const Color(0xFF861F41),
-                        //         'error');
-                        //   } else if (no_of_leave < mindays!) {
-                        //     _showMyDialog(
-                        //         'Please Select  minimum $mindays and  maximun $maxdays only',
-                        //         const Color(0xFF861F41),
-                        //         'error');
-                        //   } else {
-                        //     createleave(
-                        //         "In Review", leave_creation_id.toString());
-                        //   }
-                        // }
                       },
                     ),
                   ),
@@ -1085,24 +841,7 @@ class _CreteLeaveRequestState extends State<CreteLeaveRequest> {
                           ),
                         ),
                       ),
-                      onTap: () {
-                        // if (validation()) {
-                        //   if (no_of_leave > maxdays!) {
-                        //     _showMyDialog(
-                        //         'Please Select maximun $maxdays and minimum $mindays only',
-                        //         const Color(0xFF861F41),
-                        //         'error');
-                        //   } else if (no_of_leave < mindays!) {
-                        //     _showMyDialog(
-                        //         'Please Select  minimum $mindays and  maximun $maxdays only',
-                        //         const Color(0xFF861F41),
-                        //         'error');
-                        //   } else {
-                        //     createleave(
-                        //         "In Review", leave_creation_id.toString());
-                        //   }
-                        // }
-                      },
+                      onTap: () {},
                     ),
                   ),
                 ],
@@ -1175,30 +914,6 @@ class _CreteLeaveRequestState extends State<CreteLeaveRequest> {
     List<XFile> cameraImages = [];
     List<File> selectedFiles = [];
     const int maxFileSizeMB = 5; // Max size in MB
-
-    // Show options to the user
-    // String? choice = await showDialog<String>(
-    //   context: context,
-    //   builder: (BuildContext context) {
-    //     return SimpleDialog(
-    //       title: const Text('Choose an option'),
-    //       children: [
-    //         SimpleDialogOption(
-    //           onPressed: () => Navigator.pop(context, 'Camera'),
-    //           child: const Text('Take a Photo'),
-    //         ),
-    //         SimpleDialogOption(
-    //           onPressed: () => Navigator.pop(context, 'Files'),
-    //           child: Container(
-    //               decoration: BoxDecoration(
-    //                   borderRadius: BorderRadius.circular(4),
-    //                   color: Colors.grey),
-    //               child: const Text('Pick Files')),
-    //         ),
-    //       ],
-    //     );
-    //   },
-    // );
 
     if (choice == 'Camera') {
       // Capture image using the camera
@@ -1364,8 +1079,8 @@ class _CreteLeaveRequestState extends State<CreteLeaveRequest> {
         await preferences.setString("login_check", "false");
         preferences.commit();
 
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) =>  Login_Activity()));
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => Login_Activity()));
       } else if (response.statusCode == 422) {
         Navigator.of(context).pop();
 
@@ -1385,81 +1100,6 @@ class _CreteLeaveRequestState extends State<CreteLeaveRequest> {
       print('Error occurred: $e');
     }
   }
-
-  // void createleave(String status, String id) async {
-  //   _customProgress('Please wait...');
-  //   SharedPreferences preferences = await SharedPreferences.getInstance();
-  //   String? token = preferences.getString('user_access_token');
-  //   var response =
-  //       await http.post(Uri.parse("${baseurl.url}leaveRequest"), headers: {
-  //     'Authorization': 'Bearer $token'
-  //   }, body: {
-  //     'lr_code': leave_code_id,
-  //     'lrequester_id': emp_code,
-  //     'from_date': FromedateInput.text,
-  //     'to_date': TodateInput.text,
-  //     'lr_type': 'Self',
-  //     'leave_description': descriptionInput.text,
-  //     // 'lr_id': id,
-  //     'addressduringleave': '',
-  //     'leavetype': '',
-  //     'localcontact1': '',
-  //     'localcontact2': '',
-  //     'vcontact1': '',
-  //     'vcontact2': '',
-  //     // 'leave_planned': leave_plan
-  //   });
-  //   print(
-  //       "$leave_code_id $emp_code ${FromedateInput.text} ${TodateInput.text} $leave_behalf ${AddressInput.text}");
-  //   print("leave apply");
-  //   print(response.body);
-  //   print(response.statusCode);
-  //   var jsonObject = jsonDecode(response.body);
-  //   if (response.statusCode == 200) {
-  //     print(response.body);
-
-  //     if (jsonObject['status'] == "1") {
-  //       if (status == "") {
-  //         _showMyDialog(
-  //             'Record is saved succesfully. Kindly submit for approval',
-  //             const Color(0xFF861F41),
-  //             'error');
-
-  //         setState(() {
-  //           leave_creation_id = jsonObject['lr_id'];
-  //           submit_visi = true;
-  //         });
-  //       } else {
-  //         _showMyDialog('${jsonObject['message']}', Colors.green, 'success');
-  //         Navigator.of(context).pop();
-  //         Navigator.push(context,
-  //             MaterialPageRoute(builder: (context) => const upcoming_dash()));
-  //       }
-  //     } else if (jsonObject['status'] == "0") {
-  //       Navigator.of(context).pop();
-  //       _showMyDialog(
-  //           '${jsonObject['message']}', const Color(0xFF861F41), 'error');
-  //     } else {
-  //       Navigator.of(context).pop();
-  //       _showMyDialog(
-  //           '${jsonObject['message']}', const Color(0xFF861F41), 'error');
-  //     }
-  //   } else if (response.statusCode == 401) {
-  //     Navigator.of(context).pop();
-  //     SharedPreferences preferences = await SharedPreferences.getInstance();
-  //     await preferences.setString("login_check", "false");
-  //     preferences.commit();
-
-  //     Navigator.push(
-  //         context, MaterialPageRoute(builder: (context) => Login_Activity()));
-  //   } else if (response.statusCode == 422) {
-  //     Navigator.of(context).pop();
-
-  //     preferences.commit();
-  //     _showMyDialog(
-  //         '${jsonObject['message']}', const Color(0xFF861F41), 'error');
-  //   }
-  // }
 
   Future<void> _showMyDialog(
       String msg, Color colorDynamic, String success) async {
@@ -1500,15 +1140,7 @@ class _CreteLeaveRequestState extends State<CreteLeaveRequest> {
           'Please Select leave Code', const Color(0xFF861F41), 'error');
 
       return false;
-    }
-    // else if (leave_code_id == "AL" && annualLeave==null) {
-    //   // if (annualLeave == null) {
-    //     _showMyDialog('Please Select Annual Leave Type',
-    //         const Color(0xFF861F41), 'error');
-    //     return false;
-    //   // }
-    // }
-    else if (FromedateInput.text == '') {
+    } else if (FromedateInput.text == '') {
       _showMyDialog(
           'Please Select from Date', const Color(0xFF861F41), 'error');
 
@@ -1525,7 +1157,7 @@ class _CreteLeaveRequestState extends State<CreteLeaveRequest> {
       _showMyDialog('Please Enter Reason', const Color(0xFF861F41), 'error');
 
       return false;
-    } else if (documentvalid=="Yes") {
+    } else if (documentvalid == "Yes") {
       if (selecteMultiImagesList.isEmpty) {
         _showMyDialog('Please Upload File ', const Color(0xFF861F41), 'error');
 
@@ -1569,7 +1201,7 @@ class _CreteLeaveRequestState extends State<CreteLeaveRequest> {
           no_of_leave = jsonObject['count'];
           rejoining_date = jsonObject['rejoining_date'];
           rejoiningDateArray = List.from(jsonObject['rejoining_date_array']);
-          RejoiningDate.text=rejoining_date;
+          RejoiningDate.text = rejoining_date;
         });
       }
     }

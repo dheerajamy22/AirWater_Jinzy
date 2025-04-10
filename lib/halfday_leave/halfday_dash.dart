@@ -6,6 +6,7 @@ import 'package:demo/baseurl/base_url.dart';
 import 'package:demo/encryption_file/encrp_data.dart';
 import 'package:demo/halfday_leave/haldaymethod.dart';
 import 'package:demo/leave_process/employee_name_method.dart';
+import 'package:demo/leave_process/leave_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
@@ -27,9 +28,17 @@ class _halfdayDashState extends State<halfdayDash> {
   String no_of_wfhdays = '';
   String datevalid = "";
   bool is_true = false;
+  String emp_code = "", leave_code_id = "";
+  var _countries = [];
+  List<LeaveTypeModule> leaveTypeList = [];
+  bool submit_visi = false, leave_balance_visi = false;
+  String? leavecode;
+  String leave_balance = "", rejoining_date = "", documentvalid = "";
   int count = 0;
   List<String> halfday_type = ["Pre Lunch", "Post Lunch"];
   String selected_haldaytype = "Pre Lunch";
+  String? halfdayallowed;
+
   RadioGroupController myController = RadioGroupController();
   String? team_emp_name;
   var team_names = [];
@@ -38,6 +47,7 @@ class _halfdayDashState extends State<halfdayDash> {
   String name = "";
   String progress = "";
   List<emp_name> employee_names = [];
+  bool isCountrySelected = false;
 
   getemplist(String type) async {
     SharedPreferences pr = await SharedPreferences.getInstance();
@@ -48,8 +58,7 @@ class _halfdayDashState extends State<halfdayDash> {
     setState(() {
       name = EncryptData.decryptAES(pr.getString('user_name')!);
     });
-    var response = await http.post(
-        Uri.parse("${baseurl.url}employee-details"),
+    var response = await http.post(Uri.parse("${baseurl.url}employee-details"),
         headers: {'Authorization': 'Bearer $token'},
         body: {"req_type": 'Onbehalf'});
 
@@ -78,15 +87,18 @@ class _halfdayDashState extends State<halfdayDash> {
           context, MaterialPageRoute(builder: (context) => Login_Activity()));
     }
   }
+
   callme() async {
     await Future.delayed(Duration(seconds: 3));
     setState(() {
       progress = '1';
     });
   }
+
   @override
   void initState() {
     // callme();
+    getleavecode();
     getlist();
     getemplist("Onbehalf");
     //s
@@ -127,13 +139,15 @@ class _halfdayDashState extends State<halfdayDash> {
               const EdgeInsets.only(left: 12, right: 12, top: 16, bottom: 16),
           child: Column(
             children: [
-              if (progress=='') Padding(
-                padding: const EdgeInsets.only(top: 24.0),
-                child: Center(
-                    child: CircularProgressIndicator(
-                      color: MyColor.mainAppColor,
-                    )),
-              )else if (halfdaylist.length == 0) ...[
+              if (progress == '')
+                Padding(
+                  padding: const EdgeInsets.only(top: 24.0),
+                  child: Center(
+                      child: CircularProgressIndicator(
+                    color: MyColor.mainAppColor,
+                  )),
+                )
+              else if (halfdaylist.length == 0) ...[
                 Center(
                   child: Padding(
                     padding: const EdgeInsets.only(top: 100.0),
@@ -172,55 +186,56 @@ class _halfdayDashState extends State<halfdayDash> {
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 Row(
+                                  children: [
+                                    CircleAvatar(
+                                      backgroundColor: MyColor.new_red_color
+                                          .withOpacity(0.8),
+                                      radius: 25,
+                                      child: ClipOval(
+                                        child: SvgPicture.asset(
+                                          'assets/new_svgs/half_day.svg',
+                                          width: 30,
+                                          height: 30,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 16,
+                                    ),
+                                    Flexible(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.stretch,
+                                        children: [
+                                          Text(
+                                            "Date:- ${halfdaylist[index].date}",
+                                            style: const TextStyle(
+                                                fontSize: 14,
+                                                fontFamily: 'pop'),
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
                                             children: [
-                                              CircleAvatar(
-                                                backgroundColor: MyColor.new_red_color
-                                            .withOpacity(0.8),
-                                                radius: 25,
-                                                child: ClipOval(
-                                                  child: SvgPicture.asset(
-                                                    'assets/new_svgs/half_day.svg',
-                                                    width: 30,
-                                                    height: 30,
-                                                  ),
-                                                ),
+                                              Text(
+                                                '${halfdaylist[index].type}',
+                                                style: const TextStyle(
+                                                    fontSize: 14,
+                                                    fontFamily: 'pop'),
                                               ),
-                                              const SizedBox(
-                                                width: 16,
+                                              Text(
+                                                '${halfdaylist[index].lr_status}',
+                                                style: const TextStyle(
+                                                    fontSize: 14,
+                                                    fontFamily: 'pop'),
                                               ),
-                                              Flexible(
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.stretch,
-                                                  children: [
-                                                    Text(
-                                                      "Date:- ${halfdaylist[index].date}",
-                                                      style: const TextStyle(
-                                                          fontSize: 14,
-                                                          fontFamily: 'pop'),
-                                                    ),
-                                                    
-                                                      Row(
-                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                        children: [
-                                                          Text(
-                                                          '${halfdaylist[index].type}',
-                                                          style: const TextStyle(
-                                                              fontSize: 14,
-                                                              fontFamily: 'pop'),),
-                                                              Text(
-                                                      '${halfdaylist[index].lr_status}',
-                                                      style: const TextStyle(
-                                                          fontSize: 14,
-                                                          fontFamily: 'pop'),
-                                                    ),
-                                                        ],
-                                                      ),
-                                                  ],
-                                                ),
-                                              )
                                             ],
                                           ),
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
                                 // Row(
                                 //   mainAxisAlignment:
                                 //       MainAxisAlignment.spaceBetween,
@@ -239,16 +254,16 @@ class _halfdayDashState extends State<halfdayDash> {
                                 // Text("Type:- ${halfdaylist[index].type}",
                                 //     style: TextStyle(
                                 //         fontFamily: "pop", fontSize: 14)),
-                                 const SizedBox(
-                                          height: 10,
-                                        ),
-                                        Container(
-                                          height: 2,
-                                          color: Colors.black38,
-                                        ),
-                                        const SizedBox(
-                                          height: 4,
-                                        ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Container(
+                                  height: 2,
+                                  color: Colors.black38,
+                                ),
+                                const SizedBox(
+                                  height: 4,
+                                ),
                                 Text("Reason:-"),
                                 Text(halfdaylist[index].reason,
                                     style: TextStyle(
@@ -267,122 +282,7 @@ class _halfdayDashState extends State<halfdayDash> {
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-           _showhalfdaydailog("Self");
-          // if (reported == "1") {
-          //   showDialog(
-          //       context: context,
-          //       builder: (BuildContext) {
-          //         return AlertDialog(
-          //           scrollable: true,
-          //           content: Padding(
-          //             padding: const EdgeInsets.all(8.0),
-          //             child: Column(
-          //               children: [
-          //                 Row(
-          //                   mainAxisAlignment: MainAxisAlignment.spaceAround,
-          //                   children: [
-          //                     Flexible(
-          //                       child: InkWell(
-          //                         onTap: () {
-          //                           _showhalfdaydailog("Self");
-          //                           Navigator.pop(context);
-          //                         },
-          //                         child: Card(
-          //                           child: Container(
-          //                             height:
-          //                                 MediaQuery.of(context).size.height *
-          //                                     0.15,
-          //                             decoration: BoxDecoration(
-          //                                 borderRadius:
-          //                                     BorderRadius.circular(12)),
-          //                             child: Column(
-          //                               mainAxisAlignment:
-          //                                   MainAxisAlignment.center,
-          //                               children: [
-          //                                 Center(
-          //                                   child: SvgPicture.asset(
-          //                                       "assets/new_svgs/Self.svg"),
-          //                                 ),
-          //                                 const SizedBox(
-          //                                   height: 6,
-          //                                 ),
-          //                                 Text("Self",
-          //                                     style: TextStyle(
-          //                                         fontFamily: "pop",
-          //                                         fontSize: 14))
-          //                               ],
-          //                             ),
-          //                           ),
-          //                         ),
-          //                       ),
-          //                     ),
-          //                     Flexible(
-          //                       child: InkWell(
-          //                         onTap: () {
-          //                           _showhalfdaydailog("Onbehalf");
-          //                           Navigator.pop(context);
-          //                         },
-          //                         child: Card(
-          //                           child: Container(
-          //                             height:
-          //                                 MediaQuery.of(context).size.height *
-          //                                     0.15,
-          //                             decoration: BoxDecoration(
-          //                                 borderRadius:
-          //                                     BorderRadius.circular(12)),
-          //                             child: Column(
-          //                               mainAxisAlignment:
-          //                                   MainAxisAlignment.center,
-          //                               children: [
-          //                                 Center(
-          //                                   child: SvgPicture.asset(
-          //                                       "assets/new_svgs/Onbehalf.svg"),
-          //                                 ),
-          //                                 const SizedBox(
-          //                                   height: 6,
-          //                                 ),
-          //                                 Text(
-          //                                   "On-Behalf",
-          //                                   style: TextStyle(
-          //                                       fontFamily: "pop",
-          //                                       fontSize: 14),
-          //                                 )
-          //                               ],
-          //                             ),
-          //                           ),
-          //                         ),
-          //                       ),
-          //                     )
-          //                   ],
-          //                 ),
-          //                 const SizedBox(
-          //                   height: 16,
-          //                 ),
-          //                 InkWell(
-          //                   onTap: () {
-          //                     Navigator.of(context).pop();
-          //                   },
-          //                   child: Container(
-          //                     width: MediaQuery.of(context).size.width,
-          //                     height: 50,
-          //                     decoration: BoxDecoration(
-          //                         color: MyColor.mainAppColor,
-          //                         borderRadius: BorderRadius.circular(12)),
-          //                     child: Center(
-          //                         child: Text(
-          //                       "Cancel",
-          //                       style: TextStyle(color: MyColor.white_color),
-          //                     )),
-          //                   ),
-          //                 )
-          //               ],
-          //             ),
-          //           ),
-          //         );
-          //       });
-          // } else {
-          //   _showhalfdaydailog("Self");
-          // }
+          _showhalfdaydailog("Self");
         },
         child: Icon(
           Icons.add,
@@ -405,9 +305,9 @@ class _halfdayDashState extends State<halfdayDash> {
     print(response.statusCode);
     print(response.body);
     if (response.statusCode == 200) {
-       setState(() {
-      progress = '1';
-    });
+      setState(() {
+        progress = '1';
+      });
       var jsonobject = jsonDecode(response.body);
       if (jsonobject['status'] == "1") {
         var jsonarray = jsonobject['data'];
@@ -427,23 +327,23 @@ class _halfdayDashState extends State<halfdayDash> {
         }
       }
     } else if (response.statusCode == 401) {
-       setState(() {
-      progress = '1';
-    });
+      setState(() {
+        progress = '1';
+      });
       SharedPreferences preferences = await SharedPreferences.getInstance();
       await preferences.setString("login_check", "false");
       preferences.commit();
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => Login_Activity()));
-    }else if(response.statusCode==500){
-       setState(() {
-      progress = '1';
-    });
-      _showMyDialog('Something Went Wrong', Color(0xFF861F41), 'error');
-    }else if(response.statusCode==404){
+    } else if (response.statusCode == 500) {
       setState(() {
-      progress = '1';
-    });
+        progress = '1';
+      });
+      _showMyDialog('Something Went Wrong', Color(0xFF861F41), 'error');
+    } else if (response.statusCode == 404) {
+      setState(() {
+        progress = '1';
+      });
       _showMyDialog('Something Went Wrong', Color(0xFF861F41), 'error');
     }
   }
@@ -577,6 +477,72 @@ class _halfdayDashState extends State<halfdayDash> {
                       )
                     ],
                   ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    height: 52,
+                    alignment: Alignment.centerLeft,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.black26),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        left: 10,
+                        right: 10,
+                      ),
+                      child: DropdownButton<String>(
+                          underline: Container(),
+                          hint: const Text("Select Leave Code"),
+                          style: const TextStyle(
+                              color: Colors.grey,
+                              fontFamily: "pop",
+                              fontSize: 14),
+                          icon: const Icon(Icons.keyboard_arrow_down),
+                          isDense: true,
+                          isExpanded: true,
+                          alignment: Alignment.centerLeft,
+                          items: _countries.map((ctry) {
+                            return DropdownMenuItem<String>(
+                                value: '${ctry["lc_code"]}',
+                                child: Text('${ctry["lc_code"]}'));
+                          }).toList(),
+                          value: leavecode,
+                          onChanged: submit_visi == true
+                              ? null
+                              : (value) {
+                                  setState(() {
+                                    leave_balance_visi = true;
+                                    leavecode = value!;
+                                    for (int i = 0;
+                                        i < _countries.length;
+                                        i++) {
+                                      if (_countries[i]["lc_code"] == value) {
+                                        halfdayallowed =
+                                            _countries[i]['halfdayallowed'];
+                                        leave_code_id =
+                                            _countries[i]["lc_code"].toString();
+                                        print("leave code $leave_code_id");
+                                        leave_balance =
+                                            _countries[i]['balance'];
+                                        print("balance $leave_balance");
+                                        datevalid = _countries[i]['Validation'];
+                                        documentvalid =
+                                            _countries[i]['document'];
+
+                                        print('dropDownId $emp_code');
+                                        print('dropDownId $leave_balance');
+                                      }
+                                    }
+                                    isCountrySelected = true;
+                                  });
+                                }),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
                   Text(
                     "Reason",
                     style: TextStyle(fontFamily: "pop_m", fontSize: 16),
@@ -612,10 +578,10 @@ class _halfdayDashState extends State<halfdayDash> {
                       onTap: () {
                         if (vaidation()) {
                           Navigator.pop(context);
-                         // _customProgress('Please wait...');
+                          // _customProgress('Please wait...');
                           sendhalfdayRequest(Type);
                         }
-                       // Navigator.pop(context);
+                        // Navigator.pop(context);
                         // String selected = myController.value.toString();
                         // print("select type $selected");
                       },
@@ -642,6 +608,53 @@ class _halfdayDashState extends State<halfdayDash> {
         });
   }
 
+  Future<List<LeaveTypeModule>> getleavecode() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String? token = preferences.getString('user_access_token');
+
+    // emp_code = EncryptData.decryptAES(preferences.getString('emp_code')!);
+    print("insan ke id $emp_code");
+
+    var response =
+        await http.post(Uri.parse('${baseurl.url}getleavecode'), headers: {
+      'Authorization': 'Bearer $token'
+    }, body: {
+      'emp_id': EncryptData.decryptAES(preferences.getString('user_emp_code')!),
+    });
+    print("code ${response.body}");
+    if (response.statusCode == 200) {
+      var jsonData = json.decode(response.body);
+
+      if (jsonData['status'] == "1") {
+        var jsonArray = jsonData['leave_details'];
+
+        setState(() {
+          _countries = jsonData['leave_details'];
+        });
+
+        print('count$_countries');
+        for (var leaveType in jsonArray) {
+          LeaveTypeModule leaveTypeModule = LeaveTypeModule(
+              lc_id: leaveType['lc_id'].toString(),
+              lc_name: leaveType['lc_name'],
+              halfdayallowed: leaveType['halfdayallowed'],
+              balance: leaveType['balance']);
+
+          leaveTypeList.add(leaveTypeModule);
+        }
+      }
+    } else if (response.statusCode == 401) {
+      print('leave type code ${response.body}');
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      await preferences.setString("login_check", "false");
+      preferences.commit();
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => Login_Activity()));
+    }
+
+    return leaveTypeList;
+  }
+
   int daysBetween(DateTime from, DateTime to) {
     from = DateTime(from.year, from.month, from.day);
     to = DateTime(to.year, to.month, to.day);
@@ -650,15 +663,16 @@ class _halfdayDashState extends State<halfdayDash> {
 
   bool vaidation() {
     if (_reason.text == '') {
-
-     _showMyDialog('Please Enter reason', Color(0xFF861F41), 'error');
+      _showMyDialog('Please Enter reason', Color(0xFF861F41), 'error');
       return false;
+    } else if (halfdayallowed == "No") {
+      _showMyDialog('This Leave Cannot Used For Half Day',
+          MyColor.dialog_error_color, 'error');
     }
     return true;
   }
 
   void sendhalfdayRequest(String type) async {
-    
     _customProgress('Please wait...');
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String? token = preferences.getString('user_access_token');
@@ -671,7 +685,9 @@ class _halfdayDashState extends State<halfdayDash> {
         'req_type': type,
         'type': myController.value.toString(),
         'reason': '${_reason.text}',
-        'lrequester_id': emp_id
+        'lrequester_id': emp_id,
+        'leave_code': leavecode,
+        'date': "${DateTime.now().toString().split(" ").first}"
       },
       headers: {'Authorization': 'Bearer $token'},
     );
@@ -703,7 +719,7 @@ class _halfdayDashState extends State<halfdayDash> {
 
   Future<void> _showMyDialog(
       String msg, Color color_dynamic, String success) async {
- /*   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    /*   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Row(
         children: [
           if (success == 'success') ...[
@@ -739,15 +755,18 @@ class _halfdayDashState extends State<halfdayDash> {
       backgroundColor: color_dynamic, // Example color
       //borderRadius: 8.0, // Example border radius
       margin: EdgeInsets.all(16.0), // Example margin
-      padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0), // Example padding
+      padding: EdgeInsets.symmetric(
+          horizontal: 24.0, vertical: 12.0), // Example padding
 
-     icon: success=='success'?Icon(
-        Icons.check,
-        color: MyColor.white_color,
-      ):Icon(
-       Icons.error,
-       color: MyColor.white_color,
-     ),
+      icon: success == 'success'
+          ? Icon(
+              Icons.check,
+              color: MyColor.white_color,
+            )
+          : Icon(
+              Icons.error,
+              color: MyColor.white_color,
+            ),
     ).show(context);
   }
 
