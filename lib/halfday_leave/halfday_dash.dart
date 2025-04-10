@@ -10,6 +10,7 @@ import 'package:demo/leave_process/leave_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:radio_group_v2/utils/radio_group_decoration.dart';
 import 'package:radio_group_v2/widgets/view_models/radio_group_controller.dart';
 import 'package:radio_group_v2/widgets/views/radio_group.dart';
@@ -40,6 +41,7 @@ class _halfdayDashState extends State<halfdayDash> {
   String? halfdayallowed;
 
   RadioGroupController myController = RadioGroupController();
+  TextEditingController dateInput = TextEditingController();
   String? team_emp_name;
   var team_names = [];
   String? emp_id;
@@ -443,11 +445,66 @@ class _halfdayDashState extends State<halfdayDash> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(DateTime.now()
+                                      Flexible(
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(left: 8.0),
+                                          child: TextField(
+                                            controller: dateInput,
+                                            //editing controller of this TextField
+                                            decoration: const InputDecoration(
+                                                focusedBorder: InputBorder.none,
+                                                border: InputBorder.none,
+                                                icon: Icon(
+                                                  Icons.calendar_today,
+                                                  color: Color(0xFF0054A4),
+                                                ),
+                                                //icon of text field
+                                                hintText: "From date",
+                                                hintStyle: TextStyle(
+                                                    color: Colors.grey,
+                                                    fontFamily: "pop",
+                                                    fontSize: 14)
+                                              //label text of field
+                                            ),
+                                            style: const TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 16,
+                                                fontFamily: 'pop'),
+                                            readOnly: true,
+                                            onTap: () async {
+                                              if (leave_code_id == '') {
+                                                _showMyDialog('Please Select leave Code',
+                                                    const Color(0xFF861F41), 'error');
+                                              } else {
+                                                DateTime? pickedDate = await showDatePicker(
+                                                    context: context,
+                                                    initialDate:  DateTime.now(),
+                                                    firstDate:  DateTime.now(),
+                                                    lastDate: DateTime(2100));
+
+                                                if (pickedDate != null) {
+                                                  print(
+                                                      pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
+                                                  String formattedDate =
+                                                  DateFormat('yyyy-MM-dd').format(pickedDate);
+                                                  print(
+                                                      formattedDate); //formatted date output using intl package =>  2021-03-16
+
+                                                  setState(() {
+                                                   dateInput.text = formattedDate;
+
+                                                  });
+                                                } else {}
+                                              }
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                                      /*Text(DateTime.now()
                                           .toString()
                                           .split(" ")
                                           .first),
-                                      Icon(Icons.calendar_month)
+                                      Icon(Icons.calendar_month)*/
                                     ],
                                   )),
                             ),
@@ -519,21 +576,25 @@ class _halfdayDashState extends State<halfdayDash> {
                                         i < _countries.length;
                                         i++) {
                                       if (_countries[i]["lc_code"] == value) {
-                                        halfdayallowed =
-                                            _countries[i]['halfdayallowed'];
-                                        leave_code_id =
-                                            _countries[i]["lc_code"].toString();
-                                        print("leave code $leave_code_id");
-                                        leave_balance =
-                                            _countries[i]['balance'];
-                                        print("balance $leave_balance");
-                                        datevalid = _countries[i]['Validation'];
-                                        documentvalid =
-                                            _countries[i]['document'];
+                                        if(_countries[i]['halfdayallowed']=="No"){
+                                          _showMyDialog('This leave code cannot be used for a half day.',
+                                              MyColor.dialog_error_color, 'error');
+                                          leavecode=null;
+                                        }else{
+                                          halfdayallowed =
+                                          _countries[i]['halfdayallowed'];
+                                          leave_code_id =
+                                              _countries[i]["lc_code"].toString();
+                                          leave_balance =
+                                          _countries[i]['balance'];
+                                          print("balance $leave_balance");
+                                          datevalid = _countries[i]['Validation'];
+                                          documentvalid =
+                                          _countries[i]['document'];
 
-                                        print('dropDownId $emp_code');
-                                        print('dropDownId $leave_balance');
-                                        print('halday ${halfdayallowed}');
+
+                                        }
+
                                       }
                                     }
                                     isCountrySelected = true;
@@ -580,7 +641,7 @@ class _halfdayDashState extends State<halfdayDash> {
                         if (vaidation()) {
                           Navigator.pop(context);
                           // _customProgress('Please wait...');
-                          sendhalfdayRequest(Type);
+                          sendhalfdayRequest(Type,'${dateInput.text}');
                         }
                         // Navigator.pop(context);
                         // String selected = myController.value.toString();
@@ -663,19 +724,22 @@ class _halfdayDashState extends State<halfdayDash> {
   }
 
   bool vaidation() {
-    if (_reason.text == '') {
+    if (dateInput.text.trim().toString()== '') {
+      _showMyDialog('Please select trans date', Color(0xFF861F41), 'error');
+      return false;
+    }if (leavecode== null) {
+      _showMyDialog('Please select leave code', Color(0xFF861F41), 'error');
+      return false;
+    } if (_reason.text.trim().toString() == '') {
       _showMyDialog('Please Enter reason', Color(0xFF861F41), 'error');
       return false;
-    } else if (halfdayallowed == "No") {
-      _showMyDialog('This Leave Cannot Used For Half Day',
-          MyColor.dialog_error_color, 'error');
-          return false;
     }
     return true;
   }
 
-  void sendhalfdayRequest(String type) async {
+  void sendhalfdayRequest(String type,String date) async {
     _customProgress('Please wait...');
+
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String? token = preferences.getString('user_access_token');
 
@@ -689,28 +753,40 @@ class _halfdayDashState extends State<halfdayDash> {
         'reason': '${_reason.text}',
         'lrequester_id': emp_id,
         'leave_code': leavecode,
-        'date': "${DateTime.now().toString().split(" ").first}"
+        'date': "$date"
       },
       headers: {'Authorization': 'Bearer $token'},
     );
 
     print(response.statusCode);
     print(response.body);
-
+    var jsonObject = json.decode(response.body);
     if (response.statusCode == 200) {
-      var jsonObject = json.decode(response.body);
+
 
       if (jsonObject['status'] == '1') {
         Navigator.pop(context);
         _reason.clear();
+        dateInput.clear();
+        leavecode=null;
         _showMyDialog('${jsonObject['message']}', Colors.green, 'success');
         getlist();
       } else if (jsonObject['status'] == '0') {
+        _reason.clear();
+        dateInput.clear();
+        leavecode=null;
         Navigator.pop(context);
         _reason.clear();
         _showMyDialog('${jsonObject['message']}', Color(0xFF861F41), 'error');
       }
-    } else if (response.statusCode == 401) {
+    } else if (response.statusCode == 422) {
+      Navigator.pop(context);
+
+      _reason.clear();
+      dateInput.clear();
+      leavecode=null;
+      _showMyDialog('${jsonObject['message']}', Color(0xFF861F41), 'error');
+    }else if (response.statusCode == 401) {
       SharedPreferences preferences = await SharedPreferences.getInstance();
       await preferences.setString("login_check", "false");
       preferences.commit();
