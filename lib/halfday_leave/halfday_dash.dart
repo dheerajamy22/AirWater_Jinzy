@@ -49,7 +49,7 @@ class _halfdayDashState extends State<halfdayDash> {
       name = EncryptData.decryptAES(pr.getString('user_name')!);
     });
     var response = await http.post(
-        Uri.parse("${baseurl.url}leaverequest_emp_details"),
+        Uri.parse("${baseurl.url}employee-details"),
         headers: {'Authorization': 'Bearer $token'},
         body: {"req_type": 'Onbehalf'});
 
@@ -267,121 +267,122 @@ class _halfdayDashState extends State<halfdayDash> {
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          if (reported == "1") {
-            showDialog(
-                context: context,
-                builder: (BuildContext) {
-                  return AlertDialog(
-                    scrollable: true,
-                    content: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Flexible(
-                                child: InkWell(
-                                  onTap: () {
-                                    _showhalfdaydailog("Self");
-                                    Navigator.pop(context);
-                                  },
-                                  child: Card(
-                                    child: Container(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.15,
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(12)),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Center(
-                                            child: SvgPicture.asset(
-                                                "assets/new_svgs/Self.svg"),
-                                          ),
-                                          const SizedBox(
-                                            height: 6,
-                                          ),
-                                          Text("Self",
-                                              style: TextStyle(
-                                                  fontFamily: "pop",
-                                                  fontSize: 14))
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Flexible(
-                                child: InkWell(
-                                  onTap: () {
-                                    _showhalfdaydailog("Onbehalf");
-                                    Navigator.pop(context);
-                                  },
-                                  child: Card(
-                                    child: Container(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.15,
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(12)),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Center(
-                                            child: SvgPicture.asset(
-                                                "assets/new_svgs/Onbehalf.svg"),
-                                          ),
-                                          const SizedBox(
-                                            height: 6,
-                                          ),
-                                          Text(
-                                            "On-Behalf",
-                                            style: TextStyle(
-                                                fontFamily: "pop",
-                                                fontSize: 14),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 16,
-                          ),
-                          InkWell(
-                            onTap: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: Container(
-                              width: MediaQuery.of(context).size.width,
-                              height: 50,
-                              decoration: BoxDecoration(
-                                  color: MyColor.mainAppColor,
-                                  borderRadius: BorderRadius.circular(12)),
-                              child: Center(
-                                  child: Text(
-                                "Cancel",
-                                style: TextStyle(color: MyColor.white_color),
-                              )),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  );
-                });
-          } else {
-            _showhalfdaydailog("Self");
-          }
+           _showhalfdaydailog("Self");
+          // if (reported == "1") {
+          //   showDialog(
+          //       context: context,
+          //       builder: (BuildContext) {
+          //         return AlertDialog(
+          //           scrollable: true,
+          //           content: Padding(
+          //             padding: const EdgeInsets.all(8.0),
+          //             child: Column(
+          //               children: [
+          //                 Row(
+          //                   mainAxisAlignment: MainAxisAlignment.spaceAround,
+          //                   children: [
+          //                     Flexible(
+          //                       child: InkWell(
+          //                         onTap: () {
+          //                           _showhalfdaydailog("Self");
+          //                           Navigator.pop(context);
+          //                         },
+          //                         child: Card(
+          //                           child: Container(
+          //                             height:
+          //                                 MediaQuery.of(context).size.height *
+          //                                     0.15,
+          //                             decoration: BoxDecoration(
+          //                                 borderRadius:
+          //                                     BorderRadius.circular(12)),
+          //                             child: Column(
+          //                               mainAxisAlignment:
+          //                                   MainAxisAlignment.center,
+          //                               children: [
+          //                                 Center(
+          //                                   child: SvgPicture.asset(
+          //                                       "assets/new_svgs/Self.svg"),
+          //                                 ),
+          //                                 const SizedBox(
+          //                                   height: 6,
+          //                                 ),
+          //                                 Text("Self",
+          //                                     style: TextStyle(
+          //                                         fontFamily: "pop",
+          //                                         fontSize: 14))
+          //                               ],
+          //                             ),
+          //                           ),
+          //                         ),
+          //                       ),
+          //                     ),
+          //                     Flexible(
+          //                       child: InkWell(
+          //                         onTap: () {
+          //                           _showhalfdaydailog("Onbehalf");
+          //                           Navigator.pop(context);
+          //                         },
+          //                         child: Card(
+          //                           child: Container(
+          //                             height:
+          //                                 MediaQuery.of(context).size.height *
+          //                                     0.15,
+          //                             decoration: BoxDecoration(
+          //                                 borderRadius:
+          //                                     BorderRadius.circular(12)),
+          //                             child: Column(
+          //                               mainAxisAlignment:
+          //                                   MainAxisAlignment.center,
+          //                               children: [
+          //                                 Center(
+          //                                   child: SvgPicture.asset(
+          //                                       "assets/new_svgs/Onbehalf.svg"),
+          //                                 ),
+          //                                 const SizedBox(
+          //                                   height: 6,
+          //                                 ),
+          //                                 Text(
+          //                                   "On-Behalf",
+          //                                   style: TextStyle(
+          //                                       fontFamily: "pop",
+          //                                       fontSize: 14),
+          //                                 )
+          //                               ],
+          //                             ),
+          //                           ),
+          //                         ),
+          //                       ),
+          //                     )
+          //                   ],
+          //                 ),
+          //                 const SizedBox(
+          //                   height: 16,
+          //                 ),
+          //                 InkWell(
+          //                   onTap: () {
+          //                     Navigator.of(context).pop();
+          //                   },
+          //                   child: Container(
+          //                     width: MediaQuery.of(context).size.width,
+          //                     height: 50,
+          //                     decoration: BoxDecoration(
+          //                         color: MyColor.mainAppColor,
+          //                         borderRadius: BorderRadius.circular(12)),
+          //                     child: Center(
+          //                         child: Text(
+          //                       "Cancel",
+          //                       style: TextStyle(color: MyColor.white_color),
+          //                     )),
+          //                   ),
+          //                 )
+          //               ],
+          //             ),
+          //           ),
+          //         );
+          //       });
+          // } else {
+          //   _showhalfdaydailog("Self");
+          // }
         },
         child: Icon(
           Icons.add,
@@ -398,7 +399,7 @@ class _halfdayDashState extends State<halfdayDash> {
     String token = pref.getString('user_access_token')!;
     halfdaylist.clear();
     var response = await http.get(
-      Uri.parse('${baseurl.url}halfdayleaverequestlist'),
+      Uri.parse('${baseurl.url}half-day-leave-request-list'),
       headers: {'Authorization': 'Bearer $token'},
     );
     print(response.statusCode);
