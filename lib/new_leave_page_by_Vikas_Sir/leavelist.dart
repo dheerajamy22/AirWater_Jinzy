@@ -49,7 +49,7 @@ class _leavelistState extends State<leavelist> {
     String? token = p.getString('user_access_token');
     emp_img = p.getString('user_profile')!;
     var response = await http.post(
-      Uri.parse("${baseurl.url}leave_request_list"),
+      Uri.parse("${baseurl.url}leave-request-list"),
       headers: {
         'Authorization': 'Bearer $token',
       },

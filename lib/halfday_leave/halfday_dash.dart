@@ -218,7 +218,7 @@ class _halfdayDashState extends State<halfdayDash> {
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
                                               Text(
-                                                '${halfdaylist[index].type}',
+                                                '${halfdaylist[index].leave_code}',
                                                 style: const TextStyle(
                                                     fontSize: 14,
                                                     fontFamily: 'pop'),
@@ -316,7 +316,7 @@ class _halfdayDashState extends State<halfdayDash> {
               requesting_type: i['requesting_type'],
               employee_name: i['employee_name'],
               date: i['date'],
-              type: i['type'],
+              type: "",
               reason: i['reason'],
               lr_id: i['lr_id'],
               lr_status: i['lr_status'],
@@ -533,6 +533,7 @@ class _halfdayDashState extends State<halfdayDash> {
 
                                         print('dropDownId $emp_code');
                                         print('dropDownId $leave_balance');
+                                        print('halday ${halfdayallowed}');
                                       }
                                     }
                                     isCountrySelected = true;
@@ -668,6 +669,7 @@ class _halfdayDashState extends State<halfdayDash> {
     } else if (halfdayallowed == "No") {
       _showMyDialog('This Leave Cannot Used For Half Day',
           MyColor.dialog_error_color, 'error');
+          return false;
     }
     return true;
   }
@@ -680,7 +682,7 @@ class _halfdayDashState extends State<halfdayDash> {
     print(
         " reason ${_reason.text}  req_type $type  , type ${myController.value.toString()}");
     var response = await http.post(
-      Uri.parse('${baseurl.url}halfdayleaverequest'),
+      Uri.parse('${baseurl.url}half-day-leave-request'),
       body: {
         'req_type': type,
         'type': myController.value.toString(),
