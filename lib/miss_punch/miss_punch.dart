@@ -25,7 +25,7 @@ class misspunch extends StatefulWidget {
 }
 
 class _misspunchState extends State<misspunch> {
-  var FromedateInput = TextEditingController(text: 'Date');
+  var FromedateInput = TextEditingController(text: '');
   TextEditingController _reason = TextEditingController();
   bool _datevisi = true;
   String datevalid = "";
@@ -198,10 +198,13 @@ class _misspunchState extends State<misspunch> {
                                     children: [
                                       Visibility(
                                           visible: _datevisi,
-                                          child: Text(DateTime.now()
-                                              .toString()
-                                              .split(" ")
-                                              .first)),
+                                          child: Text(
+                                              DateTime.now()
+                                                  .subtract(Duration(days: 1)) // ⬅ subtract 1 day
+                                                  .toString()
+                                                  .split(" ")
+                                                  .first
+                                          )),
                                       Visibility(
                                           visible:
                                               _datevisi == false ? true : false,
@@ -409,10 +412,11 @@ class _misspunchState extends State<misspunch> {
   }
 
   bool validation() {
-    if (FromedateInput.text == 'Date') {
+    /* if (FromedateInput.text == 'Date') {
       _showMyDialog('Please Select date', Color(0xFF861F41), 'error');
       return false;
-    } else if (_reason.text == '') {
+    } else*/
+    if (_reason.text == '') {
     _showMyDialog('Please enter reason', Color(0xFF861F41), 'error');
     return false;
   }
