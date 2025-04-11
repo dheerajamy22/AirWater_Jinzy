@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:demo/Earlygoing_latecoming/emp_EGLC.dart';
 import 'package:demo/baseurl/base_url.dart';
 import 'package:demo/halfday_leave/emp_halfday.dart';
 import 'package:demo/new_leave_managerdashboard/manager_leaveworkflow.dart';
@@ -507,7 +508,7 @@ class _EmployeeDetailsState extends State<EmployeeDetails> {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => employee_wfh(
+                                            builder: (context) => employee_EGLC(
                                                   emp_code: widget.emp_code,
                                                 )));
                                   },
@@ -516,7 +517,7 @@ class _EmployeeDetailsState extends State<EmployeeDetails> {
                                     height: 50,
                                     alignment: Alignment.center,
                                     child: SvgPicture.asset(
-                                      'assets/new_svgs/Leave_Balance.svg',
+                                      'assets/new_svgs/Punch.svg',
                                       width: 20,
                                       height: 20,
                                     ),
@@ -528,7 +529,7 @@ class _EmployeeDetailsState extends State<EmployeeDetails> {
                                 Padding(
                                   padding: const EdgeInsets.only(top: 8.0),
                                   child: Text(
-                                    'WFH \n History',
+                                    'LC/EG',
                                     textAlign: TextAlign.center,
                                   ),
                                 ),

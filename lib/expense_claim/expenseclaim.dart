@@ -80,21 +80,27 @@ class _expenseClaimState extends State<expenseClaim> {
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60.0),
         child: AppBar(
-          elevation: 0.0,
+         elevation: 0.0,
+          automaticallyImplyLeading: false,
           backgroundColor: const Color(0xFF0054A4),
-          leading: IconButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              icon: const Icon(
-                Icons.arrow_back,
-                color: MyColor.white_color,
-              )),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+         title: Row(
+             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                  padding: const EdgeInsets.only(right: 32.0),
+
+               Row(
+                 children: [
+                    GestureDetector(
+                      onTap: () {
+                         Navigator.of(context).pop();
+                      },
+                      child: Icon(
+                      Icons.arrow_back,
+                      color: MyColor.white_color,
+                                   ),
+                    ),
+
+                                  Container(
+                  padding: const EdgeInsets.only(left: 8.0),
                   child: const Text(
                     'Expense Claim',
                     style: TextStyle(
@@ -102,11 +108,15 @@ class _expenseClaimState extends State<expenseClaim> {
                         fontFamily: 'pop',
                         color: MyColor.white_color),
                   )),
+                 ],
+               ),
+             
               Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
+                    padding: const EdgeInsets.only(left: 0.0),
                     child: Image.asset(
                       'assets/images/powered_by_tag.png',
                       width: 90,

@@ -559,33 +559,53 @@ Icon(Icons.error,color: MyColor.white_color,),
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(60.0),
           child: AppBar(
-              elevation: 0.0,
-              scrolledUnderElevation: 0,
-              backgroundColor: MyColor.white_color,
-              automaticallyImplyLeading: false,
-              title: Row(
-                children: [
-                  InkWell(
+             elevation: 0.0,
+          automaticallyImplyLeading: false,
+          backgroundColor: const Color(0xFF0054A4),
+         title: Row(
+             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+
+               Row(
+                 children: [
+                    GestureDetector(
                       onTap: () {
-                        Navigator.pop(context);
+                         Navigator.of(context).pop();
                       },
                       child: Icon(
-                        Icons.arrow_back,
-                        color: Colors.black,
-                      )),
-                  SizedBox(
-                    width: 8,
-                  ),
-                  Text(
-                    'Attendance Log',
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontFamily: 'pop',
-                      color: Colors.black,
+                      Icons.arrow_back,
+                      color: MyColor.white_color,
+                                   ),
+                    ),
+
+                                  Container(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: const Text(
+                    'Attendance Request',
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontFamily: 'pop',
+                        color: MyColor.white_color),
+                  )),
+                 ],
+               ),
+             
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 0.0),
+                    child: Image.asset(
+                      'assets/images/powered_by_tag.png',
+                      width: 90,
+                      height: 20,
                     ),
                   ),
                 ],
-              )),
+              ),
+            ],
+          ),),
         ),
         body: Column(
           children: [

@@ -133,31 +133,52 @@ class _leavelistState extends State<leavelist> {
         preferredSize: const Size.fromHeight(60.0),
         child: AppBar(
             elevation: 0.0,
-            backgroundColor: MyColor.white_color,
-            automaticallyImplyLeading: false,
-            title: Row(
-              children: [
-                InkWell(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: Icon(
+          automaticallyImplyLeading: false,
+          backgroundColor: const Color(0xFF0054A4),
+         title: Row(
+             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+
+               Row(
+                 children: [
+                    GestureDetector(
+                      onTap: () {
+                         Navigator.of(context).pop();
+                      },
+                      child: Icon(
                       Icons.arrow_back,
-                      color: Colors.black,
-                    )),
-                SizedBox(
-                  width: 8,
-                ),
-                Text(
-                  'Submission List',
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontFamily: 'pop',
-                    color: Colors.black,
+                      color: MyColor.white_color,
+                                   ),
+                    ),
+
+                                  Container(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: const Text(
+                    'Leave History',
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontFamily: 'pop',
+                        color: MyColor.white_color),
+                  )),
+                 ],
+               ),
+             
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 0.0),
+                    child: Image.asset(
+                      'assets/images/powered_by_tag.png',
+                      width: 90,
+                      height: 20,
+                    ),
                   ),
-                ),
-              ],
-            )),
+                ],
+              ),
+            ],
+          ),),
       ),
       body: SafeArea(
         child: Padding(

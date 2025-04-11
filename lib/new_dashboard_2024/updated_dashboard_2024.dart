@@ -208,13 +208,11 @@ class _upcoming_dashState extends State<upcoming_dash> {
 
               if (empstatus == "Confirmed") {
                 Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      CreteLeaveRequest(
-                                                        self_select:
-                                                            'On Behalf',
-                                                      )));
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => CreteLeaveRequest(
+                              self_select: 'On Behalf',
+                            )));
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text("This is not Available for you")));
@@ -805,13 +803,11 @@ class _upcoming_dashState extends State<upcoming_dash> {
                                   children: [
                                     InkWell(
                                       onTap: () {
-                                        
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      CreateOvertimeRequest()));
-                                     
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    CreateOvertimeRequest()));
                                       },
                                       child: Container(
                                         width:
@@ -1959,8 +1955,8 @@ class _upcoming_dashState extends State<upcoming_dash> {
     String? user_emp_code = pr.getString('user_emp_code');
     String? token = pr.getString('user_access_token');
     print('${token}');
-    var response = await http
-        .post(Uri.parse('${baseurl.url}attendence-log'), body: {
+    var response =
+        await http.post(Uri.parse('${baseurl.url}attendence-log'), body: {
       'emp_code': EncryptData.decryptAES(user_emp_code!),
     }, headers: {
       'Authorization': 'Bearer $token'
@@ -2641,17 +2637,14 @@ class _upcoming_dashState extends State<upcoming_dash> {
       empstatus = p.getString('empstatus');
     });
 
-    var response = await http.post(
-        Uri.parse(
-            '${baseurl.url}birthday-list'),
+    var response = await http.post(Uri.parse('${baseurl.url}birthday-list'),
         headers: {'Authorization': 'Bearer $token'});
-   print('bdayc  ' + response.body);
+    print('bdayc  ' + response.body);
     var jsonData = json.decode(response.body);
     if (response.statusCode == 200) {
       if (jsonData['status'] == "1") {
         var jsonArray = jsonData['BirthdayList'];
 
-     
         for (var data in jsonArray) {
           BirthdayModel birthdayModel = BirthdayModel(
               name: data['name'],
@@ -3039,8 +3032,8 @@ class _upcoming_dashState extends State<upcoming_dash> {
     String? e_id = pref.getString('e_id');
     String? emp_id = pref.getString('emp_id');
     String? token = pref.getString('user_access_token');
-    var response =
-        await http.post(Uri.parse('${baseurl.url}workflow-list-for-attendence'), body: {
+    var response = await http
+        .post(Uri.parse('${baseurl.url}workflow-list-for-attendence'), body: {
       'emp_code': '',
     }, headers: {
       'Authorization': 'Bearer $token'

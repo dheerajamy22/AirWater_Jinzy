@@ -55,29 +55,53 @@ class _misspunchState extends State<misspunch> {
     return Scaffold(
       backgroundColor: MyColor.new_light_gray,
       appBar: AppBar(
+         elevation: 0.0,
           automaticallyImplyLeading: false,
-          elevation: 0,
-          scrolledUnderElevation: 0,
-          backgroundColor: MyColor.white_color,
-          title: Row(
+          backgroundColor: const Color(0xFF0054A4),
+         title: Row(
+             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              InkWell(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Icon(
-                    Icons.arrow_back,
-                    color: Colors.black,
+
+               Row(
+                 children: [
+                    GestureDetector(
+                      onTap: () {
+                         Navigator.of(context).pop();
+                      },
+                      child: Icon(
+                      Icons.arrow_back,
+                      color: MyColor.white_color,
+                                   ),
+                    ),
+
+                                  Container(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: const Text(
+                    'Miss Punch',
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontFamily: 'pop',
+                        color: MyColor.white_color),
                   )),
-              SizedBox(
-                width: 8,
-              ),
-              Text(
-                "Punch Regularization Request",
-                style: TextStyle(fontFamily: "pop_m", fontSize: 16),
+                 ],
+               ),
+             
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 0.0),
+                    child: Image.asset(
+                      'assets/images/powered_by_tag.png',
+                      width: 90,
+                      height: 20,
+                    ),
+                  ),
+                ],
               ),
             ],
-          )),
+          ),),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.only(left: 12, right: 12, top: 16, bottom: 16),
