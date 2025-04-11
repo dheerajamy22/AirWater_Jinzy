@@ -34,7 +34,7 @@ class _employee_wfhState extends State<employee_wfh> {
 
   @override
   void initState() {
-    callme();
+   // callme();
     getwfhlist('All');
     super.initState();
   }
@@ -471,6 +471,9 @@ class _employee_wfhState extends State<employee_wfh> {
     });
     print(response.body);
     if (response.statusCode == 200) {
+      setState(() {
+        progress = '1';
+      });
       var jsonObject = jsonDecode(response.body);
       if (jsonObject['status'] == "1") {
         // leaverqst_details.clear();
@@ -523,12 +526,17 @@ class _employee_wfhState extends State<employee_wfh> {
           }
         }
       } else {}
-    } else if (response.statusCode == 401) {
+    }
+    else if (response.statusCode == 401) {
       SharedPreferences preferences = await SharedPreferences.getInstance();
       await preferences.setString("login_check", "false");
       preferences.commit();
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => Login_Activity()));
+    }else{
+      setState(() {
+        progress = '1';
+      });
     }
     // return filter_list;
   }

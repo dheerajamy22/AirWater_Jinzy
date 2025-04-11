@@ -28,7 +28,7 @@ class _myteamState extends State<myteam> {
     String? user_emp_code = pref.getString('user_emp_code');
     String? token = pref.getString('user_access_token');
 
-    var response = await http.get(Uri.parse('${baseurl.url}myteam'),
+    var response = await http.get(Uri.parse('${baseurl.url}my-team'),
         headers: {'Authorization': 'Bearer $token'});
     print('Team Data ' + response.body);
 

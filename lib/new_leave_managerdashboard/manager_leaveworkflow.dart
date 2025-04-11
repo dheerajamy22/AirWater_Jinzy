@@ -28,9 +28,7 @@ class _manager_workflowState extends State<manager_workflow> {
 
   callme() async {
     await Future.delayed(Duration(seconds: 3));
-    setState(() {
-      progress = '1';
-    });
+
   }
 
   void getleavelist(String status) async {
@@ -38,7 +36,7 @@ class _manager_workflowState extends State<manager_workflow> {
     SharedPreferences p = await SharedPreferences.getInstance();
     String? token = p.getString('user_access_token');
     var response = await http.post(
-      Uri.parse("${baseurl.url}Leave_WorkflowListView"),
+      Uri.parse("${baseurl.url}leave-request-workflow-list"),
       body: {'emp_code': '${widget.emp_code}'},
       headers: {
         'Authorization': 'Bearer $token',
@@ -47,6 +45,9 @@ class _manager_workflowState extends State<manager_workflow> {
 
     print(response.body);
     if (response.statusCode == 200) {
+      setState(() {
+        progress = '1';
+      });
       var jsonObject = jsonDecode(response.body);
       if (jsonObject['status'] == "1") {
         // leaverqst_details.clear();
@@ -110,19 +111,24 @@ class _manager_workflowState extends State<manager_workflow> {
           }
         }
       } else {}
-    } else if (response.statusCode == 401) {
+    }
+    else if (response.statusCode == 401) {
       SharedPreferences preferences = await SharedPreferences.getInstance();
       await preferences.setString("login_check", "false");
       preferences.commit();
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => Login_Activity()));
+    }else{
+      setState(() {
+        progress = '1';
+      });
     }
     // return workflow_list;
   }
 
   @override
   void initState() {
-    callme();
+   // callme();
     getleavelist('All');
     super.initState();
   }

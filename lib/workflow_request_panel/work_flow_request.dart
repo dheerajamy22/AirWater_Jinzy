@@ -459,22 +459,28 @@ _customProgress('Please wait...');
   }
 
   void getWorkFlowRequest() async {
+
     SharedPreferences pref = await SharedPreferences.getInstance();
     String? e_id = pref.getString('e_id');
     String? emp_id = pref.getString('emp_id');
     String? token = pref.getString('user_access_token');
     var response =
-        await http.post(Uri.parse('${baseurl.url}WorkflowListView'), body: {
+        await http.post(Uri.parse('${baseurl.url}workflow-list-for-attendence'), body: {
       'emp_code': '${widget.emp_code}',
     }, headers: {
       'Authorization': 'Bearer $token'
     });
     print(token);
 
-    var jsonObject = json.decode(response.body);
+
     print('ff ' + response.body);
+    print('ff ' + '${response.statusCode}');
     List<String> req_no= [];
     if (response.statusCode == 200) {
+      setState(() {
+        progress = '1';
+      });
+      var jsonObject = json.decode(response.body);
       if (jsonObject['status'] == '1') {
         var jsonArray = jsonObject['requested_Tasks'];
         work_flow_data.clear();
@@ -501,15 +507,20 @@ _customProgress('Please wait...');
           });
         }
       }
-    } else if (response.statusCode == 401) {
+    }
+    else if (response.statusCode == 401) {
       SharedPreferences preferences = await SharedPreferences.getInstance();
       await preferences.setString("login_check", "false");
       preferences.commit();
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => Login_Activity()));
+    }else{
+      setState(() {
+        progress = '1';
+      });
     }
 
-    print('work flow data ${response.body}');
+
 
     // return work_flow_data;
   }
@@ -537,7 +548,7 @@ Icon(Icons.error,color: MyColor.white_color,),
   }
   @override
   void initState() {
-    callme();
+    //callme();
     getWorkFlowRequest();
     super.initState();
   }

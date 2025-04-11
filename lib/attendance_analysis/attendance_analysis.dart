@@ -506,7 +506,7 @@ class _attendanceanalysisState extends State<attendanceanalysis> {
     print(months[selectedMonthIndex].toString().split(" ").first);
     print(selectedYear);
     var response =
-        await http.post(Uri.parse('${baseurl.url}attendacelog'), body: {
+        await http.post(Uri.parse('${baseurl.url}monthly-attendence-log'), body: {
       'month_number':
           '${months[selectedMonthIndex].toString().split(" ").first}',
       'year': selectedYear.toString()

@@ -395,8 +395,8 @@ class _AllAttandanceApprovePageState extends State<AllAttandanceApprovePage> {
     String? emp_id = pref.getString('emp_id');
     String? token = pref.getString('user_access_token');
     var response =
-        await http.post(Uri.parse('${baseurl.url}approveall'), body: {
-      'req_no[]':
+        await http.post(Uri.parse('${baseurl.url}approve-all-attendence'), body: {
+      'req_nos':
           '${widget.req_no_list.toString().replaceAll(' ', '').replaceAll('[', '').replaceAll(']', '')}',
       'status': '${status}',
     }, headers: {
