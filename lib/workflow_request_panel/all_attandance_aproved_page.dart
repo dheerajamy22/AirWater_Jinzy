@@ -14,7 +14,7 @@ import 'package:http/http.dart' as http;
 
 class AllAttandanceApprovePage extends StatefulWidget {
   List<Workflow> work_flow_data;
-  List<String> req_no_list;
+  String req_no_list;
   AllAttandanceApprovePage(
       {Key? key, required this.work_flow_data, required this.req_no_list})
       : super(key: key);

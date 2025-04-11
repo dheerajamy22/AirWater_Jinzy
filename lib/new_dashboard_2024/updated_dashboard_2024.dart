@@ -89,7 +89,7 @@ class _upcoming_dashState extends State<upcoming_dash> {
   List<Workflow> work_flow_data = [];
   List<BalanceLeaveModel> balance_list = [];
   File? _capturedImage;
-  List<String> req_no_list = [];
+String req_no_list="";
 
   @override
   void initState() {
@@ -3046,6 +3046,8 @@ class _upcoming_dashState extends State<upcoming_dash> {
 
     if (response.statusCode == 200) {
       if (jsonObject['status'] == '1') {
+        // flow.add(workflow);
+        req_no_list=jsonObject['all_ids'];
         var jsonArray = jsonObject['requested_Tasks'];
         work_flow_data.clear();
         for (var flow in jsonArray) {
@@ -3057,17 +3059,15 @@ class _upcoming_dashState extends State<upcoming_dash> {
             ccl_type: flow['Type'],
             ccl_inout_ip: flow['IP'],
             checkio_reason: flow['Reason'],
-            wtxn_ref_request_no: flow['ReqNo'],
+            wtxn_ref_request_no: "",
             emp_photo: flow['Image'],
           );
-          req_no_list.add(EncryptData.decryptAES(flow['ReqNo']));
- 
-          // flow.add(workflow);
 
           setState(() {
             work_flow_data.add(workflow);
-             print("attendance length ${work_flow_data.length}");
-              print("Name ${EncryptData.decryptAES(work_flow_data[0].wtxn_requester_emp_name)}");
+            print("attendance length ${work_flow_data.length}");
+            print(
+                "Name ${EncryptData.decryptAES(work_flow_data[0].wtxn_requester_emp_name)}");
           });
         }
         print('attendance ${work_flow_data.length}');
