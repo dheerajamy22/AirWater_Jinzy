@@ -33,6 +33,7 @@ class _manager_workflowState extends State<manager_workflow> {
 
   void getleavelist(String status) async {
     workflow_list = [];
+    print(widget.emp_code);
     SharedPreferences p = await SharedPreferences.getInstance();
     String? token = p.getString('user_access_token');
     var response = await http.post(
