@@ -167,14 +167,14 @@ class _expenseClaimState extends State<expenseClaim> {
                                       context: context,
                                       initialDate: TodateInput == ""
                                           ? DateTime.parse(TodateInput.text)
-                                          : DateTime.now(),
+                                          : DateTime.now().subtract(Duration(days: 1)),
                                       firstDate: 
                                            DateTime(2000),
                                           
                                       //DateTime.now() - not to allow to choose before today.
                                       lastDate: TodateInput == ""
                                           ? DateTime.parse(TodateInput.text)
-                                          : DateTime.now());
+                                          : DateTime.now().subtract(Duration(days: 1)));
           
                                   if (pickedDate != null) {
                                     print(
@@ -245,7 +245,7 @@ class _expenseClaimState extends State<expenseClaim> {
                                       initialDate: DateTime.parse(startDate),
                                       firstDate: DateTime(2000),
                                       //DateTime.now() - not to allow to choose before today.
-                                      lastDate: DateTime.parse(startDate));
+                                      lastDate: DateTime.now().subtract(Duration(days: 1)));
           
                                   if (pickedDate != null) {
                                     print(
