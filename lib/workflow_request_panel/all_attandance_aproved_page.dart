@@ -117,6 +117,7 @@ class _AllAttandanceApprovePageState extends State<AllAttandanceApprovePage> {
                     itemCount: widget.work_flow_data.length,
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
+                      print("length ${widget.work_flow_data.length}");
                       return Padding(
                         padding: const EdgeInsets.all(4.0),
                         child: Card(
@@ -179,9 +180,8 @@ class _AllAttandanceApprovePageState extends State<AllAttandanceApprovePage> {
                                                   fontFamily: 'pop'),
                                             ),
                                             Padding(
-                                              padding:
-                                                  const EdgeInsets.only(
-                                                      top: 2.0),
+                                              padding: const EdgeInsets.only(
+                                                  top: 2.0),
                                               child: Text(
                                                 '${EncryptData.decryptAES(widget.work_flow_data[index].wtxn_request_datetime.toString())}',
                                                 style: const TextStyle(
@@ -189,37 +189,33 @@ class _AllAttandanceApprovePageState extends State<AllAttandanceApprovePage> {
                                                     fontFamily: 'pop'),
                                               ),
                                             ),
-                                           
                                           ],
                                         )
                                       ],
                                     ),
                                   ),
-                                   const SizedBox(
-                                      height: 10,
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Container(
+                                    height: 2,
+                                    color: Colors.black38,
+                                  ),
+                                  const SizedBox(
+                                    height: 4,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 2.0),
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          '${EncryptData.decryptAES(widget.work_flow_data[index].ccl_type.toString())}',
+                                          style: const TextStyle(
+                                              fontSize: 16, fontFamily: 'pop'),
+                                        ),
+                                      ],
                                     ),
-                                    Container(
-                                      height: 2,
-                                      color: Colors.black38,
-                                    ),
-                                    const SizedBox(
-                                      height: 4,
-                                    ),
-                                   Padding(
-                                              padding:
-                                                  const EdgeInsets.only(
-                                                      top: 2.0),
-                                              child: Row(
-                                                children: [
-                                                  Text(
-                                                    '${EncryptData.decryptAES(widget.work_flow_data[index].ccl_type.toString())}',
-                                                    style: const TextStyle(
-                                                        fontSize: 16,
-                                                        fontFamily: 'pop'),
-                                                  ),
-                                                ],
-                                              ),
-                                            )
+                                  )
                                 ],
                               ),
                             ),
@@ -394,8 +390,8 @@ class _AllAttandanceApprovePageState extends State<AllAttandanceApprovePage> {
     String? e_id = pref.getString('e_id');
     String? emp_id = pref.getString('emp_id');
     String? token = pref.getString('user_access_token');
-    var response =
-        await http.post(Uri.parse('${baseurl.url}approve-all-attendence'), body: {
+    var response = await http
+        .post(Uri.parse('${baseurl.url}approve-all-attendence'), body: {
       'req_nos':
           '${widget.req_no_list.toString().replaceAll(' ', '').replaceAll('[', '').replaceAll(']', '')}',
       'status': '${status}',

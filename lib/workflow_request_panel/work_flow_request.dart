@@ -68,7 +68,7 @@ _customProgress('Please wait...');
     String? e_id = pref.getString('e_id');
     String? token = pref.getString('user_access_token');
     var response = await http
-        .post(Uri.parse('${baseurl.url}workFlowRequest_Accept_Reject'), body: {
+        .post(Uri.parse('${baseurl.url}workflow-accept-reject'), body: {
       'req_no': '${wtxn_id}',
       'status': '${ccl_action}',
       'reason': '${wtxn_comments}',

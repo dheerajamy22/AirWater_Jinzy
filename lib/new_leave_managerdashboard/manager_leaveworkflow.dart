@@ -74,7 +74,7 @@ class _manager_workflowState extends State<manager_workflow> {
             tbl_leavecode_id: array_data['tbl_leavecode_id'],
             lr_reason: array_data['lr_reason'],
             leave_type: array_data['leave_type'],
-            lr_leave_planed: array_data['lr_leave_planed'],
+            lr_leave_planed: "",
           );
 
           List<leave_workflow> data = [];
@@ -1021,7 +1021,7 @@ class _manager_workflowState extends State<manager_workflow> {
     String? emp_id = pref.getString('emp_id');
     String? e_id = pref.getString('e_id');
     String? token = pref.getString('user_access_token');
-    var response = await http.post(Uri.parse('${baseurl.url}action'), body: {
+    var response = await http.post(Uri.parse('${baseurl.url}workflow-action'), body: {
       'request_id': '${wtxn_id}',
       'status': '${ccl_action}',
       'comment': '${wtxn_comments}',

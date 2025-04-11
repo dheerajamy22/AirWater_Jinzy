@@ -3061,11 +3061,13 @@ class _upcoming_dashState extends State<upcoming_dash> {
             emp_photo: flow['Image'],
           );
           req_no_list.add(EncryptData.decryptAES(flow['ReqNo']));
-
+ 
           // flow.add(workflow);
 
           setState(() {
             work_flow_data.add(workflow);
+             print("attendance length ${work_flow_data.length}");
+              print("Name ${EncryptData.decryptAES(work_flow_data[0].wtxn_requester_emp_name)}");
           });
         }
         print('attendance ${work_flow_data.length}');

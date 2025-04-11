@@ -49,7 +49,7 @@ class _employee_EGLCState extends State<employee_EGLC> {
                                   Container(
                   padding: const EdgeInsets.only(left: 8.0),
                   child: const Text(
-                    'Attendance Request',
+                    'EG/LC Request',
                     style: TextStyle(
                         fontSize: 18,
                         fontFamily: 'pop',

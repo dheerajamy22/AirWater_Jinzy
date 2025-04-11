@@ -65,7 +65,7 @@ class _EmployeeDetailsState extends State<EmployeeDetails> {
     print(months[selectedMonthIndex].toString().split(" ").first);
     print(selectedYear);
     var response = await http
-        .post(Uri.parse('${baseurl.url}WebLog-CheckIn-OutDetails'), body: {
+        .post(Uri.parse('${baseurl.url}attendence-log'), body: {
       'emp_code': '${widget.emp_code}',
       'month_number':
           '${months[selectedMonthIndex].toString().split(" ").first}',
@@ -529,7 +529,7 @@ class _EmployeeDetailsState extends State<EmployeeDetails> {
                                 Padding(
                                   padding: const EdgeInsets.only(top: 8.0),
                                   child: Text(
-                                    'LC/EG',
+                                    'LC/EG\n Request',
                                     textAlign: TextAlign.center,
                                   ),
                                 ),

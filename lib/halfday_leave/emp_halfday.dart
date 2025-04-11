@@ -474,7 +474,7 @@ class _emp_halfdayState extends State<emp_halfday> {
               date: i['date'],
               status: i['status'],
               lr_reason: i['lr_reason'],
-              type: i['Type']);
+              type: "");
           // filter_list.add(leavedetails);
           List<halfworkflow> data = [];
           data.add(wfhdetails);
