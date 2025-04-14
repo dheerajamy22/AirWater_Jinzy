@@ -172,7 +172,7 @@ quantity.text="1";
                   isExpanded: true,
                   items: categoryList.map((_country) {
                     return DropdownMenuItem<String>(
-                      value: _country.id,
+                      value: _country.name,
                       child: Text(_country.name),
                     );
                   }).toList(),
@@ -213,7 +213,7 @@ quantity.text="1";
                   isExpanded: true,
                   items: UnitList.map((_country) {
                     return DropdownMenuItem<String>(
-                      value: _country.id,
+                      value: _country.name,
                       child: Text(_country.name),
                     );
                   }).toList(),
