@@ -530,6 +530,7 @@ class _purchaseRequestState extends State<purchaseRequest> {
           
                           setState(() {
                             additemlist.add(newItem);
+                            print(additemlist[0].quantity);
                           });
                         },
                         child: Container(
@@ -579,6 +580,7 @@ class _purchaseRequestState extends State<purchaseRequest> {
                                 additemlist.add(array);
                               }
                             });
+                            print(additemlist);
                           } else {
                             // Optionally handle the case where no data was returned
                             print("No items were selected.");
@@ -823,6 +825,8 @@ class _purchaseRequestState extends State<purchaseRequest> {
   });
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('user_access_token');
+    print(additemlist[0].quantity);
+    print(additemlist[0].estimatePrice);
 
     int businessLineId = _businessLineId != null
         ? int.parse(_businessLineId!)
