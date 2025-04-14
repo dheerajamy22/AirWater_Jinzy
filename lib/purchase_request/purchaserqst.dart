@@ -531,6 +531,7 @@ class _purchaseRequestState extends State<purchaseRequest> {
                           setState(() {
                             additemlist.add(newItem);
                             print(additemlist[0].quantity);
+                            _calculateTotal();
                           });
                         },
                         child: Container(
