@@ -599,8 +599,9 @@ class _misspunchState extends State<misspunch> {
       'Authorization': 'Bearer $token'
     });
     print(response.body);
+     var jsonObject = json.decode(response.body);
     if (response.statusCode == 200) {
-      var jsonObject = json.decode(response.body);
+     
 
       if (jsonObject['status'] == '1') {
         pr.hide();
@@ -630,6 +631,10 @@ class _misspunchState extends State<misspunch> {
       preferences.commit();
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => Login_Activity()));
+    } if (response.statusCode == 422) {
+      Navigator.of(context).pop();
+
+      _showMyDialog(jsonObject['message'], MyColor.dialog_error_color, 'error');
     }
   }
 

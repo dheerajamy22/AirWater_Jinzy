@@ -841,7 +841,11 @@ setState(() {
     } else if (response.statusCode == 400) {
       _showMyDialog(jsonObject['message'], MyColor.dialog_error_color, 'error');
       print("Bad Request");
-    } else {
+    }  if (response.statusCode == 422) {
+      Navigator.of(context).pop();
+
+      _showMyDialog(jsonObject['message'], MyColor.dialog_error_color, 'error');
+    }else {
       print("Unknown Error");
     }
   }
@@ -1303,7 +1307,11 @@ void bottomDialog() async {
       print("Not Found");
     } else if (response.statusCode == 400) {
       print("Bad Request");
-    } else {
+    }  if (response.statusCode == 422) {
+      Navigator.of(context).pop();
+
+      _showMyDialog(jsonObject['message'], MyColor.dialog_error_color, 'error');
+    }else {
       print("Unknown Error");
     }
   }

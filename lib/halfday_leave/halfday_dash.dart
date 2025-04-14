@@ -65,8 +65,9 @@ class _halfdayDashState extends State<halfdayDash> {
         body: {"req_type": 'Onbehalf'});
 
     print('fghj ${response.body}');
+     var jsonObject = jsonDecode(response.body);
     if (response.statusCode == 200) {
-      var jsonObject = jsonDecode(response.body);
+     
       team_names.clear();
       if (jsonObject['status'] == "1") {
         var jsonarray = jsonObject['subordinates'];
@@ -87,6 +88,10 @@ class _halfdayDashState extends State<halfdayDash> {
       preferences.commit();
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => Login_Activity()));
+    } if (response.statusCode == 422) {
+      Navigator.of(context).pop();
+
+      _showMyDialog(jsonObject['message'], MyColor.dialog_error_color, 'error');
     }
   }
 
@@ -330,11 +335,12 @@ class _halfdayDashState extends State<halfdayDash> {
     );
     print(response.statusCode);
     print(response.body);
+     var jsonobject = jsonDecode(response.body);
     if (response.statusCode == 200) {
       setState(() {
         progress = '1';
       });
-      var jsonobject = jsonDecode(response.body);
+      // var jsonobject = jsonDecode(response.body);
       if (jsonobject['status'] == "1") {
         var jsonarray = jsonobject['data'];
         for (var i in jsonarray) {
@@ -366,7 +372,11 @@ class _halfdayDashState extends State<halfdayDash> {
         progress = '1';
       });
       _showMyDialog('Something Went Wrong', Color(0xFF861F41), 'error');
-    } else if (response.statusCode == 404) {
+    }  if (response.statusCode == 422) {
+      Navigator.of(context).pop();
+
+      _showMyDialog(jsonobject['message'], MyColor.dialog_error_color, 'error');
+    }else if (response.statusCode == 404) {
       setState(() {
         progress = '1';
       });
@@ -708,9 +718,10 @@ class _halfdayDashState extends State<halfdayDash> {
       'emp_id': EncryptData.decryptAES(preferences.getString('user_emp_code')!),
     });
     print("code ${response.body}");
-    if (response.statusCode == 200) {
-      var jsonData = json.decode(response.body);
+     var jsonData = json.decode(response.body);
 
+    if (response.statusCode == 200) {
+     
       if (jsonData['status'] == "1") {
         var jsonArray = jsonData['leave_details'];
 
@@ -736,6 +747,10 @@ class _halfdayDashState extends State<halfdayDash> {
       preferences.commit();
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => Login_Activity()));
+    } if (response.statusCode == 422) {
+      Navigator.of(context).pop();
+
+      _showMyDialog(jsonData['message'], MyColor.dialog_error_color, 'error');
     }
 
     return leaveTypeList;

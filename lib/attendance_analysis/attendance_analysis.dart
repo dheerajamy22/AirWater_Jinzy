@@ -543,12 +543,12 @@ class _attendanceanalysisState extends State<attendanceanalysis> {
     checkin_out_log_list.clear();
     print('Attandance Log ' + response.body);
     print(response.statusCode);
-
+  var jsonObject = json.decode(response.body);
     if (response.statusCode == 200) {
       setState(() {
         progress = '1';
       });
-      var jsonObject = json.decode(response.body);
+    
 
       if (jsonObject['status'] == '1') {
         // checkin_out_log_list.clear();
@@ -589,6 +589,13 @@ class _attendanceanalysisState extends State<attendanceanalysis> {
         progress = '1';
       });
       _showMyDialog('Something Went Wrong', Color(0xFF861F41), 'error');
+    } if (response.statusCode == 422) {
+      Navigator.of(context).pop();
+
+      _showMyDialog(jsonObject['message'], MyColor.dialog_error_color, 'error');
+      setState(() {
+        progress = '1';
+      });
     }else{
       setState(() {
         progress = '1';

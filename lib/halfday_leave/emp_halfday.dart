@@ -458,11 +458,12 @@ class _emp_halfdayState extends State<emp_halfday> {
       "emp_code": widget.emp_code
     });
     print(response.body);
+       var jsonObject = jsonDecode(response.body);
     if (response.statusCode == 200) {
       setState(() {
         progress = '1';
       });
-      var jsonObject = jsonDecode(response.body);
+   
       if (jsonObject['status'] == "1") {
         // leaverqst_details.clear();
         filter_list.clear();
@@ -517,6 +518,10 @@ class _emp_halfdayState extends State<emp_halfday> {
       preferences.commit();
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => Login_Activity()));
+    } if (response.statusCode == 422) {
+      Navigator.of(context).pop();
+
+      _showMyDialog(jsonObject['message'], MyColor.dialog_error_color, 'error');
     }else{
       setState(() {
         progress = '1';
@@ -731,6 +736,10 @@ class _emp_halfdayState extends State<emp_halfday> {
       preferences.commit();
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => Login_Activity()));
+    } if (response.statusCode == 422) {
+      Navigator.of(context).pop();
+
+      _showMyDialog(jsonObject['message'], MyColor.dialog_error_color, 'error');
     }
   }
 

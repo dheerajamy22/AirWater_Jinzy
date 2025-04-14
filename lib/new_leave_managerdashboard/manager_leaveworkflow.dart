@@ -45,11 +45,12 @@ class _manager_workflowState extends State<manager_workflow> {
     );
 
     print(response.body);
+     var jsonObject = jsonDecode(response.body);
     if (response.statusCode == 200) {
       setState(() {
         progress = '1';
       });
-      var jsonObject = jsonDecode(response.body);
+     
       if (jsonObject['status'] == "1") {
         // leaverqst_details.clear();
         workflow_list.clear();
@@ -119,6 +120,10 @@ class _manager_workflowState extends State<manager_workflow> {
       preferences.commit();
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => Login_Activity()));
+    } if (response.statusCode == 422) {
+      Navigator.of(context).pop();
+
+      _showMyDialog(jsonObject['message'], MyColor.dialog_error_color, 'error');
     }else{
       setState(() {
         progress = '1';

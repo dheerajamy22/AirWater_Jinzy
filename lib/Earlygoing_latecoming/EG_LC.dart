@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:demo/Earlygoing_latecoming/EC_LC_main.dart';
- import 'package:demo/app_color/color_constants.dart';
+import 'package:demo/app_color/color_constants.dart';
 import 'package:demo/baseurl/base_url.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -322,18 +322,21 @@ class _EG_LCState extends State<EG_LC> {
     _customProgress('Please wait...');
     SharedPreferences pref = await SharedPreferences.getInstance();
     String? token = pref.getString('user_access_token');
-    var response = await http
-        .post(Uri.parse('${baseurl.url}late-comming-earyly-going-request'), headers: {
-      'Authorization': 'Bearer $token'
-    }, body: {
-      'type': requesttype,
-      'date': '${FromedateInput.text}',
-      'time': '${selectedTime.hour}:${selectedTime.minute}',
-      'reason': _reason.text
-    });
+    var response = await http.post(
+        Uri.parse('${baseurl.url}late-comming-earyly-going-request'),
+        headers: {
+          'Authorization': 'Bearer $token'
+        },
+        body: {
+          'type': requesttype,
+          'date': '${FromedateInput.text}',
+          'time': '${selectedTime.hour}:${selectedTime.minute}',
+          'reason': _reason.text
+        });
+    print(response.body);
+    print(response.statusCode);
+    var jsonObject = json.decode(response.body);
     if (response.statusCode == 200) {
-      print(response.body);
-      var jsonObject = json.decode(response.body);
       if (jsonObject['status'] == '1') {
         Navigator.of(context).pop();
         Navigator.push(
@@ -344,6 +347,11 @@ class _EG_LCState extends State<EG_LC> {
         count = 0;
         _showMyDialog(jsonObject['message'], Color(0xFF861F41), 'error');
       }
+    }
+    if (response.statusCode == 422) {
+      Navigator.of(context).pop();
+
+      _showMyDialog(jsonObject['message'], MyColor.dialog_error_color, 'error');
     }
   }
 

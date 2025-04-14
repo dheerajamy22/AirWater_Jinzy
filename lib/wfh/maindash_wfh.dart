@@ -260,8 +260,9 @@ class _main_wfhState extends State<main_wfh> {
         body: {'emp_code': emp_code});
     print(response.statusCode);
     print(response.body);
+         var jsonobject = jsonDecode(response.body);
     if (response.statusCode == 200) {
-      var jsonobject = jsonDecode(response.body);
+ 
       if (jsonobject['status'] == "1") {
         var jsonarray = jsonobject['records'];
         for (var i in jsonarray) {
@@ -287,6 +288,14 @@ class _main_wfhState extends State<main_wfh> {
       preferences.commit();
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => Login_Activity()));
+    } if (response.statusCode == 422) {
+      Navigator.of(context).pop();
+
+      _showMyDialog(jsonobject['message'], MyColor.dialog_error_color, 'error');
+    } if (response.statusCode == 422) {
+      Navigator.of(context).pop();
+
+      _showMyDialog('Something went wrong', MyColor.dialog_error_color, 'error');
     }
   }
 
@@ -606,9 +615,9 @@ class _main_wfhState extends State<main_wfh> {
 
     print(response.statusCode);
     print(response.body);
+      var jsonObject = json.decode(response.body);
 
     if (response.statusCode == 200) {
-      var jsonObject = json.decode(response.body);
 
       if (jsonObject['status'] == '1') {
         Navigator.of(context).pop();
@@ -631,6 +640,10 @@ class _main_wfhState extends State<main_wfh> {
      
       Navigator.of(context).pop();
        _showMyDialog('Something went Wrong', Color(0xFF861F41), 'error');
+    } if (response.statusCode == 422) {
+      Navigator.of(context).pop();
+
+      _showMyDialog(jsonObject['message'], MyColor.dialog_error_color, 'error');
     }
   }
 

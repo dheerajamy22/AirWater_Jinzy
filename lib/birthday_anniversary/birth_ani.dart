@@ -293,7 +293,44 @@ class _birthday_anniversaryState extends State<birthday_anniversary> {
       preferences.commit();
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => Login_Activity()));
+    } if (response.statusCode == 422) {
+      Navigator.of(context).pop();
+
+      _showMyDialog(jsonData['message'], MyColor.dialog_error_color, 'error');
     }
+  }
+
+   Future<void> _showMyDialog(
+      String msg, Color color_dynamic, String success) async {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Row(
+        children: [
+          if (success == 'success') ...[
+            Icon(
+              Icons.check,
+              color: MyColor.white_color,
+            ),
+          ] else ...[
+            Icon(
+              Icons.error,
+              color: MyColor.white_color,
+            ),
+          ],
+          SizedBox(
+            width: 8,
+          ),
+          Flexible(
+              child: Text(
+            msg,
+            style: TextStyle(color: MyColor.white_color),
+            maxLines: 2,
+          ))
+        ],
+      ),
+      backgroundColor: color_dynamic,
+      behavior: SnackBarBehavior.floating,
+      elevation: 3,
+    ));
   }
 
   // that's function use to Anniversary Api
@@ -332,6 +369,10 @@ class _birthday_anniversaryState extends State<birthday_anniversary> {
       preferences.commit();
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => Login_Activity()));
+    } if (response.statusCode == 422) {
+      Navigator.of(context).pop();
+
+      _showMyDialog(jsonData['message'], MyColor.dialog_error_color, 'error');
     }
   }
 }

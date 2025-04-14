@@ -281,11 +281,12 @@ class _EGLCDashState extends State<EGLCDash> {
         );
     print(response.statusCode);
     print(response.body);
+       var jsonobject = jsonDecode(response.body);
     if (response.statusCode == 200) {
        setState(() {
       progress = '1';
     });
-      var jsonobject = jsonDecode(response.body);
+   
       if (jsonobject['status'] == "1") {
         var jsonarray = jsonobject['data'];
         for (var i in jsonarray) {
@@ -316,6 +317,10 @@ class _EGLCDashState extends State<EGLCDash> {
       progress = '1';
     });
        _showMyDialog('Something went wrong', Color(0xFF861F41), 'error');
+    } if (response.statusCode == 422) {
+      Navigator.of(context).pop();
+
+      _showMyDialog(jsonobject['message'], MyColor.dialog_error_color, 'error');
     }
   }
 

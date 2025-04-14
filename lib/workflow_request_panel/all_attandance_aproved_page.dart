@@ -419,6 +419,10 @@ class _AllAttandanceApprovePageState extends State<AllAttandanceApprovePage> {
       preferences.commit();
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => Login_Activity()));
+    } if (response.statusCode == 422) {
+      Navigator.of(context).pop();
+
+      _showMyDialog(jsonObject['message'], MyColor.dialog_error_color, 'error');
     }
 
     // return work_flow_data;

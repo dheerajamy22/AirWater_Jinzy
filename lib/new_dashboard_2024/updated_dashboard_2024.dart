@@ -2775,6 +2775,7 @@ class _upcoming_dashState extends State<upcoming_dash> {
 
     return balance_list;
   }
+  
 
   void check_In_Dialog(String type, String msg) async {
     return await showDialog(

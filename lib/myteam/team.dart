@@ -31,12 +31,12 @@ class _myteamState extends State<myteam> {
     var response = await http.get(Uri.parse('${baseurl.url}my-team'),
         headers: {'Authorization': 'Bearer $token'});
     print('Team Data ' + response.body);
-
+ var jsonObject = json.decode(response.body);
     if (response.statusCode == 200) {
       setState(() {
         progress = '1';
       });
-      var jsonObject = json.decode(response.body);
+     
       if (jsonObject['status'] == '1') {
         var listJsonArray = jsonObject['team'];
 
@@ -63,6 +63,10 @@ class _myteamState extends State<myteam> {
       preferences.commit();
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => Login_Activity()));
+    } if (response.statusCode == 422) {
+      Navigator.of(context).pop();
+
+      _showMyDialog(jsonObject['message'], MyColor.dialog_error_color, 'error');
     }
     else {
       setState(() {
@@ -71,6 +75,39 @@ class _myteamState extends State<myteam> {
     }
 
     return team_list;
+  }
+
+   Future<void> _showMyDialog(
+      String msg, Color color_dynamic, String success) async {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Row(
+        children: [
+          if (success == 'success') ...[
+            Icon(
+              Icons.check,
+              color: MyColor.white_color,
+            ),
+          ] else ...[
+            Icon(
+              Icons.error,
+              color: MyColor.white_color,
+            ),
+          ],
+          SizedBox(
+            width: 8,
+          ),
+          Flexible(
+              child: Text(
+            msg,
+            style: TextStyle(color: MyColor.white_color),
+            maxLines: 2,
+          ))
+        ],
+      ),
+      backgroundColor: color_dynamic,
+      behavior: SnackBarBehavior.floating,
+      elevation: 3,
+    ));
   }
 
   String progress = "";

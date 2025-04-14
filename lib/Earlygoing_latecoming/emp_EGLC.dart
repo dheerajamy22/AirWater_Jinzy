@@ -44,12 +44,13 @@ class _employee_EGLCState extends State<employee_EGLC> {
       },
     );
 
+  var jsonObject = jsonDecode(response.body);
     print(response.body);
     if (response.statusCode == 200) {
       setState(() {
         progress = '1';
       });
-      var jsonObject = jsonDecode(response.body);
+    
       if (jsonObject['status'] == "1") {
         // leaverqst_details.clear();
         LCEG_workflow_list.clear();
@@ -123,6 +124,10 @@ class _employee_EGLCState extends State<employee_EGLC> {
       setState(() {
         progress = '1';
       });
+    } if (response.statusCode == 422) {
+      Navigator.of(context).pop();
+
+      _showMyDialog(jsonObject['message'], MyColor.dialog_error_color, 'error');
     }
     // return workflow_list;
   }
@@ -1029,9 +1034,9 @@ class _employee_EGLCState extends State<employee_EGLC> {
     }, headers: {
       'Authorization': 'Bearer ${token}'
     });
-
+ var jsonObject = json.decode(response.body);
     print('Approved data ' + response.body);
-    var jsonObject = json.decode(response.body);
+   
     if (response.statusCode == 200) {
       Navigator.pop(context);
       if (jsonObject['status'] == '1') {
@@ -1048,6 +1053,10 @@ class _employee_EGLCState extends State<employee_EGLC> {
       preferences.commit();
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => Login_Activity()));
+    } if (response.statusCode == 422) {
+      Navigator.of(context).pop();
+
+      _showMyDialog(jsonObject['message'], MyColor.dialog_error_color, 'error');
     }
   }
 

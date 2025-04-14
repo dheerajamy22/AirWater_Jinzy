@@ -69,9 +69,10 @@ class _CreteLeaveRequestState extends State<CreteLeaveRequest> {
     }, body: {
       'emp_id': EncryptData.decryptAES(preferences.getString('user_emp_code')!),
     });
+    var jsonData = json.decode(response.body);
     print("code ${response.body}");
     if (response.statusCode == 200) {
-      var jsonData = json.decode(response.body);
+      
 
       if (jsonData['status'] == "1") {
         var jsonArray = jsonData['leave_details'];
@@ -98,6 +99,10 @@ class _CreteLeaveRequestState extends State<CreteLeaveRequest> {
       preferences.commit();
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => Login_Activity()));
+    } if (response.statusCode == 422) {
+      Navigator.of(context).pop();
+
+      _showMyDialog(jsonData['message'], MyColor.dialog_error_color, 'error');
     }
 
     return leaveTypeList;

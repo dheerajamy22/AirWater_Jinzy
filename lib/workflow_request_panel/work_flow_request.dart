@@ -108,6 +108,10 @@ _customProgress('Please wait...');
       preferences.commit();
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => Login_Activity()));
+    } if (response.statusCode == 422) {
+      Navigator.of(context).pop();
+
+      _showMyDialog(jsonObject['message'], MyColor.dialog_error_color, 'error');
     }
   }
 
@@ -476,11 +480,12 @@ _customProgress('Please wait...');
     print('ff ' + response.body);
     print('ff ' + '${response.statusCode}');
     List<String> req_no= [];
+    var jsonObject = json.decode(response.body);
     if (response.statusCode == 200) {
       setState(() {
         progress = '1';
       });
-      var jsonObject = json.decode(response.body);
+      
       if (jsonObject['status'] == '1') {
         var jsonArray = jsonObject['requested_Tasks'];
         work_flow_data.clear();
@@ -514,6 +519,10 @@ _customProgress('Please wait...');
       preferences.commit();
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => Login_Activity()));
+    } if (response.statusCode == 422) {
+      Navigator.of(context).pop();
+
+      _showMyDialog(jsonObject['message'], MyColor.dialog_error_color, 'error');
     }else{
       setState(() {
         progress = '1';

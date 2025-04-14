@@ -55,11 +55,12 @@ class _leavelistState extends State<leavelist> {
       },
     );
     print(response.body);
+    var jsonObject = json.decode(response.body);
     if (response.statusCode == 200) {
        setState(() {
       progress = '1';
     });
-      var jsonObject = jsonDecode(response.body);
+      // var jsonObject = jsonDecode(response.body);
       if (jsonObject['status'] == "1") {
         // leaverqst_details.clear();
         filter_list.clear();
@@ -122,10 +123,46 @@ class _leavelistState extends State<leavelist> {
       preferences.commit();
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => Login_Activity()));
+    } if (response.statusCode == 422) {
+      Navigator.of(context).pop();
+
+      _showMyDialog(jsonObject['message'], MyColor.dialog_error_color, 'error');
     }
     // return filter_list;
   }
 
+ Future<void> _showMyDialog(
+      String msg, Color color_dynamic, String success) async {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Row(
+        children: [
+          if (success == 'success') ...[
+            Icon(
+              Icons.check,
+              color: MyColor.white_color,
+            ),
+          ] else ...[
+            Icon(
+              Icons.error,
+              color: MyColor.white_color,
+            ),
+          ],
+          SizedBox(
+            width: 8,
+          ),
+          Flexible(
+              child: Text(
+            msg,
+            style: TextStyle(color: MyColor.white_color),
+            maxLines: 2,
+          ))
+        ],
+      ),
+      backgroundColor: color_dynamic,
+      behavior: SnackBarBehavior.floating,
+      elevation: 3,
+    ));
+  }
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: MyColor.new_light_gray,
@@ -683,8 +720,9 @@ class _leavelistState extends State<leavelist> {
       'delete_id': id
     });
     print(response.body);
+    var jsonObject = json.decode(response.body);
     if (response.statusCode == 200) {
-      var jsonObject = jsonDecode(response.body);
+      // var jsonObject = jsonDecode(response.body);
       if (jsonObject['status'] == "1") {
         pr.hide();
         setState(() {
@@ -699,6 +737,10 @@ class _leavelistState extends State<leavelist> {
       preferences.commit();
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => Login_Activity()));
+    } if (response.statusCode == 422) {
+      Navigator.of(context).pop();
+
+      _showMyDialog(jsonObject['message'], MyColor.dialog_error_color, 'error');
     }
   }
 
@@ -713,9 +755,11 @@ class _leavelistState extends State<leavelist> {
     }, body: {
       'cancel_id': id
     });
+          var jsonObject = json.decode(response.body);
+
     print(response.body);
     if (response.statusCode == 200) {
-      var jsonObject = jsonDecode(response.body);
+      // var jsonObject = jsonDecode(response.body);
       if (jsonObject['status'] == "1") {
         pr.hide();
         setState(() {
@@ -730,6 +774,10 @@ class _leavelistState extends State<leavelist> {
       preferences.commit();
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => Login_Activity()));
+    } if (response.statusCode == 422) {
+      Navigator.of(context).pop();
+
+      _showMyDialog(jsonObject['message'], MyColor.dialog_error_color, 'error');
     }
   }
 
@@ -901,10 +949,12 @@ class _leavelistState extends State<leavelist> {
     print(
         "what going on $leave_code_id $emp_id ${FromedateInput} ${TodateInput} $leave_behalf ${descriptionInput}");
     print(response.body);
+          var jsonObject = json.decode(response.body);
+
     if (response.statusCode == 200) {
       await pr.hide();
       print(response.body);
-      var jsonObject = jsonDecode(response.body);
+      // var jsonObject = jsonDecode(response.body);
       if (jsonObject['status'] == "1") {
         print("rafsr " + response.body);
         print("yujikol" + status);
@@ -925,6 +975,10 @@ class _leavelistState extends State<leavelist> {
       await pr.hide();
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => Login_Activity()));
+    } if (response.statusCode == 422) {
+      Navigator.of(context).pop();
+
+      _showMyDialog(jsonObject['message'], MyColor.dialog_error_color, 'error');
     }
   }
 
