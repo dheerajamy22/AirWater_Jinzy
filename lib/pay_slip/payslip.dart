@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:demo/app_color/color_constants.dart';
 import 'package:demo/baseurl/base_url.dart';
 import 'package:dio/dio.dart';
@@ -239,47 +240,70 @@ class _paySlipState extends State<paySlip> {
     );
   }
 
- Future<void> downloadAndOpenFile(String url) async {
+
+Future<void> downloadAndOpenFile(String base64Str) async {
   try {
-    // Request storage permission
     await _requestPermissions();
 
+    final bytes = base64Decode(base64Str);
     final dir = await getTemporaryDirectory();
-    final filePath = '${dir.path}/${url.split('/').last}';
+    final filePath = '${dir.path}/pay_slip_${selectedMonthIndex + 1}_$selectedYear.pdf';
 
-    final dio = Dio();
-    // dio.options = BaseOptions(
-    //   connectTimeout: Duration(seconds: 1),
-    //   receiveTimeout: Duration(seconds: 1),
-    // );
+    final file = File(filePath);
+    await file.writeAsBytes(bytes);
 
-    // Show loading indicator
-    setState(() {
-      _isLoading = true;
-    });
-
-    // Download the file with progress
-    await dio.download(url, filePath, cancelToken: cancelToken,
-        onReceiveProgress: (received, total) {
-      if (total != -1) {
-        setState(() {
-          // Update progress based on received bytes and total bytes
-          _progress = (received / total) * 100;
-        });
-      }
-    });
-
-    // Open the file once downloaded
     final result = await OpenFile.open(filePath);
     debugPrint("OpenFile result: ${result.message}");
   } catch (e) {
-    debugPrint("Error downloading or opening file: $e");
-  } finally {
-    setState(() {
-      _isLoading = false;  // Set loading to false after the download is complete
-    });
+    debugPrint("Error decoding or opening base64 PDF: $e");
   }
-} 
+}
+
+
+
+
+
+//  Future<void> downloadAndOpenFile(String url) async {
+//   try {
+//     // Request storage permission
+//     await _requestPermissions();
+
+//     final dir = await getTemporaryDirectory();
+//     final filePath = '${dir.path}/${url.split('/').last}';
+
+//     final dio = Dio();
+//     // dio.options = BaseOptions(
+//     //   connectTimeout: Duration(seconds: 1),
+//     //   receiveTimeout: Duration(seconds: 1),
+//     // );
+
+//     // Show loading indicator
+//     setState(() {
+//       _isLoading = true;
+//     });
+
+//     // Download the file with progress
+//     await dio.download(url, filePath, cancelToken: cancelToken,
+//         onReceiveProgress: (received, total) {
+//       if (total != -1) {
+//         setState(() {
+//           // Update progress based on received bytes and total bytes
+//           _progress = (received / total) * 100;
+//         });
+//       }
+//     });
+
+//     // Open the file once downloaded
+//     final result = await OpenFile.open(filePath);
+//     debugPrint("OpenFile result: ${result.message}");
+//   } catch (e) {
+//     debugPrint("Error downloading or opening file: $e");
+//   } finally {
+//     setState(() {
+//       _isLoading = false;  // Set loading to false after the download is complete
+//     });
+//   }
+// } 
 
 Future<void> _requestPermissions() async {
     PermissionStatus status = await Permission.storage.request();
