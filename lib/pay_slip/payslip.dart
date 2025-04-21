@@ -188,7 +188,7 @@ class _paySlipState extends State<paySlip> {
                               children: [
                                 Text(name),
                                 Text(
-                                    '${months[selectedMonthIndex].toString().split(" ").last} Pay Slip')
+                                    '${selectedMonthIndex + 1}_$selectedYear${'_pay_slip'} '),
                               ],
                             ),
                           ],
@@ -247,7 +247,7 @@ Future<void> downloadAndOpenFile(String base64Str) async {
 
     final bytes = base64Decode(base64Str);
     final dir = await getTemporaryDirectory();
-    final filePath = '${dir.path}/pay_slip_${selectedMonthIndex + 1}_$selectedYear.pdf';
+    final filePath = '${dir.path}/${selectedMonthIndex + 1}_$selectedYear${'_pay_slip'}.pdf';
 
     final file = File(filePath);
     await file.writeAsBytes(bytes);
