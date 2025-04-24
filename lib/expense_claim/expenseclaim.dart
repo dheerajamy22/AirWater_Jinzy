@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:another_flushbar/flushbar.dart';
 import 'package:demo/_login_part/login_activity.dart';
 import 'package:demo/app_color/color_constants.dart';
 import 'package:demo/baseurl/base_url.dart';
@@ -25,7 +26,6 @@ class expenseClaim extends StatefulWidget {
 }
 
 class _expenseClaimState extends State<expenseClaim> {
-  
   TextEditingController FromedateInput = TextEditingController();
   TextEditingController TodateInput = TextEditingController();
   TextEditingController description = TextEditingController();
@@ -80,37 +80,34 @@ class _expenseClaimState extends State<expenseClaim> {
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60.0),
         child: AppBar(
-         elevation: 0.0,
+          elevation: 0.0,
           automaticallyImplyLeading: false,
           backgroundColor: const Color(0xFF0054A4),
-         title: Row(
-             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-
-               Row(
-                 children: [
-                    GestureDetector(
-                      onTap: () {
-                         Navigator.of(context).pop();
-                      },
-                      child: Icon(
+              Row(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Icon(
                       Icons.arrow_back,
                       color: MyColor.white_color,
-                                   ),
                     ),
-
-                                  Container(
-                  padding: const EdgeInsets.only(left: 8.0),
-                  child: const Text(
-                    'Expense Claim',
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontFamily: 'pop',
-                        color: MyColor.white_color),
-                  )),
-                 ],
-               ),
-             
+                  ),
+                  Container(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: const Text(
+                        'Expense Claim',
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontFamily: 'pop',
+                            color: MyColor.white_color),
+                      )),
+                ],
+              ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -133,8 +130,8 @@ class _expenseClaimState extends State<expenseClaim> {
         children: [
           SingleChildScrollView(
             child: Padding(
-              padding:
-                  const EdgeInsets.only(left: 12, right: 12, top: 16, bottom: 30),
+              padding: const EdgeInsets.only(
+                  left: 12, right: 12, top: 16, bottom: 30),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -145,7 +142,8 @@ class _expenseClaimState extends State<expenseClaim> {
                         child: Container(
                           height: MediaQuery.of(context).size.height * 0.06,
                           decoration: BoxDecoration(
-                              border: Border.all(color: const Color(0xFF0054A4)),
+                              border:
+                                  Border.all(color: const Color(0xFF0054A4)),
                               borderRadius: BorderRadius.circular(5.0)),
                           child: Padding(
                             padding: const EdgeInsets.only(left: 8.0),
@@ -177,23 +175,25 @@ class _expenseClaimState extends State<expenseClaim> {
                                       context: context,
                                       initialDate: TodateInput == ""
                                           ? DateTime.parse(TodateInput.text)
-                                          : DateTime.now().subtract(Duration(days: 1)),
-                                      firstDate: 
-                                           DateTime(2000),
-                                          
+                                          : DateTime.now()
+                                              .subtract(Duration(days: 1)),
+                                      firstDate: DateTime(2000),
+
                                       //DateTime.now() - not to allow to choose before today.
                                       lastDate: TodateInput == ""
                                           ? DateTime.parse(TodateInput.text)
-                                          : DateTime.now().subtract(Duration(days: 1)));
-          
+                                          : DateTime.now()
+                                              .subtract(Duration(days: 1)));
+
                                   if (pickedDate != null) {
                                     print(
                                         pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
                                     String formattedDate =
-                                        DateFormat('yyyy-MM-dd').format(pickedDate);
+                                        DateFormat('yyyy-MM-dd')
+                                            .format(pickedDate);
                                     print(
                                         formattedDate); //formatted date output using intl package =>  2021-03-16
-          
+
                                     setState(() {
                                       FromedateInput.text = formattedDate;
                                       if (FromedateInput.text != '' &&
@@ -212,7 +212,8 @@ class _expenseClaimState extends State<expenseClaim> {
                         child: Container(
                           height: MediaQuery.of(context).size.height * 0.06,
                           decoration: BoxDecoration(
-                              border: Border.all(color: const Color(0xFF0054A4)),
+                              border:
+                                  Border.all(color: const Color(0xFF0054A4)),
                               borderRadius: BorderRadius.circular(5.0)),
                           child: Padding(
                             padding: const EdgeInsets.only(left: 8.0),
@@ -255,16 +256,18 @@ class _expenseClaimState extends State<expenseClaim> {
                                       initialDate: DateTime.parse(startDate),
                                       firstDate: DateTime(2000),
                                       //DateTime.now() - not to allow to choose before today.
-                                      lastDate: DateTime.now().subtract(Duration(days: 1)));
-          
+                                      lastDate: DateTime.now()
+                                          .subtract(Duration(days: 1)));
+
                                   if (pickedDate != null) {
                                     print(
                                         pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
                                     String formattedDate =
-                                        DateFormat('yyyy-MM-dd').format(pickedDate);
+                                        DateFormat('yyyy-MM-dd')
+                                            .format(pickedDate);
                                     print(
                                         formattedDate); //formatted date output using intl package =>  2021-03-16
-          
+
                                     setState(() {
                                       TodateInput.text = formattedDate;
                                     });
@@ -282,7 +285,9 @@ class _expenseClaimState extends State<expenseClaim> {
                   ),
                   Text("Description",
                       style: TextStyle(
-                          fontSize: 14, fontFamily: 'pop', color: Colors.black)),
+                          fontSize: 14,
+                          fontFamily: 'pop',
+                          color: Colors.black)),
                   const SizedBox(
                     height: 6,
                   ),
@@ -297,7 +302,9 @@ class _expenseClaimState extends State<expenseClaim> {
                   ),
                   Text("Financial Dimension",
                       style: TextStyle(
-                          fontSize: 16, fontFamily: 'pop_m', color: Colors.black)),
+                          fontSize: 16,
+                          fontFamily: 'pop_m',
+                          color: Colors.black)),
                   const SizedBox(
                     height: 16,
                   ),
@@ -345,7 +352,7 @@ class _expenseClaimState extends State<expenseClaim> {
                     ),
                   ),
                   const SizedBox(height: 16),
-          
+
                   // Country Dropdown
                   Row(
                     children: [
@@ -380,7 +387,8 @@ class _expenseClaimState extends State<expenseClaim> {
                       }).toList(),
                       onChanged: (value) {
                         setState(() {
-                          selectedCountry = value; // Update the correct variable
+                          selectedCountry =
+                              value; // Update the correct variable
                           for (var i in countryList) {
                             if (i.id == value) {
                               _selectedCountryId = i.id;
@@ -391,7 +399,7 @@ class _expenseClaimState extends State<expenseClaim> {
                     ),
                   ),
                   const SizedBox(height: 16),
-          
+
                   // Department Dropdown
                   Row(
                     children: [
@@ -426,7 +434,8 @@ class _expenseClaimState extends State<expenseClaim> {
                       }).toList(),
                       onChanged: (value) {
                         setState(() {
-                          selectedDepartment = value; // Update the correct variable
+                          selectedDepartment =
+                              value; // Update the correct variable
                           for (var i in departmentList) {
                             if (i.id == value) {
                               _selectedDepartmentId = i.id;
@@ -437,7 +446,7 @@ class _expenseClaimState extends State<expenseClaim> {
                     ),
                   ),
                   const SizedBox(height: 16),
-          
+
                   // Entity Dropdown
                   Row(
                     children: [
@@ -483,7 +492,7 @@ class _expenseClaimState extends State<expenseClaim> {
                     ),
                   ),
                   const SizedBox(height: 16),
-          
+
                   // Facility Dropdown
                   Row(
                     children: [
@@ -529,7 +538,7 @@ class _expenseClaimState extends State<expenseClaim> {
                     ),
                   ),
                   const SizedBox(height: 16),
-          
+
                   // Project Dropdown
                   Row(
                     children: [
@@ -555,12 +564,12 @@ class _expenseClaimState extends State<expenseClaim> {
                     ),
                     child: Center(
                       child: DropdownButton<String>(
-                        value: selectedProject, 
+                        value: selectedProject,
                         hint: Text("Please Select"),
                         isExpanded: true,
                         items: projectList.map((project) {
                           return DropdownMenuItem<String>(
-                            value: project.description, 
+                            value: project.description,
                             child: Text(project.description),
                           );
                         }).toList(),
@@ -569,9 +578,9 @@ class _expenseClaimState extends State<expenseClaim> {
                             selectedProject = value;
                             for (var project in projectList) {
                               if (project.description == value) {
-                              
                                 _selectedProjectId = project.id;
-                                print('Selected project ID: $_selectedProjectId');
+                                print(
+                                    'Selected project ID: $_selectedProjectId');
                               }
                             }
                           });
@@ -629,7 +638,8 @@ class _expenseClaimState extends State<expenseClaim> {
                                       borderRadius: BorderRadius.circular(5),
                                       color: MyColor.background_light_blue),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Align(
                                         alignment: Alignment.topRight,
@@ -640,7 +650,8 @@ class _expenseClaimState extends State<expenseClaim> {
                                             });
                                           },
                                           child: Icon(Icons.delete,
-                                              color: MyColor.red_color, size: 16),
+                                              color: MyColor.red_color,
+                                              size: 16),
                                         ),
                                       ),
                                       Text(
@@ -654,7 +665,8 @@ class _expenseClaimState extends State<expenseClaim> {
                                               fontSize: 14,
                                               fontFamily: 'pop',
                                               color: Colors.black)),
-                                      Text('Amount: ${showlinesList[index].amount}',
+                                      Text(
+                                          'Amount: ${showlinesList[index].amount}',
                                           style: TextStyle(
                                               fontSize: 14,
                                               fontFamily: 'pop',
@@ -708,20 +720,21 @@ class _expenseClaimState extends State<expenseClaim> {
                 ],
               ),
             ),
-          ),if (_isLoading) // Step 3: Conditionally render the loading widget
-          Center(
-            child: SpinKitWave(
-              size: 50,
-              itemBuilder: (BuildContext context, int index) {
-                return DecoratedBox(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: MyColor.mainAppColor,
-                  ),
-                );
-              },
-            ),
           ),
+          if (_isLoading) // Step 3: Conditionally render the loading widget
+            Center(
+              child: SpinKitWave(
+                size: 50,
+                itemBuilder: (BuildContext context, int index) {
+                  return DecoratedBox(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: MyColor.mainAppColor,
+                    ),
+                  );
+                },
+              ),
+            ),
         ],
       ),
     );
@@ -768,10 +781,9 @@ class _expenseClaimState extends State<expenseClaim> {
   }
 
   void _sendClaimData() async {
-     setState(() {
-    _isLoading = true; // Start loading
-  });
-   
+    setState(() {
+      _isLoading = true; // Start loading
+    });
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('user_access_token');
@@ -817,9 +829,9 @@ class _expenseClaimState extends State<expenseClaim> {
       },
       body: jsonEncode(expenseClaim.toJson()),
     );
-setState(() {
-    _isLoading = false; // Stop loading
-  });
+    setState(() {
+      _isLoading = false; // Stop loading
+    });
     print(response.statusCode);
     print(response.body);
     var jsonObject = jsonDecode(response.body);
@@ -841,333 +853,354 @@ setState(() {
     } else if (response.statusCode == 400) {
       _showMyDialog(jsonObject['message'], MyColor.dialog_error_color, 'error');
       print("Bad Request");
-    }  if (response.statusCode == 422) {
+    }
+    if (response.statusCode == 422) {
       Navigator.of(context).pop();
 
       _showMyDialog(jsonObject['message'], MyColor.dialog_error_color, 'error');
-    }else {
+    } else {
       print("Unknown Error");
     }
   }
 
+  void bottomDialog() async {
+    // Clear previous data
+    media.clear();
+    amount.clear();
+    selectedCurrency = null;
+    selectedExpenseCategory = null;
+    encodeImage = "";
 
-void bottomDialog() async {
-  // Clear previous data
-  media.clear();
-  amount.clear();
-  selectedCurrency = null;
-  selectedExpenseCategory = null;
-  encodeImage = "";
-
-  // Show the bottom sheet and handle the result using .then()
-  await showModalBottomSheet(
-    context: context,
-    builder: (context) {
-      return StatefulBuilder(builder: (context, setState) {
-        return Container(
-          padding: const EdgeInsets.only(top: 16.0, left: 5, right: 5),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("Add Expense", style: TextStyle(fontSize: 16, fontFamily: 'pop_m', color: Colors.black)),
-              const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  const SizedBox(width: 10),
-                  Flexible(
-                    child: Container(
-                      height: 52,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.blueAccent),
-                          borderRadius: BorderRadius.circular(5)),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 10, right: 10),
-                        child: DropdownButton<String>(
-                          value: selectedExpenseCategory,
-                          hint: Text("Please Select"),
-                          isExpanded: true,
-                          items: ExpenseCategorylist.map((category) {
-                            return DropdownMenuItem<String>(
-                              value: category.categoery_name,
-                              child: Text(category.categoery_name),
-                            );
-                          }).toList(),
-                          onChanged: (value) {
-                            setState(() {
-                              selectedExpenseCategory = value;
-                              // Update the corresponding ID
-                              _selectedExpenseCategoryId =
-                                  ExpenseCategorylist.firstWhere((cat) =>
-                                          cat.categoery_name == value)
-                                      .id
-                                      .toString();
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Flexible(
-                    child: Container(
-                      height: MediaQuery.of(context).size.height * 0.06,
-                      decoration: BoxDecoration(
-                          border: Border.all(color: const Color(0xFF0054A4)),
-                          borderRadius: BorderRadius.circular(5.0)),
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 8.0),
-                        child: TextField(
-                          controller: FromedateInput,
-                          decoration: const InputDecoration(
-                            focusedBorder: InputBorder.none,
-                            border: InputBorder.none,
-                            icon: Icon(
-                              Icons.calendar_today,
-                              color: Color(0xFF0054A4),
-                            ),
-                            hintText: "From date",
-                            hintStyle: TextStyle(
-                                color: Colors.grey,
-                                fontFamily: "pop",
-                                fontSize: 14),
-                          ),
-                          style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 16,
-                              fontFamily: 'pop'),
-                          readOnly: true,
-                          onTap: () async {
-                            DateTime? pickedDate = await showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime(2000),
-                              lastDate: DateTime(2100),
-                            );
-
-                            if (pickedDate != null) {
-                              String formattedDate =
-                                  DateFormat('yyyy-MM-dd').format(pickedDate);
-                              setState(() {
-                                FromedateInput.text = formattedDate;
-                              });
-                            }
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              Expanded(
-                child: Column(
+    // Show the bottom sheet and handle the result using .then()
+    await showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(builder: (context, setState) {
+          return Container(
+            padding: const EdgeInsets.only(top: 16.0, left: 5, right: 5),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Add Expense",
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontFamily: 'pop_m',
+                        color: Colors.black)),
+                const SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        const SizedBox(width: 10),
-                        Flexible(
-                          child: CustomTextField(
-                            controller: amount,
-                            hintText: "Amount",
-                            obscureText: false,
-                            keyboardType: TextInputType.number,
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Flexible(
-                          child: Container(
-                            height: 52,
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.blueAccent),
-                                borderRadius: BorderRadius.circular(5)),
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 10, right: 10),
-                              child: DropdownButton<String>(
-                                value: selectedCurrency,
-                                hint: Text("Please Currency"),
-                                isExpanded: true,
-                                items: currencyList.map((category) {
-                                  return DropdownMenuItem<String>(
-                                    value: category.currency_name,
-                                    child: Text(category.currency_name),
-                                  );
-                                }).toList(),
-                                onChanged: (value) {
-                                  setState(() {
-                                    selectedCurrency = value;
-                                    _slectedCurrencyId = currencyList
-                                        .firstWhere((curr) =>
-                                            curr.currency_name == value)
+                    const SizedBox(width: 10),
+                    Flexible(
+                      child: Container(
+                        height: 52,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.blueAccent),
+                            borderRadius: BorderRadius.circular(5)),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 10, right: 10),
+                          child: DropdownButton<String>(
+                            value: selectedExpenseCategory,
+                            hint: Text("Please Select"),
+                            isExpanded: true,
+                            items: ExpenseCategorylist.map((category) {
+                              return DropdownMenuItem<String>(
+                                value: category.categoery_name,
+                                child: Text(category.categoery_name),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                selectedExpenseCategory = value;
+                                // Update the corresponding ID
+                                _selectedExpenseCategoryId =
+                                    ExpenseCategorylist.firstWhere((cat) =>
+                                            cat.categoery_name == value)
                                         .id
                                         .toString();
-                                  });
-                                },
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Wrap(
-                          children: [
-                            iconTextButto('Camera', Color(0xFF0054A4),
-                                () async {
-                              final images = await ImagePicker()
-                                  .pickImage(source: ImageSource.camera);
-                              if (images != null) {
-                                final bytes =
-                                    File(images.path).readAsBytesSync();
-                                encodeImage = base64Encode(bytes);
-                                File file = File(images.path);
-                                setState(() {
-                                  media.add({'type': 'images', 'file': file});
-                                });
-                              }
+                              });
                             },
-                                const Icon(Icons.camera_alt,
-                                    color: MyColor.white_color),
-                                context),
-                            iconTextButto('Gallery', Color(0xFF0054A4),
-                                () async {
-                              final images = await ImagePicker()
-                                  .pickImage(source: ImageSource.gallery);
-                              if (images != null) {
-                                final bytes =
-                                    File(images.path).readAsBytesSync();
-                                encodeImage = base64Encode(bytes);
-                                File file = File(images.path);
-                                setState(() {
-                                  media.add({'type': 'images', 'file': file});
-                                });
-                              }
-                            },
-                                const Icon(Icons.photo,
-                                    color: MyColor.white_color),
-                                context),
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Container(
-                              alignment: Alignment.center,
-                              height: 120,
-                              width: 120,
-                              decoration:
-                                  BoxDecoration(color: Colors.grey[350]),
-                              child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: media.length,
-                                itemBuilder: (context, index) {
-                                  return attachmentWidget(media[index]);
-                                },
-                              ),
-                            ),
                           ),
                         ),
-                      ],
+                      ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 16, left: 10, right: 10),
-                      child: InkWell(
-                        child: Container(
-                          height: 52,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF0054A4),
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          child: const Text(
-                            'Submit',
-                            style: TextStyle(
-                                color: Colors.white,
+                    const SizedBox(width: 10),
+                    Flexible(
+                      child: Container(
+                        height: MediaQuery.of(context).size.height * 0.06,
+                        decoration: BoxDecoration(
+                            border: Border.all(color: const Color(0xFF0054A4)),
+                            borderRadius: BorderRadius.circular(5.0)),
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 8.0),
+                          child: TextField(
+                            controller: FromedateInput,
+                            decoration: const InputDecoration(
+                              focusedBorder: InputBorder.none,
+                              border: InputBorder.none,
+                              icon: Icon(
+                                Icons.calendar_today,
+                                color: Color(0xFF0054A4),
+                              ),
+                              hintText: "From date",
+                              hintStyle: TextStyle(
+                                  color: Colors.grey,
+                                  fontFamily: "pop",
+                                  fontSize: 14),
+                            ),
+                            style: const TextStyle(
+                                color: Colors.black,
                                 fontSize: 16,
                                 fontFamily: 'pop'),
+                            readOnly: true,
+                            onTap: () async {
+                              DateTime? pickedDate = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime(2000),
+                                lastDate: DateTime(2100),
+                              );
+
+                              if (pickedDate != null) {
+                                String formattedDate =
+                                    DateFormat('yyyy-MM-dd').format(pickedDate);
+                                setState(() {
+                                  FromedateInput.text = formattedDate;
+                                });
+                              }
+                            },
                           ),
                         ),
-                        onTap: () {
-                          if (dialogValidation()) {
-                            // Create a new Line object with the provided data
-                            Line data = Line(
-                              tblExpenseCatId: int.parse(_selectedExpenseCategoryId!),
-                              date: FromedateInput.text.toString(),
-                              amount: double.parse(amount.text),
-                              currencyId: int.parse(_slectedCurrencyId!),
-                              attachement: encodeImage,
-                            );
-
-                            // Close the dialog and return the created data
-                            Navigator.pop(context, data); // Pass the data back when dialog closes
-                          } else {
-                            print("Please fill all fields.");
-                          }
-                        },
                       ),
                     ),
                   ],
                 ),
-              ),
-            ],
-          ),
-        );
-      });
-    },
-  ).then((result) {
-    if (result != null) {
-      try {
-        double parsedAmount = double.parse(amount.text); // Ensure it's a valid number
+                const SizedBox(height: 16),
+                Expanded(
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          const SizedBox(width: 10),
+                          Flexible(
+                            child: CustomTextField(
+                              controller: amount,
+                              hintText: "Amount",
+                              obscureText: false,
+                              keyboardType: TextInputType.number,
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Flexible(
+                            child: Container(
+                              height: 52,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.blueAccent),
+                                  borderRadius: BorderRadius.circular(5)),
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 10, right: 10),
+                                child: DropdownButton<String>(
+                                  value: selectedCurrency,
+                                  hint: Text("Currency"),
+                                  isExpanded: true,
+                                  items: currencyList.map((category) {
+                                    return DropdownMenuItem<String>(
+                                      value: category.currency_name,
+                                      child: Text(category.currency_name),
+                                    );
+                                  }).toList(),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      selectedCurrency = value;
+                                      _slectedCurrencyId = currencyList
+                                          .firstWhere((curr) =>
+                                              curr.currency_name == value)
+                                          .id
+                                          .toString();
+                                    });
+                                  },
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Wrap(
+                            children: [
+                              iconTextButto('Camera', Color(0xFF0054A4),
+                                  () async {
+                                final images = await ImagePicker()
+                                    .pickImage(source: ImageSource.camera);
+                                if (images != null) {
+                                  final bytes =
+                                      File(images.path).readAsBytesSync();
+                                  encodeImage = base64Encode(bytes);
+                                  File file = File(images.path);
+                                  setState(() {
+                                    media.add({'type': 'images', 'file': file});
+                                  });
+                                }
+                              },
+                                  const Icon(Icons.camera_alt,
+                                      color: MyColor.white_color),
+                                  context),
+                              iconTextButto('Gallery', Color(0xFF0054A4),
+                                  () async {
+                                final images = await ImagePicker()
+                                    .pickImage(source: ImageSource.gallery);
+                                if (images != null) {
+                                  final bytes =
+                                      File(images.path).readAsBytesSync();
+                                  encodeImage = base64Encode(bytes);
+                                  File file = File(images.path);
+                                  setState(() {
+                                    media.add({'type': 'images', 'file': file});
+                                  });
+                                }
+                              },
+                                  const Icon(Icons.photo,
+                                      color: MyColor.white_color),
+                                  context),
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8.0),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Container(
+                                alignment: Alignment.center,
+                                height: 120,
+                                width: 120,
+                                decoration:
+                                    BoxDecoration(color: Colors.grey[350]),
+                                child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: media.length,
+                                  itemBuilder: (context, index) {
+                                    return attachmentWidget(media[index]);
+                                  },
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(top: 16, left: 10, right: 10),
+                        child: InkWell(
+                          child: Container(
+                            height: 52,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF0054A4),
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: const Text(
+                              'Submit',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontFamily: 'pop'),
+                            ),
+                          ),
+                          onTap: () {
+                            if (dialogValidation()) {
+                              // Create a new Line object with the provided data
+                              Line data = Line(
+                                tblExpenseCatId:
+                                    int.parse(_selectedExpenseCategoryId!),
+                                date: FromedateInput.text.toString(),
+                                amount: double.parse(amount.text),
+                                currencyId: int.parse(_slectedCurrencyId!),
+                                attachement: encodeImage,
+                              );
 
-        // If everything is valid, continue with adding the result
-        setState(() {
-          line.add(result);  // Add the result data
-          showlines array = showlines(
-            tblExpenseCatname: selectedExpenseCategory!,
-            date: FromedateInput.text.toString(),
-            amount: parsedAmount,  // Use the validated amount
-            currencyname: selectedCurrency!,
-            img: encodeImage,
+                              // Close the dialog and return the created data
+                              Navigator.pop(context,
+                                  data); // Pass the data back when dialog closes
+                            } else {
+                              print("Please fill all fields.");
+                            }
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           );
-          showlinesList.add(array);  // Add to showlinesList
         });
+      },
+    ).then((result) {
+      if (result != null) {
+        try {
+          double parsedAmount =
+              double.parse(amount.text); // Ensure it's a valid number
 
-        print("Data saved successfully!");
-        print("Line count: ${line.length}");
-        print("Show Line count: ${showlinesList.length}");
-      } catch (e) {
-        print("Error: Invalid amount format");
-        // Show an error or handle invalid format
+          // If everything is valid, continue with adding the result
+          setState(() {
+            line.add(result); // Add the result data
+            showlines array = showlines(
+              tblExpenseCatname: selectedExpenseCategory!,
+              date: FromedateInput.text.toString(),
+              amount: parsedAmount, // Use the validated amount
+              currencyname: selectedCurrency!,
+              img: encodeImage,
+            );
+            showlinesList.add(array); // Add to showlinesList
+          });
+
+          print("Data saved successfully!");
+          print("Line count: ${line.length}");
+          print("Show Line count: ${showlinesList.length}");
+        } catch (e) {
+          print("Error: Invalid amount format");
+          // Show an error or handle invalid format
+        }
+      } else {
+        print("No data was returned from the dialog.");
       }
-    } else {
-      print("No data was returned from the dialog.");
-    }
-  });
-}
+    });
+  }
 
-
-   bool dialogValidation() {
-    if (amount.text.isEmpty) {
-      _showMyDialog('Please Enter Amount', MyColor.dialog_error_color, 'error');
+  bool dialogValidation() {
+    if (selectedExpenseCategory == null) {
+      Flushbar(
+        message: 'Please Select Expense Category',
+        backgroundColor: MyColor.dialog_error_color,
+        duration: Duration(milliseconds: 1000),
+      ).show(context);
       return false;
     } else if (FromedateInput.text.isEmpty) {
-      _showMyDialog('Please Select Date', MyColor.dialog_error_color, 'error');
+      Flushbar(
+        message: 'Please Select Date',
+        backgroundColor: MyColor.dialog_error_color,
+        duration: Duration(milliseconds: 1000),
+      ).show(context);
       return false;
-    } else if (selectedExpenseCategory == null) {
-      _showMyDialog('Please Select Expense Category',
-          MyColor.dialog_error_color, 'error');
+    } else if (amount.text.isEmpty) {
+      Flushbar(
+        message: 'Please Enter Amount',
+        backgroundColor: MyColor.dialog_error_color,
+        duration: Duration(milliseconds: 1000),
+      ).show(context);
       return false;
     } else if (selectedCurrency == null) {
-      _showMyDialog(
-          'Please Select Currency', MyColor.dialog_error_color, 'error');
+      Flushbar(
+        message: 'Please Select Currency',
+        backgroundColor: MyColor.dialog_error_color,
+        duration: Duration(milliseconds: 1000),
+      ).show(context);
       return false;
     }
     return true;
@@ -1307,11 +1340,12 @@ void bottomDialog() async {
       print("Not Found");
     } else if (response.statusCode == 400) {
       print("Bad Request");
-    }  if (response.statusCode == 422) {
+    }
+    if (response.statusCode == 422) {
       Navigator.of(context).pop();
 
       _showMyDialog(jsonObject['message'], MyColor.dialog_error_color, 'error');
-    }else {
+    } else {
       print("Unknown Error");
     }
   }

@@ -111,9 +111,9 @@ class _paySlipState extends State<paySlip> {
                   icon: Icon(Icons.chevron_left, size: 14),
                   onPressed: () {
                     setState(() {
-                          progress="";
-        url = '';
-        name = '';
+                      progress = "";
+                      url = '';
+                      name = '';
                       if (selectedMonthIndex == 0) {
                         selectedMonthIndex = months.length - 1;
                         selectedYear -= 1;
@@ -193,19 +193,21 @@ class _paySlipState extends State<paySlip> {
                             ),
                           ],
                         ),
-                       if (_isLoading)
-  Padding(
-    padding: const EdgeInsets.only(top: 8.0),
-    child: Column(
-      children: [
-        CircularProgressIndicator(
-          value: _progress / 100,  // This binds the progress to the CircularProgressIndicator
-        ),
-        SizedBox(height: 8),
-        Text('${_progress.toStringAsFixed(0)}%'),  // Displaying the progress as an integer
-      ],
-    ),
-  ),
+                        if (_isLoading)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8.0),
+                            child: Column(
+                              children: [
+                                CircularProgressIndicator(
+                                  value: _progress /
+                                      100, // This binds the progress to the CircularProgressIndicator
+                                ),
+                                SizedBox(height: 8),
+                                Text(
+                                    '${_progress.toStringAsFixed(0)}%'), // Displaying the progress as an integer
+                              ],
+                            ),
+                          ),
                       ],
                     ),
                   ),
@@ -240,28 +242,24 @@ class _paySlipState extends State<paySlip> {
     );
   }
 
+  Future<void> downloadAndOpenFile(String base64Str) async {
+    try {
+      await _requestPermissions();
 
-Future<void> downloadAndOpenFile(String base64Str) async {
-  try {
-    await _requestPermissions();
+      final bytes = base64Decode(base64Str);
+      final dir = await getTemporaryDirectory();
+      final filePath =
+          '${dir.path}/${selectedMonthIndex + 1}_$selectedYear${'_pay_slip'}.pdf';
 
-    final bytes = base64Decode(base64Str);
-    final dir = await getTemporaryDirectory();
-    final filePath = '${dir.path}/${selectedMonthIndex + 1}_$selectedYear${'_pay_slip'}.pdf';
+      final file = File(filePath);
+      await file.writeAsBytes(bytes);
 
-    final file = File(filePath);
-    await file.writeAsBytes(bytes);
-
-    final result = await OpenFile.open(filePath);
-    debugPrint("OpenFile result: ${result.message}");
-  } catch (e) {
-    debugPrint("Error decoding or opening base64 PDF: $e");
+      final result = await OpenFile.open(filePath);
+      debugPrint("OpenFile result: ${result.message}");
+    } catch (e) {
+      debugPrint("Error decoding or opening base64 PDF: $e");
+    }
   }
-}
-
-
-
-
 
 //  Future<void> downloadAndOpenFile(String url) async {
 //   try {
@@ -303,9 +301,9 @@ Future<void> downloadAndOpenFile(String base64Str) async {
 //       _isLoading = false;  // Set loading to false after the download is complete
 //     });
 //   }
-// } 
+// }
 
-Future<void> _requestPermissions() async {
+  Future<void> _requestPermissions() async {
     PermissionStatus status = await Permission.storage.request();
     if (status.isGranted) {
       print("Storage permission granted.");
