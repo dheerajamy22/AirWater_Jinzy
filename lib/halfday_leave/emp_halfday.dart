@@ -48,7 +48,6 @@ class _emp_halfdayState extends State<emp_halfday> {
          title: Row(
              mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-
                Row(
                  children: [
                     GestureDetector(
@@ -72,7 +71,6 @@ class _emp_halfdayState extends State<emp_halfday> {
                   )),
                  ],
                ),
-             
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -92,10 +90,10 @@ class _emp_halfdayState extends State<emp_halfday> {
       body: SafeArea(
         child: Padding(
           padding:
-              const EdgeInsets.only(left: 8, right: 8, top: 16, bottom: 16),
+              const EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 16),
           child: Column(
             children: [
-              Row(
+           /*   Row(
                 children: [
                   Flexible(
                     child: InkWell(
@@ -110,9 +108,9 @@ class _emp_halfdayState extends State<emp_halfday> {
                         padding: EdgeInsets.all(0),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8),
-                          /*  color: button_on == "All"
+                          *//*  color: button_on == "All"
                                 ? MyColor.mainAppColor
-                                : MyColor.white_color*/
+                                : MyColor.white_color*//*
                         ),
                         child: Center(
                             child: Text(
@@ -143,9 +141,9 @@ class _emp_halfdayState extends State<emp_halfday> {
                         padding: EdgeInsets.all(0),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8),
-                          /* color: button_on == "Pending"
+                          *//* color: button_on == "Pending"
                                 ? MyColor.mainAppColor
-                                : MyColor.white_color*/
+                                : MyColor.white_color*//*
                         ),
                         child: Center(
                             child: Text(
@@ -176,9 +174,9 @@ class _emp_halfdayState extends State<emp_halfday> {
                         padding: EdgeInsets.all(0),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8),
-                          /* color: button_on == "approved"
+                          *//* color: button_on == "approved"
                                 ? MyColor.mainAppColor
-                                : MyColor.white_color*/
+                                : MyColor.white_color*//*
                         ),
                         child: Center(
                             child: Text(
@@ -209,9 +207,9 @@ class _emp_halfdayState extends State<emp_halfday> {
                         padding: EdgeInsets.all(0),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8),
-                          /*    color: button_on == "reject"
+                          *//*    color: button_on == "reject"
                                 ? MyColor.mainAppColor
-                                : MyColor.white_color*/
+                                : MyColor.white_color*//*
                         ),
                         child: Center(
                             child: Text(
@@ -284,7 +282,7 @@ class _emp_halfdayState extends State<emp_halfday> {
                     ),
                   ),
                 ],
-              ),
+              ),*/
               if (progress == '')
                 Padding(
                   padding: const EdgeInsets.only(top: 24.0),
@@ -444,8 +442,77 @@ class _emp_halfdayState extends State<emp_halfday> {
       ),
     );
   }
-
   void gethalfdaylist(String status) async {
+    print('${widget.emp_code}');
+    filter_list = [];
+    setState(() {
+      progress = '';
+    });
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('user_access_token');
+    emp_img = prefs.getString('user_profile')!;
+
+    var response = await http.post(
+      Uri.parse("${baseurl.url}halfleave-workflow"),
+      headers: {'Authorization': 'Bearer $token'},
+      body: {"emp_code": widget.emp_code},
+    );
+
+    print(response.body);
+    var jsonObject = jsonDecode(response.body);
+
+    if (response.statusCode == 200) {
+      setState(() {
+        progress = '1';
+      });
+
+      if (jsonObject['status'] == "1") {
+        filter_list.clear();
+        var jsonarray = jsonObject['requested_Tasks'];
+
+        List<halfworkflow> tempList = [];
+
+        for (var i in jsonarray) {
+          halfworkflow wfhdetails = halfworkflow(
+            ReqNo: i['ReqNo'],
+            AssignDate: i['AssignDate'],
+            date: i['date'],
+            status: i['status'],
+            lr_reason: i['lr_reason'],
+            type: "",
+          );
+
+          // Apply status filter
+          if (status == 'All' ||
+              (status == 'Approved' && wfhdetails.status == 'Approved') ||
+              (status == 'Declined' && wfhdetails.status == 'Rejected') ||
+              (status == 'Pending' && wfhdetails.status == 'Pending')) {
+            tempList.add(wfhdetails);
+          }
+        }
+
+        setState(() {
+          filter_list = tempList;
+        });
+      }
+    } else if (response.statusCode == 401) {
+      await prefs.setString("login_check", "false");
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => Login_Activity()),
+      );
+    } else if (response.statusCode == 422) {
+      Navigator.of(context).pop();
+      _showMyDialog(jsonObject['message'], MyColor.dialog_error_color, 'error');
+    } else {
+      setState(() {
+        progress = '1';
+      });
+    }
+  }
+
+  /*void gethalfdaylist(String status) async {
     print('${widget.emp_code}');
     filter_list = [];
     SharedPreferences p = await SharedPreferences.getInstance();
@@ -528,7 +595,7 @@ class _emp_halfdayState extends State<emp_halfday> {
       });
     }
     // return filter_list;
-  }
+  }*/
 
   
 

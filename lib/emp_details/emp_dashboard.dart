@@ -12,6 +12,9 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../_login_part/login_activity.dart';
 import '../app_color/color_constants.dart';
+import '../workflow/Ec_request_workflow.dart';
+import '../workflow/PR_requestWorkFlow.dart';
+import '../workflow/overtime_workflow.dart';
 
 class EmployeeDetails extends StatefulWidget {
   final String emp_code, name, img;
@@ -677,9 +680,7 @@ class _EmployeeDetailsState extends State<EmployeeDetails> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                manager_workflow(
-                                                  emp_code: widget.emp_code,
-                                                )));
+                                                OvertimeWorkflow()));
                                   },
                                   child: Container(
                                     width: 50,
@@ -716,8 +717,8 @@ class _EmployeeDetailsState extends State<EmployeeDetails> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                My_Work_flow_Request(
-                                                  emp_code: widget.emp_code,
+                                                PurchaseRequestWorkflow(
+
                                                 )));
                                   },
                                   child: Container(
@@ -754,8 +755,8 @@ class _EmployeeDetailsState extends State<EmployeeDetails> {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => emp_halfday(
-                                                  emp_code: widget.emp_code,
+                                            builder: (context) => ExpenseClaimWorkflow(
+
                                                 )));
                                   },
                                   child: Container(

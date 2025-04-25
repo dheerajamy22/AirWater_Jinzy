@@ -1,26 +1,26 @@
 import 'dart:convert';
 
-import 'package:demo/Earlygoing_latecoming/EG_LCMOdel.dart';
 import 'package:demo/_login_part/login_activity.dart';
 import 'package:demo/app_color/color_constants.dart';
 import 'package:demo/baseurl/base_url.dart';
 import 'package:demo/new_leave_managerdashboard/leave_workflowmethod.dart';
+import 'package:demo/workflow/Overtime_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class employee_EGLC extends StatefulWidget {
-  final String emp_code;
-  const employee_EGLC({super.key,required this.emp_code});
+class OvertimeWorkflow extends StatefulWidget {
+
+  const OvertimeWorkflow({super.key});
 
   @override
-  State<employee_EGLC> createState() => _employee_EGLCState();
+  State<OvertimeWorkflow> createState() => _OvertimeWorkflowState();
 }
 
-class _employee_EGLCState extends State<employee_EGLC> {
-  List<leave_workflow> LCEG_workflow_list = [];
+class _OvertimeWorkflowState extends State<OvertimeWorkflow> {
+  List<OvertimeModel> workflow_list = [];
 
   TextEditingController _comment = TextEditingController();
   String button_on = "All";
@@ -28,10 +28,10 @@ class _employee_EGLCState extends State<employee_EGLC> {
 
   callme() async {
     await Future.delayed(Duration(seconds: 3));
-
   }
-  void getleavelist(String status) async {
-    LCEG_workflow_list = [];
+
+  void getOvertimeWorkflow(String status) async {
+    workflow_list = [];
     setState(() {
       progress = '';
     });
@@ -39,14 +39,15 @@ class _employee_EGLCState extends State<employee_EGLC> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('user_access_token');
 
-    var response = await http.post(
-      Uri.parse("${baseurl.url}lceg-request-workflow-list"),
-      body: {'emp_code': '${widget.emp_code}'},
-      headers: {'Authorization': 'Bearer $token'},
+    var response = await http.get(
+      Uri.parse("${baseurl.url}ot-request-workflow-list"),
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
     );
 
-    var jsonObject = jsonDecode(response.body);
     print(response.body);
+    var jsonObject = jsonDecode(response.body);
 
     if (response.statusCode == 200) {
       setState(() {
@@ -54,46 +55,38 @@ class _employee_EGLCState extends State<employee_EGLC> {
       });
 
       if (jsonObject['status'] == "1") {
-        LCEG_workflow_list.clear();
+        workflow_list.clear();
         var jsonarray = jsonObject['requested_Tasks'];
 
-        List<leave_workflow> tempList = [];
+        List<OvertimeModel> tempList = [];
 
         for (var array_data in jsonarray) {
-          leave_workflow leave_list = leave_workflow(
-            ReqNo: array_data['ReqNo'],
-            AssignDate: array_data['AssignDate'],
-            EmpCode: array_data['EmpCode'],
-            EmpId: array_data['EmpId'],
-            EmpName: array_data['EmpName'],
-            Image: array_data['Image'],
-            Type: array_data['Type'],
-            created_at: array_data['created_at'],
-            lr_from_date: "",
-            lr_ref_no: array_data['ref_no'],
-            lr_status: array_data['status'],
-            lr_to_date: "",
-            lr_total_days: "",
-            req_type: "",
-            requester_id: array_data['requester_id'],
-            tbl_employee_id: array_data['tbl_employee_id'],
-            tbl_leavecode_id: "",
-            lr_reason: array_data['reason'],
-            leave_type: "",
-            lr_leave_planed: "",
+          OvertimeModel otItem = OvertimeModel(
+            ReqNo: array_data['ReqNo'] ?? '',
+            requester_id: array_data['requester_id'] ?? '',
+            EmpName: array_data['EmpName'] ?? '',
+            AssignDate: array_data['AssignDate'] ?? '',
+            status: array_data['status'] ?? '',
+            overtime_date: array_data['overtime_date'] ?? '',
+            from_time: array_data['from_time'] ?? '',
+            to_time: array_data['to_time'] ?? '',
+            total_time: array_data['total_time'] ?? '',
+            overtime_explanation: array_data['overtime_explanation'] ?? '',
+            Image: array_data['Image'] ?? '',
+            created_at: array_data['created_at'] ?? '',
           );
 
-          // Filter data based on status
+          // Apply status filter
           if (status == 'All' ||
-              (status == 'Approved' && leave_list.lr_status == 'Approved') ||
-              (status == 'Declined' && leave_list.lr_status == 'Rejected') ||
-              (status == 'In Review' && leave_list.lr_status == 'Pending')) {
-            tempList.add(leave_list);
+              (status == 'Approved' && otItem.status == 'Approved') ||
+              (status == 'Declined' && otItem.status == 'Rejected') ||
+              (status == 'In Review' && otItem.status == 'Pending')) {
+            tempList.add(otItem);
           }
         }
 
         setState(() {
-          LCEG_workflow_list = tempList;
+          workflow_list = tempList;
         });
       }
     } else if (response.statusCode == 401) {
@@ -112,84 +105,76 @@ class _employee_EGLCState extends State<employee_EGLC> {
     }
   }
 
-  /*void getleavelist(String status) async {
-    LCEG_workflow_list = [];
-    print(widget.emp_code);
+
+  /* void getOvertimeWorkflow(String status) async {
+    workflow_list = [];
+
     SharedPreferences p = await SharedPreferences.getInstance();
     String? token = p.getString('user_access_token');
-    var response = await http.post(
-      Uri.parse("${baseurl.url}lceg-request-workflow-list"),
-      body: {'emp_code': '${widget.emp_code}'},
+    var response = await http.get(
+      Uri.parse("${baseurl.url}ot-request-workflow-list"),
       headers: {
         'Authorization': 'Bearer $token',
       },
     );
 
-  var jsonObject = jsonDecode(response.body);
     print(response.body);
+    var jsonObject = jsonDecode(response.body);
     if (response.statusCode == 200) {
       setState(() {
         progress = '1';
       });
-    
+
       if (jsonObject['status'] == "1") {
         // leaverqst_details.clear();
-        LCEG_workflow_list.clear();
+        workflow_list.clear();
         var jsonarray = jsonObject['requested_Tasks'];
         for (var array_data in jsonarray) {
-          leave_workflow leave_list = leave_workflow(
-            ReqNo: array_data['ReqNo'],
-            AssignDate: array_data['AssignDate'],
-            EmpCode: array_data['EmpCode'],
-            EmpId: array_data['EmpId'],
-            EmpName: array_data['EmpName'],
-            Image: array_data['Image'],
-            Type: array_data['Type'],
-            created_at: array_data['created_at'],
-            lr_from_date: "",
-            lr_ref_no: array_data['ref_no'],
-            lr_status: array_data['status'],
-            lr_to_date: "",
-            lr_total_days: "",
-            req_type: "",
-            requester_id: array_data['requester_id'],
-            tbl_employee_id: array_data['tbl_employee_id'],
-            tbl_leavecode_id: "",
-            lr_reason: array_data['reason'],
-            leave_type: "",
-            lr_leave_planed: "",
+          OvertimeModel leave_list = OvertimeModel(ReqNo: array_data['ReqNo']??'',
+              requester_id: array_data['requester_id']??'',
+              EmpName: array_data['EmpName']??'',
+              AssignDate: array_data['AssignDate']??'',
+              status: array_data['status']??'',
+              overtime_date: array_data['overtime_date']??'',
+              from_time: array_data['from_time']??'',
+              to_time: array_data['to_time']??'',
+              total_time: array_data['total_time']??'',
+              overtime_explanation: array_data['overtime_explanation']??'',
+            Image: array_data['Image']??'',
+            created_at: array_data['created_at']??'',
           );
 
-          List<leave_workflow> data = [];
+
+          List<OvertimeModel> data = [];
           data.add(leave_list);
           if (status == 'Approved') {
             for (int i = 0; i < data.length; i++) {
-              if (data[i].lr_status == 'Approved') {
+              if (data[i].status == 'Approved') {
                 setState(() {
-                  LCEG_workflow_list.add(leave_list);
+                  workflow_list.add(leave_list);
                 });
               }
             }
           } else if (status == 'Declined') {
             for (int i = 0; i < data.length; i++) {
-              if (data[i].lr_status == 'Rejected') {
+              if (data[i].status == 'Rejected') {
                 setState(() {
-                  LCEG_workflow_list.add(leave_list);
+                  workflow_list.add(leave_list);
                   print('rtyuiop[');
                 });
               }
             }
           } else if (status == 'In Review') {
             for (int i = 0; i < data.length; i++) {
-              if (data[i].lr_status == 'Pending') {
+              if (data[i].status == 'Pending') {
                 setState(() {
-                  LCEG_workflow_list.add(leave_list);
+                  workflow_list.add(leave_list);
                 });
               }
             }
           } else if (status == 'All') {
             setState(() {
-              LCEG_workflow_list.add(leave_list);
+              workflow_list.add(leave_list);
             });
           }
         }
@@ -201,22 +186,23 @@ class _employee_EGLCState extends State<employee_EGLC> {
       preferences.commit();
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => Login_Activity()));
-    }else{
-      setState(() {
-        progress = '1';
-      });
-    } if (response.statusCode == 422) {
+    }
+    if (response.statusCode == 422) {
       Navigator.of(context).pop();
 
       _showMyDialog(jsonObject['message'], MyColor.dialog_error_color, 'error');
+    } else {
+      setState(() {
+        progress = '1';
+      });
     }
     // return workflow_list;
   }*/
 
   @override
   void initState() {
-   // callme();
-    getleavelist('All');
+    // callme();
+    getOvertimeWorkflow('All');
     super.initState();
   }
 
@@ -227,72 +213,75 @@ class _employee_EGLCState extends State<employee_EGLC> {
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(60.0),
           child: AppBar(
-             elevation: 0.0,
-          automaticallyImplyLeading: false,
-          backgroundColor: const Color(0xFF0054A4),
-         title: Row(
-             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
+            elevation: 0.0,
+            automaticallyImplyLeading: false,
+            backgroundColor: const Color(0xFF0054A4),
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
 
-               Row(
-                 children: [
+                Row(
+                  children: [
                     GestureDetector(
                       onTap: () {
-                         Navigator.of(context).pop();
+                        Navigator.of(context).pop();
                       },
                       child: Icon(
-                      Icons.arrow_back,
-                      color: MyColor.white_color,
-                                   ),
+                        Icons.arrow_back,
+                        color: MyColor.white_color,
+                      ),
                     ),
 
-                                  Container(
-                  padding: const EdgeInsets.only(left: 8.0),
-                  child: const Text(
-                    'LC/EG Request',
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontFamily: 'pop',
-                        color: MyColor.white_color),
-                  )),
-                 ],
-               ),
-             
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 0.0),
-                    child: Image.asset(
-                      'assets/images/powered_by_tag.png',
-                      width: 90,
-                      height: 20,
+                    Container(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: const Text(
+                          'Overtime Request',
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontFamily: 'pop',
+                              color: MyColor.white_color),
+                        )),
+                  ],
+                ),
+
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 0.0),
+                      child: Image.asset(
+                        'assets/images/powered_by_tag.png',
+                        width: 90,
+                        height: 20,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ],
-          ),),
+                  ],
+                ),
+              ],
+            ),),
         ),
         body: SafeArea(
           child: Padding(
             padding:
-                const EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 32),
+            const EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 32),
             child: Column(
               children: [
-             /*   Row(
+               /* Row(
                   children: [
                     Flexible(
                       child: InkWell(
                         onTap: () {
-                          getleavelist('All');
+                          getOvertimeWorkflow('All');
                           setState(() {
                             button_on = "All";
                           });
                         },
                         child: Container(
-                          height: MediaQuery.of(context).size.height * 0.06,
+                          height: MediaQuery
+                              .of(context)
+                              .size
+                              .height * 0.06,
                           padding: EdgeInsets.all(0),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
@@ -302,14 +291,14 @@ class _employee_EGLCState extends State<employee_EGLC> {
                           ),
                           child: Center(
                               child: Text(
-                            "All",
-                            style: TextStyle(
-                                color: button_on == "All"
-                                    ? Colors.black
-                                    : Colors.black,
-                                fontFamily: "pop",
-                                fontSize: 16),
-                          )),
+                                "All",
+                                style: TextStyle(
+                                    color: button_on == "All"
+                                        ? Colors.black
+                                        : Colors.black,
+                                    fontFamily: "pop",
+                                    fontSize: 16),
+                              )),
                         ),
                       ),
                     ),
@@ -319,13 +308,16 @@ class _employee_EGLCState extends State<employee_EGLC> {
                     Flexible(
                       child: InkWell(
                         onTap: () {
-                          getleavelist('In Review');
+                          getOvertimeWorkflow('In Review');
                           setState(() {
                             button_on = "In Review";
                           });
                         },
                         child: Container(
-                          height: MediaQuery.of(context).size.height * 0.06,
+                          height: MediaQuery
+                              .of(context)
+                              .size
+                              .height * 0.06,
                           padding: EdgeInsets.all(0),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
@@ -335,14 +327,14 @@ class _employee_EGLCState extends State<employee_EGLC> {
                           ),
                           child: Center(
                               child: Text(
-                            "Pending",
-                            style: TextStyle(
-                                color: button_on == "In Review"
-                                    ? Colors.black
-                                    : Colors.black,
-                                fontFamily: "pop",
-                                fontSize: 16),
-                          )),
+                                "Pending",
+                                style: TextStyle(
+                                    color: button_on == "In Review"
+                                        ? Colors.black
+                                        : Colors.black,
+                                    fontFamily: "pop",
+                                    fontSize: 16),
+                              )),
                         ),
                       ),
                     ),
@@ -352,13 +344,16 @@ class _employee_EGLCState extends State<employee_EGLC> {
                     Flexible(
                       child: InkWell(
                         onTap: () {
-                          getleavelist('Approved');
+                          getOvertimeWorkflow('Approved');
                           setState(() {
                             button_on = "approved";
                           });
                         },
                         child: Container(
-                          height: MediaQuery.of(context).size.height * 0.06,
+                          height: MediaQuery
+                              .of(context)
+                              .size
+                              .height * 0.06,
                           padding: EdgeInsets.all(0),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
@@ -368,14 +363,14 @@ class _employee_EGLCState extends State<employee_EGLC> {
                           ),
                           child: Center(
                               child: Text(
-                            "Approve",
-                            style: TextStyle(
-                                color: button_on == "approved"
-                                    ? Colors.black
-                                    : Colors.black,
-                                fontFamily: "pop",
-                                fontSize: 16),
-                          )),
+                                "Approve",
+                                style: TextStyle(
+                                    color: button_on == "approved"
+                                        ? Colors.black
+                                        : Colors.black,
+                                    fontFamily: "pop",
+                                    fontSize: 16),
+                              )),
                         ),
                       ),
                     ),
@@ -385,13 +380,16 @@ class _employee_EGLCState extends State<employee_EGLC> {
                     Flexible(
                       child: InkWell(
                         onTap: () {
-                          getleavelist('Declined');
+                          getOvertimeWorkflow('Declined');
                           setState(() {
                             button_on = "reject";
                           });
                         },
                         child: Container(
-                          height: MediaQuery.of(context).size.height * 0.06,
+                          height: MediaQuery
+                              .of(context)
+                              .size
+                              .height * 0.06,
                           padding: EdgeInsets.all(0),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
@@ -401,14 +399,14 @@ class _employee_EGLCState extends State<employee_EGLC> {
                           ),
                           child: Center(
                               child: Text(
-                            "Reject",
-                            style: TextStyle(
-                                color: button_on == "reject"
-                                    ? Colors.black
-                                    : Colors.black,
-                                fontFamily: "pop",
-                                fontSize: 16),
-                          )),
+                                "Reject",
+                                style: TextStyle(
+                                    color: button_on == "reject"
+                                        ? Colors.black
+                                        : Colors.black,
+                                    fontFamily: "pop",
+                                    fontSize: 16),
+                              )),
                         ),
                       ),
                     ),
@@ -476,170 +474,178 @@ class _employee_EGLCState extends State<employee_EGLC> {
                     padding: const EdgeInsets.only(top: 24.0),
                     child: Center(
                         child: CircularProgressIndicator(
-                      color: MyColor.mainAppColor,
-                    )),
+                          color: MyColor.mainAppColor,
+                        )),
                   )
-                else if (LCEG_workflow_list.isEmpty) ...[
-                  Container(
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.only(top: 120),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SvgPicture.asset('assets/svgs/no_data_found.svg'),
-                        const Padding(
-                          padding: EdgeInsets.only(top: 16),
-                          child: Text(
-                            'No data found',
-                            style: TextStyle(
-                                color: MyColor.mainAppColor,
-                                fontSize: 16,
-                                fontFamily: 'pop'),
-                          ),
-                        )
-                      ],
+                else
+                  if (workflow_list.isEmpty) ...[
+                    Container(
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.only(top: 120),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SvgPicture.asset('assets/svgs/no_data_found.svg'),
+                          const Padding(
+                            padding: EdgeInsets.only(top: 16),
+                            child: Text(
+                              'No data found',
+                              style: TextStyle(
+                                  color: MyColor.mainAppColor,
+                                  fontSize: 16,
+                                  fontFamily: 'pop'),
+                            ),
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                ] else ...[
-                  Expanded(
-                      child: ListView.builder(
-                          itemCount: LCEG_workflow_list.length,
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: const EdgeInsets.only(top: 8.0),
-                              child: InkWell(
-                                onTap: () {
-                                  _viewdetailsdrawer(
-                                      LCEG_workflow_list[index].EmpName,
-                                      LCEG_workflow_list[index].leave_type,
-                                      LCEG_workflow_list[index].lr_from_date,
-                                      LCEG_workflow_list[index].lr_to_date,
-                                      LCEG_workflow_list[index].lr_reason,
-                                      LCEG_workflow_list[index].lr_leave_planed,
-                                      LCEG_workflow_list[index].req_type,
-                                      LCEG_workflow_list[index].created_at,
-                                      LCEG_workflow_list[index].lr_total_days,
-                                      LCEG_workflow_list[index].ReqNo,
-                                      LCEG_workflow_list[index].lr_status);
-                                },
-                                child: Card(
-                                  color: MyColor.white_color,
-                                  elevation: 4,
-                                  shadowColor: MyColor.mainAppColor,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: MyColor.white_color
-                                        // color: (index % 2 == 0)
-                                        //     ? MyColor.mainAppColor
-                                        //         .withOpacity(0.2)
-                                        //     : MyColor.light_gray.withOpacity(0.2),
+                  ] else
+                    ...[
+                      Expanded(
+                          child: ListView.builder(
+                              itemCount: workflow_list.length,
+                              shrinkWrap: true,
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding: const EdgeInsets.only(top: 8.0),
+                                  child: InkWell(
+                                    onTap: () {
+                                      _viewdetailsdrawer(
+                                          workflow_list[index].EmpName,
+                                          workflow_list[index].requester_id,
+                                          workflow_list[index].from_time,
+                                          workflow_list[index].to_time,
+                                          workflow_list[index].overtime_explanation,
+                                          workflow_list[index].ReqNo,
+                                          workflow_list[index].created_at,
+                                          workflow_list[index].AssignDate,
+                                          workflow_list[index].total_time,
+                                          workflow_list[index].requester_id,
+                                          workflow_list[index].status);
+
+                                    },
+                                    child: Card(
+                                      color: MyColor.white_color,
+                                      elevation: 4,
+                                      shadowColor: MyColor.mainAppColor,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                                10),
+                                            color: MyColor.white_color
+                                          // color: (index % 2 == 0)
+                                          //     ? MyColor.mainAppColor
+                                          //         .withOpacity(0.2)
+                                          //     : MyColor.light_gray.withOpacity(0.2),
                                         ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 8, right: 8, bottom: 8, top: 8),
-                                      child: Column(
-                                        children: [
-                                          Row(
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 8,
+                                              right: 8,
+                                              bottom: 8,
+                                              top: 8),
+                                          child: Column(
                                             children: [
-                                              CircleAvatar(
-                                                radius: 30,
-                                                child: ClipOval(
-                                                    child: Image.network(
-                                                        '${LCEG_workflow_list[index].Image}')),
-                                              ),
-                                              const SizedBox(
-                                                width: 8,
-                                              ),
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
+                                              Row(
                                                 children: [
-                                                  Text(
-                                                    LCEG_workflow_list[index]
-                                                        .EmpName,
-                                                    style: const TextStyle(
-                                                        fontSize: 14,
-                                                        fontFamily: 'pop'),
+                                                  CircleAvatar(
+                                                    radius: 30,
+                                                    child: ClipOval(
+                                                        child: Image.network(
+                                                            '${workflow_list[index]
+                                                                .Image}')),
                                                   ),
-                                                  Padding(
-                                                    padding:
+                                                  const SizedBox(
+                                                    width: 8,
+                                                  ),
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                    children: [
+                                                      Text(
+                                                        workflow_list[index]
+                                                            .EmpName,
+                                                        style: const TextStyle(
+                                                            fontSize: 14,
+                                                            fontFamily: 'pop'),
+                                                      ),
+                                                      Padding(
+                                                        padding:
                                                         const EdgeInsets.only(
                                                             top: 0.0),
-                                                    child: Row(
-                                                      mainAxisAlignment:
+                                                        child: Row(
+                                                          mainAxisAlignment:
                                                           MainAxisAlignment
                                                               .spaceBetween,
-                                                      children: [
-                                                        Column(
-                                                          crossAxisAlignment:
+                                                          children: [
+                                                            Column(
+                                                              crossAxisAlignment:
                                                               CrossAxisAlignment
                                                                   .start,
-                                                          children: [
-                                                            Text(
-                                                              "Created On: " +
-                                                                  LCEG_workflow_list[
-                                                                          index]
-                                                                      .created_at
-                                                                      .toString()
-                                                                      .split(
+                                                              children: [
+                                                                Text(
+                                                                  "Created On: " +
+                                                                      workflow_list[
+                                                                      index]
+                                                                          .created_at
+                                                                          .toString()
+                                                                          .split(
                                                                           " ")
-                                                                      .first,
-                                                              style:
+                                                                          .first,
+                                                                  style:
                                                                   const TextStyle(
                                                                       fontSize:
-                                                                          14,
+                                                                      14,
                                                                       fontFamily:
-                                                                          'pop'),
-                                                            ),
-                                                            const SizedBox(
-                                                              width: 16,
+                                                                      'pop'),
+                                                                ),
+                                                                const SizedBox(
+                                                                  width: 16,
+                                                                ),
+                                                              ],
                                                             ),
                                                           ],
                                                         ),
-                                                      ],
-                                                    ),
+                                                      ),
+                                                    ],
                                                   ),
                                                 ],
                                               ),
-                                            ],
-                                          ),
-                                          const SizedBox(
-                                            height: 10,
-                                          ),
-                                          Container(
-                                            height: 2,
-                                            color: Colors.black38,
-                                          ),
-                                          const SizedBox(
-                                            height: 4,
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 10, right: 10),
-                                            child: Row(
-                                              mainAxisAlignment:
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              Container(
+                                                height: 2,
+                                                color: Colors.black38,
+                                              ),
+                                              const SizedBox(
+                                                height: 4,
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 10, right: 10),
+                                                child: Row(
+                                                  mainAxisAlignment:
                                                   MainAxisAlignment
                                                       .spaceBetween,
-                                              children: [
-                                                Text(LCEG_workflow_list[index]
-                                                    .leave_type),
-                                                Text(LCEG_workflow_list[index]
-                                                    .lr_status)
-                                              ],
-                                            ),
-                                          )
-                                        ],
+                                                  children: [
+                                                    Text(workflow_list[index]
+                                                        .requester_id),
+                                                    Text(workflow_list[index]
+                                                        .status)
+                                                  ],
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              ),
-                            );
-                          }))
-                ]
+                                );
+                              }))
+                    ]
               ],
             ),
           ),
@@ -647,7 +653,7 @@ class _employee_EGLCState extends State<employee_EGLC> {
   }
 
   Future<void> _viewdetailsdrawer(String name, leave_type, form_date, to_date,
-      reason, rqst_type, rqst_for, created_on, total_days, rqst_id, lr_status) {
+      reason, req_no, rqst_for, created_on, total_days, rqst_id, lr_status) {
     return showDialog(
         context: context,
         builder: (BuildContext) {
@@ -657,8 +663,9 @@ class _employee_EGLCState extends State<employee_EGLC> {
               shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(8.0)),
               ),
+              insetPadding: EdgeInsets.only(left: 8,right: 8),
               contentPadding:
-                  EdgeInsets.only(left: 8, right: 8, top: 4, bottom: 16),
+              EdgeInsets.only(left: 8, right: 8, top: 4, bottom: 16),
               content: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -666,7 +673,7 @@ class _employee_EGLCState extends State<employee_EGLC> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "Leave Details",
+                        "OT Details",
                         style: TextStyle(fontFamily: "pop_m", fontSize: 20),
                       ),
                       IconButton(
@@ -684,7 +691,10 @@ class _employee_EGLCState extends State<employee_EGLC> {
                   ),
                   Container(
                     height: 1,
-                    width: MediaQuery.of(context).size.width,
+                    width: MediaQuery
+                        .of(context)
+                        .size
+                        .width,
                     color: Colors.black26,
                   ),
                   const SizedBox(
@@ -710,45 +720,12 @@ class _employee_EGLCState extends State<employee_EGLC> {
                             rqst_id,
                             style: TextStyle(fontFamily: "pop_m", fontSize: 14),
                           ),
+
                           const SizedBox(
                             height: 16,
                           ),
                           Text(
-                            "Employee Name",
-                            style: TextStyle(
-                                fontFamily: "pop",
-                                fontSize: 16,
-                                color: Colors.black38),
-                          ),
-                          const SizedBox(
-                            height: 4,
-                          ),
-                          Text(
-                            name,
-                            style: TextStyle(fontFamily: "pop_m", fontSize: 14),
-                          ),
-                          const SizedBox(
-                            height: 16,
-                          ),
-                          Text(
-                            "Leave Type",
-                            style: TextStyle(
-                                fontFamily: "pop",
-                                fontSize: 16,
-                                color: Colors.black38),
-                          ),
-                          const SizedBox(
-                            height: 4,
-                          ),
-                          Text(
-                            leave_type,
-                            style: TextStyle(fontFamily: "pop_m", fontSize: 14),
-                          ),
-                          const SizedBox(
-                            height: 16,
-                          ),
-                          Text(
-                            "From Date",
+                            "From Time",
                             style: TextStyle(
                                 fontFamily: "pop",
                                 fontSize: 16,
@@ -765,7 +742,7 @@ class _employee_EGLCState extends State<employee_EGLC> {
                             height: 16,
                           ),
                           Text(
-                            "Total Days",
+                            "Total Time",
                             style: TextStyle(
                                 fontFamily: "pop",
                                 fontSize: 16,
@@ -783,8 +760,11 @@ class _employee_EGLCState extends State<employee_EGLC> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+
+
+
                           Text(
-                            "Request For",
+                            "Assign Date",
                             style: TextStyle(
                                 fontFamily: "pop",
                                 fontSize: 16,
@@ -794,48 +774,17 @@ class _employee_EGLCState extends State<employee_EGLC> {
                             height: 4,
                           ),
                           Text(
-                            rqst_for,
+                            created_on
+                                .toString()
+                                .split(" ")
+                                .first,
                             style: TextStyle(fontFamily: "pop_m", fontSize: 14),
                           ),
                           const SizedBox(
                             height: 16,
                           ),
                           Text(
-                            "Request Type",
-                            style: TextStyle(
-                                fontFamily: "pop",
-                                fontSize: 16,
-                                color: Colors.black38),
-                          ),
-                          const SizedBox(
-                            height: 4,
-                          ),
-                          Text(
-                            rqst_type,
-                            style: TextStyle(fontFamily: "pop_m", fontSize: 14),
-                          ),
-                          const SizedBox(
-                            height: 16,
-                          ),
-                          Text(
-                            "Created Date",
-                            style: TextStyle(
-                                fontFamily: "pop",
-                                fontSize: 16,
-                                color: Colors.black38),
-                          ),
-                          const SizedBox(
-                            height: 4,
-                          ),
-                          Text(
-                            created_on.toString().split(" ").first,
-                            style: TextStyle(fontFamily: "pop_m", fontSize: 14),
-                          ),
-                          const SizedBox(
-                            height: 16,
-                          ),
-                          Text(
-                            "To Date",
+                            "To Time",
                             style: TextStyle(
                                 fontFamily: "pop",
                                 fontSize: 16,
@@ -891,53 +840,60 @@ class _employee_EGLCState extends State<employee_EGLC> {
                         children: [
                           Flexible(
                               child: InkWell(
-                            onTap: () {
-                              Navigator.pop(context);
-                              Approved_RejectDialog(rqst_id, 'Approved',
-                                  'Approved', 'assets/svgs/approve.svg');
-                            },
-                            child: Container(
-                              width: MediaQuery.of(context).size.width,
-                              height: 48,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: MyColor.mainAppColor),
-                              child: Text(
-                                'Approve',
-                                style: TextStyle(
-                                    color: MyColor.white_color,
-                                    fontSize: 16,
-                                    fontFamily: 'pop'),
-                              ),
-                            ),
-                          )),
+                                onTap: () {
+                                  Navigator.pop(context);
+                                  Approved_RejectDialog(req_no, 'Approved',
+                                      'Approved', 'assets/svgs/approve.svg');
+                                },
+                                child: Container(
+                                  width: MediaQuery
+                                      .of(context)
+                                      .size
+                                      .width,
+                                  height: 48,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: MyColor.mainAppColor),
+                                  child: Text(
+                                    'Approve',
+                                    style: TextStyle(
+                                        color: MyColor.white_color,
+                                        fontSize: 16,
+                                        fontFamily: 'pop'),
+                                  ),
+                                ),
+                              )),
                           SizedBox(
                             width: 8,
                           ),
                           Flexible(
                               child: InkWell(
-                            onTap: () {
-                              Navigator.pop(context);
-                              Approved_RejectDialog(rqst_id, 'Rejected',
-                                  'Rejected', 'assets/svgs/reject.svg');
-                            },
-                            child: Container(
-                              width: MediaQuery.of(context).size.width,
-                              height: 48,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: MyColor.red_color.withOpacity(0.6)),
-                              child: Text(
-                                'Reject',
-                                style: TextStyle(
-                                    color: MyColor.white_color,
-                                    fontSize: 16,
-                                    fontFamily: 'pop'),
-                              ),
-                            ),
-                          )),
+                                onTap: () {
+                                  Navigator.pop(context);
+                                  Approved_RejectDialog(req_no, 'Rejected',
+                                      'Rejected', 'assets/svgs/reject.svg');
+                                },
+                                child: Container(
+                                  width: MediaQuery
+                                      .of(context)
+                                      .size
+                                      .width,
+                                  height: 48,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: MyColor.red_color.withOpacity(
+                                          0.6)),
+                                  child: Text(
+                                    'Reject',
+                                    style: TextStyle(
+                                        color: MyColor.white_color,
+                                        fontSize: 16,
+                                        fontFamily: 'pop'),
+                                  ),
+                                ),
+                              )),
                         ],
                       ),
                     )
@@ -949,12 +905,11 @@ class _employee_EGLCState extends State<employee_EGLC> {
         });
   }
 
-  void Approved_RejectDialog(
-    String request_number,
-    String w_status,
-    String ccl_action,
-    String image_url,
-  ) async {
+  void Approved_RejectDialog(String request_number,
+      String w_status,
+      String ccl_action,
+      String image_url,) async {
+    print('$request_number $w_status $ccl_action $image_url');
     return await showDialog(
         barrierDismissible: false,
         context: context,
@@ -1004,7 +959,10 @@ class _employee_EGLCState extends State<employee_EGLC> {
                       padding: const EdgeInsets.only(top: 4, right: 8, left: 8),
                       child: Container(
                         height: 90,
-                        width: MediaQuery.of(context).size.width,
+                        width: MediaQuery
+                            .of(context)
+                            .size
+                            .width,
                         decoration: BoxDecoration(
                             border: Border.all(color: Colors.grey),
                             borderRadius: BorderRadius.circular(10)),
@@ -1108,20 +1066,21 @@ class _employee_EGLCState extends State<employee_EGLC> {
     String? emp_id = pref.getString('emp_id');
     String? e_id = pref.getString('e_id');
     String? token = pref.getString('user_access_token');
-    var response = await http.post(Uri.parse('${baseurl.url}workflow-action'), body: {
+    var response = await http.post(
+        Uri.parse('${baseurl.url}workflow-action'), body: {
       'request_id': '${wtxn_id}',
       'status': '${ccl_action}',
       'comment': '${wtxn_comments}',
     }, headers: {
       'Authorization': 'Bearer ${token}'
     });
- var jsonObject = json.decode(response.body);
+
     print('Approved data ' + response.body);
-   
+    var jsonObject = json.decode(response.body);
     if (response.statusCode == 200) {
       Navigator.pop(context);
       if (jsonObject['status'] == '1') {
-        getleavelist(button_on);
+        getOvertimeWorkflow(button_on);
         _showMyDialog('${jsonObject['message']}', Colors.green, 'success');
       } else {
         _showMyDialog('${jsonObject['message']}', Color(0xFF861F41), 'error');
@@ -1134,15 +1093,14 @@ class _employee_EGLCState extends State<employee_EGLC> {
       preferences.commit();
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => Login_Activity()));
-    } if (response.statusCode == 422) {
-      Navigator.of(context).pop();
-
-      _showMyDialog(jsonObject['message'], MyColor.dialog_error_color, 'error');
+    }else{
+      Navigator.pop(context);
+      _showMyDialog('${jsonObject['message']}', Color(0xFF861F41), 'error');
     }
   }
 
-  Future<void> _showMyDialog(
-      String msg, Color color_dynamic, String success) async {
+  Future<void> _showMyDialog(String msg, Color color_dynamic,
+      String success) async {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Row(
         children: [
@@ -1151,21 +1109,22 @@ class _employee_EGLCState extends State<employee_EGLC> {
               Icons.check,
               color: MyColor.white_color,
             ),
-          ] else ...[
-            Icon(
-              Icons.error,
-              color: MyColor.white_color,
-            ),
-          ],
+          ] else
+            ...[
+              Icon(
+                Icons.error,
+                color: MyColor.white_color,
+              ),
+            ],
           SizedBox(
             width: 8,
           ),
           Flexible(
               child: Text(
-            msg,
-            style: TextStyle(color: MyColor.white_color),
-            maxLines: 2,
-          ))
+                msg,
+                style: TextStyle(color: MyColor.white_color),
+                maxLines: 2,
+              ))
         ],
       ),
       backgroundColor: color_dynamic,
@@ -1189,7 +1148,10 @@ class _employee_EGLCState extends State<employee_EGLC> {
             child: ListBody(
               children: <Widget>[
                 Container(
-                    width: MediaQuery.of(context).size.width,
+                    width: MediaQuery
+                        .of(context)
+                        .size
+                        .width,
                     child: Text(
                       '${msg}',
                       style: TextStyle(

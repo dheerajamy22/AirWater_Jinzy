@@ -30,8 +30,90 @@ class _manager_workflowState extends State<manager_workflow> {
     await Future.delayed(Duration(seconds: 3));
 
   }
-
   void getleavelist(String status) async {
+    workflow_list = [];
+    setState(() {
+      progress = '';
+    });
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('user_access_token');
+
+    var response = await http.post(
+      Uri.parse("${baseurl.url}leave-request-workflow-list"),
+      body: {'emp_code': '${widget.emp_code}'},
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    print(response.body);
+    var jsonObject = jsonDecode(response.body);
+
+    if (response.statusCode == 200) {
+      setState(() {
+        progress = '1';
+      });
+
+      if (jsonObject['status'] == "1") {
+        workflow_list.clear();
+        var jsonarray = jsonObject['requested_Tasks'];
+
+        List<leave_workflow> tempList = [];
+
+        for (var array_data in jsonarray) {
+          leave_workflow leaveListItem = leave_workflow(
+            ReqNo: array_data['ReqNo'],
+            AssignDate: array_data['AssignDate'],
+            EmpCode: array_data['EmpCode'],
+            EmpId: array_data['EmpId'],
+            EmpName: array_data['EmpName'],
+            Image: array_data['Image'],
+            Type: array_data['Type'],
+            created_at: array_data['created_at'],
+            lr_from_date: array_data['lr_from_date'],
+            lr_ref_no: array_data['lr_ref_no'],
+            lr_status: array_data['status'],
+            lr_to_date: array_data['lr_to_date'],
+            lr_total_days: array_data['lr_total_days'],
+            req_type: array_data['req_type'],
+            requester_id: array_data['requester_id'],
+            tbl_employee_id: array_data['tbl_employee_id'],
+            tbl_leavecode_id: array_data['tbl_leavecode_id'],
+            lr_reason: array_data['lr_reason'],
+            leave_type: array_data['leave_type'],
+            lr_leave_planed: "",
+          );
+
+          // Apply status filter
+          if (status == 'All' ||
+              (status == 'Approved' && leaveListItem.lr_status == 'Approved') ||
+              (status == 'Declined' && leaveListItem.lr_status == 'Rejected') ||
+              (status == 'In Review' && leaveListItem.lr_status == 'Pending')) {
+            tempList.add(leaveListItem);
+          }
+        }
+
+        setState(() {
+          workflow_list = tempList;
+        });
+      }
+    } else if (response.statusCode == 401) {
+      await prefs.setString("login_check", "false");
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => Login_Activity()),
+      );
+    } else if (response.statusCode == 422) {
+      Navigator.of(context).pop();
+      _showMyDialog(jsonObject['message'], MyColor.dialog_error_color, 'error');
+    } else {
+      setState(() {
+        progress = '1';
+      });
+    }
+  }
+
+/*  void getleavelist(String status) async {
     workflow_list = [];
     print(widget.emp_code);
     SharedPreferences p = await SharedPreferences.getInstance();
@@ -130,7 +212,7 @@ class _manager_workflowState extends State<manager_workflow> {
       });
     }
     // return workflow_list;
-  }
+  }*/
 
   @override
   void initState() {
@@ -197,10 +279,10 @@ class _manager_workflowState extends State<manager_workflow> {
         body: SafeArea(
           child: Padding(
             padding:
-                const EdgeInsets.only(left: 8, right: 8, top: 16, bottom: 32),
+                const EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 32),
             child: Column(
               children: [
-                Row(
+            /*    Row(
                   children: [
                     Flexible(
                       child: InkWell(
@@ -215,9 +297,9 @@ class _manager_workflowState extends State<manager_workflow> {
                           padding: EdgeInsets.all(0),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
-                            /* color: button_on == "All"
+                            *//* color: button_on == "All"
                                   ? MyColor.mainAppColor
-                                  : MyColor.white_color*/
+                                  : MyColor.white_color*//*
                           ),
                           child: Center(
                               child: Text(
@@ -248,9 +330,9 @@ class _manager_workflowState extends State<manager_workflow> {
                           padding: EdgeInsets.all(0),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
-                            /* color: button_on == "In Review"
+                            *//* color: button_on == "In Review"
                                   ? MyColor.mainAppColor
-                                  : MyColor.white_color*/
+                                  : MyColor.white_color*//*
                           ),
                           child: Center(
                               child: Text(
@@ -281,9 +363,9 @@ class _manager_workflowState extends State<manager_workflow> {
                           padding: EdgeInsets.all(0),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
-                            /* color: button_on == "approved"
+                            *//* color: button_on == "approved"
                                   ? MyColor.mainAppColor
-                                  : MyColor.white_color*/
+                                  : MyColor.white_color*//*
                           ),
                           child: Center(
                               child: Text(
@@ -314,9 +396,9 @@ class _manager_workflowState extends State<manager_workflow> {
                           padding: EdgeInsets.all(0),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
-                            /*color: button_on == "reject"
+                            *//*color: button_on == "reject"
                                   ? MyColor.mainAppColor
-                                  : MyColor.white_color*/
+                                  : MyColor.white_color*//*
                           ),
                           child: Center(
                               child: Text(
@@ -389,7 +471,7 @@ class _manager_workflowState extends State<manager_workflow> {
                       ),
                     ),
                   ],
-                ),
+                ),*/
                 if (progress == '')
                   Padding(
                     padding: const EdgeInsets.only(top: 24.0),
