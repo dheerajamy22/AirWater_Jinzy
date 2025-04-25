@@ -502,44 +502,7 @@ class _EmployeeDetailsState extends State<EmployeeDetails> {
                       padding: const EdgeInsets.only(top: 8.0),
                       child: Row(
                         children: [
-                          Flexible(
-                              child: Container(
-                            alignment: Alignment.center,
-                            child: Column(
-                              children: [
-                                InkWell(
-                                  onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => employee_EGLC(
-                                                  emp_code: widget.emp_code,
-                                                )));
-                                  },
-                                  child: Container(
-                                    width: 50,
-                                    height: 50,
-                                    alignment: Alignment.center,
-                                    child: SvgPicture.asset(
-                                      'assets/new_svgs/Punch.svg',
-                                      width: 20,
-                                      height: 20,
-                                    ),
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(30),
-                                        color: MyColor.mainAppColor),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 8.0),
-                                  child: Text(
-                                    'LC/EG\n Request',
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )),
+                        
                           Flexible(
                               child: Container(
                             alignment: Alignment.center,
@@ -657,104 +620,181 @@ class _EmployeeDetailsState extends State<EmployeeDetails> {
                               ],
                             ),
                           )),
+                            Flexible(
+                              child: Container(
+                            alignment: Alignment.center,
+                            child: Column(
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => employee_EGLC(
+                                                  emp_code: widget.emp_code,
+                                                )));
+                                  },
+                                  child: Container(
+                                    width: 50,
+                                    height: 50,
+                                    alignment: Alignment.center,
+                                    child: SvgPicture.asset(
+                                      'assets/new_svgs/Punch.svg',
+                                      width: 20,
+                                      height: 20,
+                                    ),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(30),
+                                        color: MyColor.mainAppColor),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 8.0),
+                                  child: Text(
+                                    'LC/EG\n Request',
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )),
                         ],
                       ),
                     ),
-                    // Padding(
-                    //      padding: const EdgeInsets.only(top: 16),
-                    //      child: Row(
-                    //       children: [
-                    //          Flexible(
-                    //             child: Container(
-                    //           alignment: Alignment.center,
-                    //           child: Column(
-                    //             children: [
-                    //               InkWell(
-                    //                 onTap: () {
-
-                    //                 },
-                    //                 child: Container(
-                    //                   width: 50,
-                    //                   height: 50,
-                    //                   alignment: Alignment.center,
-                    //                   child: SvgPicture.asset(
-                    //                     'assets/new_svgs/Punch.svg',
-                    //                     height: 25,
-                    //                     width: 25,
-                    //                   ),
-                    //                   decoration: BoxDecoration(
-                    //                       borderRadius: BorderRadius.circular(30),
-                    //                       color: MyColor.mainAppColor),
-                    //                 ),
-                    //               ),
-                    //               Padding(
-                    //                 padding: const EdgeInsets.only(top: 8.0),
-                    //                 child: Text(
-                    //                   'LC/EG',
-                    //                   textAlign: TextAlign.center,
-                    //                 ),
-                    //               ),
-                    //             ],
-                    //           ),
-                    //         )),
-                    //         Flexible(
-                    //             child: Container(
-                    //           alignment: Alignment.center,
-                    //           child: Column(
-                    //             children: [
-                    //               Container(
-                    //                 width: 50,
-                    //                 height: 50,
-                    //                 alignment: Alignment.center,
-
-                    //               ),
-                    //               Padding(
-                    //                 padding: const EdgeInsets.only(top: 8.0),
-
-                    //               ),
-                    //             ],
-                    //           ),
-                    //         )),
-                    //         Flexible(
-                    //             child: Container(
-                    //           alignment: Alignment.center,
-                    //           child: Column(
-                    //             children: [
-                    //               Container(
-                    //                 width: 50,
-                    //                 height: 50,
-                    //                 alignment: Alignment.center,
-
-                    //               ),
-                    //               Padding(
-                    //                 padding: const EdgeInsets.only(top: 8.0),
-
-                    //               ),
-                    //             ],
-                    //           ),
-                    //         )),
-                    //         Flexible(
-                    //             child: Container(
-                    //           alignment: Alignment.center,
-                    //           child: Column(
-                    //             children: [
-                    //               Container(
-                    //                 width: 50,
-                    //                 height: 50,
-                    //                 alignment: Alignment.center,
-
-                    //               ),
-                    //               Padding(
-                    //                 padding: const EdgeInsets.only(top: 8.0),
-
-                    //               ),
-                    //             ],
-                    //           ),
-                    //         )),
-
-                    //       ],
-                    //                            ),
-                    //    ),
+                     Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: Row(
+                        children: [
+                        
+                          Flexible(
+                              child: Container(
+                            alignment: Alignment.center,
+                            child: Column(
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                manager_workflow(
+                                                  emp_code: widget.emp_code,
+                                                )));
+                                  },
+                                  child: Container(
+                                    width: 50,
+                                    height: 50,
+                                    alignment: Alignment.center,
+                                    child: SvgPicture.asset(
+                                      'assets/new_svgs/ApplyWFH.svg',
+                                      width: 20,
+                                      height: 20,
+                                    ),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(30),
+                                        color: MyColor.new_yellow_color),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 8.0),
+                                  child: Text(
+                                    'OT \n Request',
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )),
+                          Flexible(
+                              child: Container(
+                            alignment: Alignment.center,
+                            child: Column(
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                My_Work_flow_Request(
+                                                  emp_code: widget.emp_code,
+                                                )));
+                                  },
+                                  child: Container(
+                                    width: 50,
+                                    height: 50,
+                                    alignment: Alignment.center,
+                                    child: SvgPicture.asset(
+                                      'assets/new_svgs/Leave_History.svg',
+                                      width: 25,
+                                      height: 25,
+                                    ),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(30),
+                                        color: MyColor.new_light_green),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 8.0),
+                                  child: Text(
+                                    'Purchase \n Request',
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )),
+                          Flexible(
+                              child: Container(
+                            alignment: Alignment.center,
+                            child: Column(
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => emp_halfday(
+                                                  emp_code: widget.emp_code,
+                                                )));
+                                  },
+                                  child: Container(
+                                    width: 50,
+                                    height: 50,
+                                    alignment: Alignment.center,
+                                    child: SvgPicture.asset(
+                                      'assets/new_svgs/Leave_History.svg',
+                                      width: 20,
+                                      height: 20,
+                                    ),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(30),
+                                        color: MyColor.new_red_color
+                                            .withOpacity(0.8)),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 8.0),
+                                  child: Text(
+                                    'Expense \n Claim ',
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )),
+                            Flexible(
+                              child: Container(
+                            alignment: Alignment.center,
+                            child: Column(
+                              children: [
+                              
+                              ],
+                            ),
+                          )),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
                 //services end here

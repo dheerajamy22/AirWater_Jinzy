@@ -53,7 +53,7 @@ class _EGLCDashState extends State<EGLCDash> {
                  children: [
                     GestureDetector(
                       onTap: () {
-                         Navigator.of(context).pop();
+                         Navigator.push(context, MaterialPageRoute(builder: (context)=>upcoming_dash()));
                       },
                       child: Icon(
                       Icons.arrow_back,
