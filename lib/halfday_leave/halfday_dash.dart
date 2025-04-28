@@ -831,6 +831,9 @@ class _halfdayDashState extends State<halfdayDash> {
       preferences.commit();
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => Login_Activity()));
+    }else if (response.statusCode == 500) {
+      Navigator.pop(context);
+      _showMyDialog('Something went wrong', Color(0xFF861F41), 'error');
     }
   }
 

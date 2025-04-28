@@ -1021,9 +1021,11 @@ class _expenseClaimState extends State<expenseClaim> {
                                               curr.currency_name == value)
                                           .id
                                           .toString();
+                                          print("id oye $_slectedCurrencyId");
                                     });
                                   },
                                 ),
+                                // child: Text("UAE Dirham",style: TextStyle(fontFamily: "pop_m",fontSize: 14),),
                               ),
                             ),
                           ),
@@ -1322,14 +1324,18 @@ class _expenseClaimState extends State<expenseClaim> {
         });
       }
       for (var i in jsonObject['currency']) {
-        currency data = currency(
+        if(i['currency_name']=="UAE Dirham"){
+  currency data = currency(
           id: i['id'],
           currency_name: i['currency_name'],
           currency_code: i['currency_code'],
         );
-        setState(() {
+         setState(() {
           currencyList.add(data);
         });
+        }
+      
+       
       }
     } else if (response.statusCode == 401) {
       print("Unauthorized");
