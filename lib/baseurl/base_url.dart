@@ -1,11 +1,7 @@
 class baseurl{
 //local
 //static final String url="http://10.10.10.30/jinzydasapi.kefify.com/jinzyapi.kefify.com/public/api/";
-
-
 // static final String url="10.10.10.142/AirWaterProject/Jinzyairwater/public/api/";
-
-
 //global
 //static final String url="https://jinzyapi.kefify.com/public/api/";
 

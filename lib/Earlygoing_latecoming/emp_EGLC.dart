@@ -233,7 +233,6 @@ class _employee_EGLCState extends State<employee_EGLC> {
          title: Row(
              mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-
                Row(
                  children: [
                     GestureDetector(

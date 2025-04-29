@@ -686,10 +686,17 @@ class _EmployeeDetailsState extends State<EmployeeDetails> {
                                     width: 50,
                                     height: 50,
                                     alignment: Alignment.center,
-                                    child: SvgPicture.asset(
-                                      'assets/new_svgs/ApplyWFH.svg',
-                                      width: 20,
-                                      height: 20,
+                                    child: Image.asset(
+                                      'assets/images/overtime.png',
+                                      color: MyColor.white_color,
+                                      width: MediaQuery.of(context)
+                                          .size
+                                          .width *
+                                          0.07,
+                                      height: MediaQuery.of(context)
+                                          .size
+                                          .height *
+                                          0.07,
                                     ),
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(30),
@@ -725,10 +732,17 @@ class _EmployeeDetailsState extends State<EmployeeDetails> {
                                     width: 50,
                                     height: 50,
                                     alignment: Alignment.center,
-                                    child: SvgPicture.asset(
-                                      'assets/new_svgs/Leave_History.svg',
-                                      width: 25,
-                                      height: 25,
+                                    child: Image.asset(
+                                      'assets/images/pr_request.png',
+                                      color: MyColor.white_color,
+                                      width: MediaQuery.of(context)
+                                          .size
+                                          .width *
+                                          0.07,
+                                      height: MediaQuery.of(context)
+                                          .size
+                                          .height *
+                                          0.07,
                                     ),
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(30),
@@ -763,10 +777,17 @@ class _EmployeeDetailsState extends State<EmployeeDetails> {
                                     width: 50,
                                     height: 50,
                                     alignment: Alignment.center,
-                                    child: SvgPicture.asset(
-                                      'assets/new_svgs/Leave_History.svg',
-                                      width: 20,
-                                      height: 20,
+                                    child: Image.asset(
+                                      'assets/images/expenses_cla.png',
+                                      color: MyColor.white_color,
+                                      width: MediaQuery.of(context)
+                                          .size
+                                          .width *
+                                          0.066,
+                                      height: MediaQuery.of(context)
+                                          .size
+                                          .height *
+                                          0.04,
                                     ),
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(30),

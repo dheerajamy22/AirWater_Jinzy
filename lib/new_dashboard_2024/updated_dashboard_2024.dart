@@ -818,16 +818,17 @@ class _upcoming_dashState extends State<upcoming_dash> {
                                             MediaQuery.of(context).size.height *
                                                 0.06,
                                         alignment: Alignment.center,
-                                        child: SvgPicture.asset(
-                                          'assets/new_svgs/ApplyWFH.svg',
+                                        child: Image.asset(
+                                          'assets/images/overtime.png',
+                                          color: MyColor.white_color,
                                           width: MediaQuery.of(context)
                                                   .size
                                                   .width *
-                                              0.065,
+                                              0.07,
                                           height: MediaQuery.of(context)
                                                   .size
                                                   .height *
-                                              0.03,
+                                              0.07,
                                         ),
                                         decoration: BoxDecoration(
                                             borderRadius:
@@ -1231,7 +1232,7 @@ class _upcoming_dashState extends State<upcoming_dash> {
                                         padding:
                                             const EdgeInsets.only(top: 8.0),
                                         child: Text(
-                                          'LC/EG',
+                                          'LC/EG \n',
                                           textAlign: TextAlign.center,
                                         ),
                                       ),
@@ -1261,16 +1262,17 @@ class _upcoming_dashState extends State<upcoming_dash> {
                                                   .height *
                                               0.06,
                                           alignment: Alignment.center,
-                                          child: SvgPicture.asset(
-                                            'assets/new_svgs/Leave_History.svg',
+                                          child: Image.asset(
+                                            'assets/images/expenses_cla.png',
+                                            color: MyColor.white_color,
                                             width: MediaQuery.of(context)
                                                     .size
                                                     .width *
-                                                0.065,
+                                                0.066,
                                             height: MediaQuery.of(context)
                                                     .size
                                                     .height *
-                                                0.03,
+                                                0.04,
                                           ),
                                           decoration: BoxDecoration(
                                               borderRadius:
@@ -1312,16 +1314,17 @@ class _upcoming_dashState extends State<upcoming_dash> {
                                                   .height *
                                               0.06,
                                           alignment: Alignment.center,
-                                          child: SvgPicture.asset(
-                                            'assets/new_svgs/my_team_icon.svg',
+                                          child: Image.asset(
+                                            'assets/images/pr_request.png',
+                                            color: MyColor.white_color,
                                             width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.035,
+                                                .size
+                                                .width *
+                                                0.07,
                                             height: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.02,
+                                                .size
+                                                .height *
+                                                0.07,
                                           ),
                                           decoration: BoxDecoration(
                                               borderRadius:
@@ -1364,16 +1367,17 @@ class _upcoming_dashState extends State<upcoming_dash> {
                                                   .height *
                                               0.06,
                                           alignment: Alignment.center,
-                                          child: SvgPicture.asset(
-                                            'assets/new_svgs/my_team_icon.svg',
+                                          child: Image.asset(
+                                            'assets/images/pay_slip.png',
+                                            color: MyColor.white_color,
                                             width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.035,
+                                                .size
+                                                .width *
+                                                0.07,
                                             height: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.02,
+                                                .size
+                                                .height *
+                                                0.07,
                                           ),
                                           decoration: BoxDecoration(
                                               borderRadius:
