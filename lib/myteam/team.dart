@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:super_profile_picture/super_profile_picture.dart';
 
 import '../_login_part/login_activity.dart';
 import '../app_color/color_constants.dart';
@@ -244,6 +245,16 @@ class _myteamState extends State<myteam> {
                                 children: [
                                   Row(
                                     children: [
+                                      if (team_list[index].image == " ") ...[
+                                      SuperProfilePicture(
+                                        label: "${team_list[index].name}",
+                                        radius: 24,
+                                        textDecorationProperties:
+                                            TextDecorationProperties(
+                                          maxLabelLength: 3,fontWeight: FontWeight.normal,
+                                        ),
+                                      ),
+                                    ] else
                                       CircleAvatar(
                                         radius: 30,
                                         child: ClipOval(

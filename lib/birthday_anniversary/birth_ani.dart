@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:super_profile_picture/super_profile_picture.dart';
 
 class birthday_anniversary extends StatefulWidget {
   const birthday_anniversary({super.key});
@@ -31,7 +32,7 @@ class _birthday_anniversaryState extends State<birthday_anniversary> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-       backgroundColor: MyColor.new_light_gray,
+      backgroundColor: MyColor.new_light_gray,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60.0),
         child: AppBar(
@@ -131,7 +132,7 @@ class _birthday_anniversaryState extends State<birthday_anniversary> {
               if (button == "on") ...[
                 if (birth_data.isEmpty) ...[
                   Container(
-                    height: MediaQuery.of(context).size.height*0.8,
+                    height: MediaQuery.of(context).size.height * 0.8,
                     child: Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -142,7 +143,10 @@ class _birthday_anniversaryState extends State<birthday_anniversary> {
                             height: 60,
                             width: 60,
                           ),
-                          Text("No Data",style: TextStyle(fontFamily: "pop",fontSize: 16),)
+                          Text(
+                            "No Data",
+                            style: TextStyle(fontFamily: "pop", fontSize: 16),
+                          )
                         ],
                       ),
                     ),
@@ -165,17 +169,29 @@ class _birthday_anniversaryState extends State<birthday_anniversary> {
                               //width: MediaQuery.of(context).size.width * 0.3,
                               child: Row(
                                 children: [
-                                  CircleAvatar(
-                                    radius: 24,
-                                    child: ClipOval(
-                                      child: Image.network(
-                                        birth_data[index].emp_photo,
-                                        fit: BoxFit.cover,
-                                        width: 80,
-                                        height: 80,
+                                  if (birth_data[index].emp_photo == " ") ...[
+                                    SuperProfilePicture(
+                                      label: birth_data[index].name,
+                                      radius: 20,
+                                      textDecorationProperties:
+                                          TextDecorationProperties(
+                                        maxLabelLength: 3,
+                                        fontWeight: FontWeight.normal,
                                       ),
                                     ),
-                                  ),
+                                  ] else ...[
+                                    CircleAvatar(
+                                      radius: 24,
+                                      child: ClipOval(
+                                        child: Image.network(
+                                          birth_data[index].emp_photo,
+                                          fit: BoxFit.cover,
+                                          width: 80,
+                                          height: 80,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                   const SizedBox(
                                     width: 16,
                                   ),
@@ -204,52 +220,66 @@ class _birthday_anniversaryState extends State<birthday_anniversary> {
                       width: 50,
                     ),
                   )
-                ]else...[
-                ListView.builder(
-                    itemCount: anniver_data.length,
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding:
-                            const EdgeInsets.only(top: 16, left: 12, right: 12),
-                        child: Card(
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: MyColor.white_color,
-                            ),
-                            padding: EdgeInsets.all(10),
-                            //width: MediaQuery.of(context).size.width * 0.3,
-                            child: Row(
-                              children: [
-                                CircleAvatar(
-                                  radius: 24,
-                                  child: ClipOval(
-                                    child: Image.network(
-                                      anniver_data[index].profile_photo,
-                                      fit: BoxFit.cover,
-                                      width: 80,
-                                      height: 80,
+                ] else ...[
+                  ListView.builder(
+                      itemCount: anniver_data.length,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.only(
+                              top: 16, left: 12, right: 12),
+                          child: Card(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: MyColor.white_color,
+                              ),
+                              padding: EdgeInsets.all(10),
+                              //width: MediaQuery.of(context).size.width * 0.3,
+                              child: Row(
+                                children: [
+                                  if (anniver_data[index].profile_photo ==
+                                      " ") ...[
+                                    SuperProfilePicture(
+                                      label: anniver_data[index].emp_name,
+                                      radius: 20,
+                                      textDecorationProperties:
+                                          TextDecorationProperties(
+                                        maxLabelLength: 3,
+                                        fontWeight: FontWeight.normal,
+                                      ),
                                     ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 16,
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(anniver_data[index].emp_name),
-                                    Text(anniver_data[index].emp_anidate)
+                                  ] else ...[
+                                    CircleAvatar(
+                                      radius: 24,
+                                      child: ClipOval(
+                                        child: Image.network(
+                                          anniver_data[index].profile_photo,
+                                          fit: BoxFit.cover,
+                                          width: 80,
+                                          height: 80,
+                                        ),
+                                      ),
+                                    ),
                                   ],
-                                ),
-                              ],
+                                  const SizedBox(
+                                    width: 16,
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(anniver_data[index].emp_name),
+                                      Text(anniver_data[index].emp_anidate)
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    })
-                    ]
+                        );
+                      })
+                ]
               ]
             ],
           ),
@@ -263,9 +293,7 @@ class _birthday_anniversaryState extends State<birthday_anniversary> {
     String? e_id = p.getString('e_id');
     String? token = p.getString('user_access_token');
 
-    var response = await http.post(
-        Uri.parse(
-            '${baseurl.url}birthday-list'),
+    var response = await http.post(Uri.parse('${baseurl.url}birthday-list'),
         headers: {'Authorization': 'Bearer $token'});
 
     var jsonData = json.decode(response.body);
@@ -293,14 +321,15 @@ class _birthday_anniversaryState extends State<birthday_anniversary> {
       preferences.commit();
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => Login_Activity()));
-    } if (response.statusCode == 422) {
+    }
+    if (response.statusCode == 422) {
       Navigator.of(context).pop();
 
       _showMyDialog(jsonData['message'], MyColor.dialog_error_color, 'error');
     }
   }
 
-   Future<void> _showMyDialog(
+  Future<void> _showMyDialog(
       String msg, Color color_dynamic, String success) async {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Row(
@@ -339,9 +368,7 @@ class _birthday_anniversaryState extends State<birthday_anniversary> {
     String? token = p.getString('user_access_token');
     String? e_id = p.getString('e_id');
     // String? token = p.getString('user_access_token');
-    var response = await http.get(
-        Uri.parse(
-            '${baseurl.url}anniversary-list'),
+    var response = await http.get(Uri.parse('${baseurl.url}anniversary-list'),
         headers: {'Authorization': 'Bearer $token'});
 
     print('annivesary  ' + response.body);
@@ -350,9 +377,9 @@ class _birthday_anniversaryState extends State<birthday_anniversary> {
     if (response.statusCode == 200) {
       if (jsonData['status'] == "1") {
         var jsonArray = jsonData['AnniversaryList'];
-     
+
         for (var data in jsonArray) {
-       UpComing_AnniversaryModel   aniData = UpComing_AnniversaryModel(
+          UpComing_AnniversaryModel aniData = UpComing_AnniversaryModel(
               emp_name: data['emp_fname'],
               emp_anidate: data['emp_joining_date'],
               profile_photo: data['emp_photo'],
@@ -369,7 +396,8 @@ class _birthday_anniversaryState extends State<birthday_anniversary> {
       preferences.commit();
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => Login_Activity()));
-    } if (response.statusCode == 422) {
+    }
+    if (response.statusCode == 422) {
       Navigator.of(context).pop();
 
       _showMyDialog(jsonData['message'], MyColor.dialog_error_color, 'error');

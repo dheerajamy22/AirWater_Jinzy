@@ -9,6 +9,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:super_profile_picture/super_profile_picture.dart';
 
 class manager_workflow extends StatefulWidget {
   final String emp_code;
@@ -545,12 +546,25 @@ class _manager_workflowState extends State<manager_workflow> {
                                         children: [
                                           Row(
                                             children: [
-                                              CircleAvatar(
-                                                radius: 30,
-                                                child: ClipOval(
-                                                    child: Image.network(
-                                                        '${workflow_list[index].Image}')),
-                                              ),
+                                              if (workflow_list[index].Image ==
+                                                  " ") ...[
+                                                SuperProfilePicture(
+                                                  label: workflow_list[index]
+                                                      .EmpName,
+                                                  radius: 20,
+                                                  textDecorationProperties:
+                                                      TextDecorationProperties(
+                                                    maxLabelLength: 3,fontWeight: FontWeight.normal,
+                                                  ),
+                                                ),
+                                              ] else ...[
+                                                CircleAvatar(
+                                                  radius: 30,
+                                                  child: ClipOval(
+                                                      child: Image.network(
+                                                          '${workflow_list[index].Image}')),
+                                                ),
+                                              ],
                                               const SizedBox(
                                                 width: 8,
                                               ),

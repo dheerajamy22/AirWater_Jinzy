@@ -10,6 +10,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:super_profile_picture/super_profile_picture.dart';
 import '../_login_part/login_activity.dart';
 import '../app_color/color_constants.dart';
 import '../workflow/Ec_request_workflow.dart';
@@ -146,17 +147,28 @@ class _EmployeeDetailsState extends State<EmployeeDetails> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            CircleAvatar(
-                              radius: 25,
-                              child: ClipOval(
-                                child: Image.network(
-                                  widget.img,
-                                  fit: BoxFit.cover,
-                                  width: 80,
-                                  height: 80,
+                            if (widget.img == " ") ...[
+                              SuperProfilePicture(
+                                label: widget.name,
+                                radius: 20,
+                                textDecorationProperties:
+                                    TextDecorationProperties(
+                                  maxLabelLength: 3,fontWeight: FontWeight.normal,
                                 ),
                               ),
-                            ),
+                            ] else ...[
+                              CircleAvatar(
+                                radius: 25,
+                                child: ClipOval(
+                                  child: Image.network(
+                                    widget.img,
+                                    fit: BoxFit.cover,
+                                    width: 80,
+                                    height: 80,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ],
                         ),
                         const SizedBox(

@@ -337,25 +337,24 @@ class _upcoming_dashState extends State<upcoming_dash> {
                 IconButton(
                     onPressed: () => _scaffoldKey.currentState?.openDrawer(),
                     icon: Icon(Icons.menu)),
-                if (emp_img == "") ...[
+                if (emp_img == " ") ...[
                   SuperProfilePicture(
                     label: emp_name,
-                    radius: 25,
+                    radius: 20,
                     textDecorationProperties: TextDecorationProperties(
                       maxLabelLength: 3,
+                      fontWeight: FontWeight.normal,
                     ),
                   ),
-                ] else
-                  CircleAvatar(
-                    radius: 25,
-                    child: ClipOval(
-                        child: Image.network(
-                      emp_img,
-                      fit: BoxFit.cover,
-                      width: 70,
-                      height: 70,
-                    )),
-                  ),
+                ] else ...[
+                  SuperProfilePicture(
+                    label: "",
+                    radius: 30,
+                    image: NetworkImage(emp_img),
+                    border: Border.all(width: 6, color: Colors.white),
+                    imageDecorationProperties: ImageDecorationProperties(),
+                  )
+                ],
                 const SizedBox(
                   width: 12,
                 ),
@@ -1449,17 +1448,29 @@ class _upcoming_dashState extends State<upcoming_dash> {
                                   //width: MediaQuery.of(context).size.width * 0.3,
                                   child: Column(
                                     children: [
-                                      CircleAvatar(
-                                        radius: 24,
-                                        child: ClipOval(
-                                          child: Image.network(
-                                            birth_data[0].emp_photo,
-                                            fit: BoxFit.cover,
-                                            width: 80,
-                                            height: 80,
+                                      if (birth_data[0].emp_photo == " ") ...[
+                                        SuperProfilePicture(
+                                          label: birth_data[0].name,
+                                          radius: 20,
+                                          textDecorationProperties:
+                                              TextDecorationProperties(
+                                            maxLabelLength: 3,
+                                            fontWeight: FontWeight.normal,
                                           ),
                                         ),
-                                      ),
+                                      ] else ...[
+                                        CircleAvatar(
+                                          radius: 24,
+                                          child: ClipOval(
+                                            child: Image.network(
+                                              birth_data[0].emp_photo,
+                                              fit: BoxFit.cover,
+                                              width: 80,
+                                              height: 80,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                       const SizedBox(
                                         height: 4,
                                       ),
@@ -1491,17 +1502,30 @@ class _upcoming_dashState extends State<upcoming_dash> {
                                       //width: MediaQuery.of(context).size.width * 0.3,
                                       child: Column(
                                         children: [
-                                          CircleAvatar(
-                                            radius: 24,
-                                            child: ClipOval(
-                                              child: Image.network(
-                                                birth_data[1].emp_photo,
-                                                fit: BoxFit.cover,
-                                                width: 80,
-                                                height: 80,
+                                          if (birth_data[1].emp_photo ==
+                                              " ") ...[
+                                            SuperProfilePicture(
+                                              label: birth_data[1].name,
+                                              radius: 20,
+                                              textDecorationProperties:
+                                                  TextDecorationProperties(
+                                                maxLabelLength: 3,
+                                                fontWeight: FontWeight.normal,
                                               ),
                                             ),
-                                          ),
+                                          ] else ...[
+                                            CircleAvatar(
+                                              radius: 24,
+                                              child: ClipOval(
+                                                child: Image.network(
+                                                  birth_data[1].emp_photo,
+                                                  fit: BoxFit.cover,
+                                                  width: 80,
+                                                  height: 80,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
                                           const SizedBox(
                                             height: 4,
                                           ),
@@ -1590,17 +1614,36 @@ class _upcoming_dashState extends State<upcoming_dash> {
                                             const EdgeInsets.only(top: 0.0),
                                         child: Row(
                                           children: [
-                                            CircleAvatar(
-                                              radius: 30,
-                                              child: ClipOval(
-                                                child: Image.network(
-                                                  '${EncryptData.decryptAES(work_flow_data[0].emp_photo.toString())}',
-                                                  fit: BoxFit.cover,
-                                                  width: 60,
-                                                  height: 60,
+                                            if (EncryptData.decryptAES(
+                                                    work_flow_data[0]
+                                                        .emp_photo
+                                                        .toString()) ==
+                                                " ") ...[
+                                              SuperProfilePicture(
+                                                label: EncryptData.decryptAES(
+                                                    work_flow_data[0]
+                                                        .wtxn_requester_emp_name
+                                                        .toString()),
+                                                radius: 20,
+                                                textDecorationProperties:
+                                                    TextDecorationProperties(
+                                                  maxLabelLength: 3,
+                                                  fontWeight: FontWeight.normal,
                                                 ),
                                               ),
-                                            ),
+                                            ] else ...[
+                                              CircleAvatar(
+                                                radius: 30,
+                                                child: ClipOval(
+                                                  child: Image.network(
+                                                    '${EncryptData.decryptAES(work_flow_data[0].emp_photo.toString())}',
+                                                    fit: BoxFit.cover,
+                                                    width: 60,
+                                                    height: 60,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
                                             const SizedBox(
                                               width: 16,
                                             ),
@@ -1678,17 +1721,36 @@ class _upcoming_dashState extends State<upcoming_dash> {
                                             const EdgeInsets.only(top: 0.0),
                                         child: Row(
                                           children: [
-                                            CircleAvatar(
-                                              radius: 30,
-                                              child: ClipOval(
-                                                child: Image.network(
-                                                  '${EncryptData.decryptAES(work_flow_data[0].emp_photo.toString())}',
-                                                  fit: BoxFit.cover,
-                                                  width: 60,
-                                                  height: 60,
+                                            if (EncryptData.decryptAES(
+                                                    work_flow_data[0]
+                                                        .emp_photo
+                                                        .toString()) ==
+                                                " ") ...[
+                                              SuperProfilePicture(
+                                                label: EncryptData.decryptAES(
+                                                    work_flow_data[0]
+                                                        .wtxn_requester_emp_name
+                                                        .toString()),
+                                                radius: 20,
+                                                textDecorationProperties:
+                                                    TextDecorationProperties(
+                                                  maxLabelLength: 3,
+                                                  fontWeight: FontWeight.normal,
                                                 ),
                                               ),
-                                            ),
+                                            ] else ...[
+                                              CircleAvatar(
+                                                radius: 30,
+                                                child: ClipOval(
+                                                  child: Image.network(
+                                                    '${EncryptData.decryptAES(work_flow_data[0].emp_photo.toString())}',
+                                                    fit: BoxFit.cover,
+                                                    width: 60,
+                                                    height: 60,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
                                             const SizedBox(
                                               width: 16,
                                             ),
@@ -1768,17 +1830,36 @@ class _upcoming_dashState extends State<upcoming_dash> {
                                             const EdgeInsets.only(top: 0.0),
                                         child: Row(
                                           children: [
-                                            CircleAvatar(
-                                              radius: 30,
-                                              child: ClipOval(
-                                                child: Image.network(
-                                                  '${EncryptData.decryptAES(work_flow_data[1].emp_photo.toString())}',
-                                                  fit: BoxFit.cover,
-                                                  width: 60,
-                                                  height: 60,
+                                            if (EncryptData.decryptAES(
+                                                    work_flow_data[1]
+                                                        .emp_photo
+                                                        .toString()) ==
+                                                " ") ...[
+                                              SuperProfilePicture(
+                                                label: EncryptData.decryptAES(
+                                                    work_flow_data[1]
+                                                        .wtxn_requester_emp_name
+                                                        .toString()),
+                                                radius: 20,
+                                                textDecorationProperties:
+                                                    TextDecorationProperties(
+                                                  maxLabelLength: 3,
+                                                  fontWeight: FontWeight.normal,
                                                 ),
                                               ),
-                                            ),
+                                            ] else ...[
+                                              CircleAvatar(
+                                                radius: 30,
+                                                child: ClipOval(
+                                                  child: Image.network(
+                                                    '${EncryptData.decryptAES(work_flow_data[1].emp_photo.toString())}',
+                                                    fit: BoxFit.cover,
+                                                    width: 60,
+                                                    height: 60,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
                                             const SizedBox(
                                               width: 16,
                                             ),
