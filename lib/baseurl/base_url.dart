@@ -6,19 +6,12 @@ class baseurl{
 //static final String url="https://jinzyapi.kefify.com/public/api/";
 
 //new dev jinzy after merging
-
-
 // static final String url="https://devjinzy.kefify.com/api/";
  //static final String url="https://jinzy-uat.a1rwater.com/api/mobile/";
  static final String url="https://jinzy.a1rwater.com/api/mobile/";
-
 // static final String url="https://jinzy.co/api/";
 // static final String url="http://10.10.10.62/JINZY_PROJECT/jinzylivegitrepo/Jinzyco/public/api/";
-
 //  static final String url="https://devjinzy.kefify.com/api/";
-
-
-
 //http://10.10.10.62/JINZY_PROJECT/jinzylivegitrepo/Jinzyco/public/api/
 //static final String url="http://10.10.10.62/JINZY_PROJECT/jinzylivegitrepo/Jinzyco/public/api/";
 
