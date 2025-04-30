@@ -10,6 +10,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:super_profile_picture/super_profile_picture.dart';
 
 class OvertimeWorkflow extends StatefulWidget {
 
@@ -106,98 +107,7 @@ class _OvertimeWorkflowState extends State<OvertimeWorkflow> {
   }
 
 
-  /* void getOvertimeWorkflow(String status) async {
-    workflow_list = [];
-
-    SharedPreferences p = await SharedPreferences.getInstance();
-    String? token = p.getString('user_access_token');
-    var response = await http.get(
-      Uri.parse("${baseurl.url}ot-request-workflow-list"),
-      headers: {
-        'Authorization': 'Bearer $token',
-      },
-    );
-
-    print(response.body);
-    var jsonObject = jsonDecode(response.body);
-    if (response.statusCode == 200) {
-      setState(() {
-        progress = '1';
-      });
-
-      if (jsonObject['status'] == "1") {
-        // leaverqst_details.clear();
-        workflow_list.clear();
-        var jsonarray = jsonObject['requested_Tasks'];
-        for (var array_data in jsonarray) {
-          OvertimeModel leave_list = OvertimeModel(ReqNo: array_data['ReqNo']??'',
-              requester_id: array_data['requester_id']??'',
-              EmpName: array_data['EmpName']??'',
-              AssignDate: array_data['AssignDate']??'',
-              status: array_data['status']??'',
-              overtime_date: array_data['overtime_date']??'',
-              from_time: array_data['from_time']??'',
-              to_time: array_data['to_time']??'',
-              total_time: array_data['total_time']??'',
-              overtime_explanation: array_data['overtime_explanation']??'',
-            Image: array_data['Image']??'',
-            created_at: array_data['created_at']??'',
-          );
-
-
-          List<OvertimeModel> data = [];
-          data.add(leave_list);
-          if (status == 'Approved') {
-            for (int i = 0; i < data.length; i++) {
-              if (data[i].status == 'Approved') {
-                setState(() {
-                  workflow_list.add(leave_list);
-                });
-              }
-            }
-          } else if (status == 'Declined') {
-            for (int i = 0; i < data.length; i++) {
-              if (data[i].status == 'Rejected') {
-                setState(() {
-                  workflow_list.add(leave_list);
-                  print('rtyuiop[');
-                });
-              }
-            }
-          } else if (status == 'In Review') {
-            for (int i = 0; i < data.length; i++) {
-              if (data[i].status == 'Pending') {
-                setState(() {
-                  workflow_list.add(leave_list);
-                });
-              }
-            }
-          } else if (status == 'All') {
-            setState(() {
-              workflow_list.add(leave_list);
-            });
-          }
-        }
-      } else {}
-    }
-    else if (response.statusCode == 401) {
-      SharedPreferences preferences = await SharedPreferences.getInstance();
-      await preferences.setString("login_check", "false");
-      preferences.commit();
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => Login_Activity()));
-    }
-    if (response.statusCode == 422) {
-      Navigator.of(context).pop();
-
-      _showMyDialog(jsonObject['message'], MyColor.dialog_error_color, 'error');
-    } else {
-      setState(() {
-        progress = '1';
-      });
-    }
-    // return workflow_list;
-  }*/
+ 
 
   @override
   void initState() {
@@ -267,208 +177,7 @@ class _OvertimeWorkflowState extends State<OvertimeWorkflow> {
             const EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 32),
             child: Column(
               children: [
-               /* Row(
-                  children: [
-                    Flexible(
-                      child: InkWell(
-                        onTap: () {
-                          getOvertimeWorkflow('All');
-                          setState(() {
-                            button_on = "All";
-                          });
-                        },
-                        child: Container(
-                          height: MediaQuery
-                              .of(context)
-                              .size
-                              .height * 0.06,
-                          padding: EdgeInsets.all(0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            *//* color: button_on == "All"
-                                  ? MyColor.mainAppColor
-                                  : MyColor.white_color*//*
-                          ),
-                          child: Center(
-                              child: Text(
-                                "All",
-                                style: TextStyle(
-                                    color: button_on == "All"
-                                        ? Colors.black
-                                        : Colors.black,
-                                    fontFamily: "pop",
-                                    fontSize: 16),
-                              )),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 2,
-                    ),
-                    Flexible(
-                      child: InkWell(
-                        onTap: () {
-                          getOvertimeWorkflow('In Review');
-                          setState(() {
-                            button_on = "In Review";
-                          });
-                        },
-                        child: Container(
-                          height: MediaQuery
-                              .of(context)
-                              .size
-                              .height * 0.06,
-                          padding: EdgeInsets.all(0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            *//* color: button_on == "In Review"
-                                  ? MyColor.mainAppColor
-                                  : MyColor.white_color*//*
-                          ),
-                          child: Center(
-                              child: Text(
-                                "Pending",
-                                style: TextStyle(
-                                    color: button_on == "In Review"
-                                        ? Colors.black
-                                        : Colors.black,
-                                    fontFamily: "pop",
-                                    fontSize: 16),
-                              )),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 2,
-                    ),
-                    Flexible(
-                      child: InkWell(
-                        onTap: () {
-                          getOvertimeWorkflow('Approved');
-                          setState(() {
-                            button_on = "approved";
-                          });
-                        },
-                        child: Container(
-                          height: MediaQuery
-                              .of(context)
-                              .size
-                              .height * 0.06,
-                          padding: EdgeInsets.all(0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            *//* color: button_on == "approved"
-                                  ? MyColor.mainAppColor
-                                  : MyColor.white_color*//*
-                          ),
-                          child: Center(
-                              child: Text(
-                                "Approve",
-                                style: TextStyle(
-                                    color: button_on == "approved"
-                                        ? Colors.black
-                                        : Colors.black,
-                                    fontFamily: "pop",
-                                    fontSize: 16),
-                              )),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 2,
-                    ),
-                    Flexible(
-                      child: InkWell(
-                        onTap: () {
-                          getOvertimeWorkflow('Declined');
-                          setState(() {
-                            button_on = "reject";
-                          });
-                        },
-                        child: Container(
-                          height: MediaQuery
-                              .of(context)
-                              .size
-                              .height * 0.06,
-                          padding: EdgeInsets.all(0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            *//*color: button_on == "reject"
-                                  ? MyColor.mainAppColor
-                                  : MyColor.white_color*//*
-                          ),
-                          child: Center(
-                              child: Text(
-                                "Reject",
-                                style: TextStyle(
-                                    color: button_on == "reject"
-                                        ? Colors.black
-                                        : Colors.black,
-                                    fontFamily: "pop",
-                                    fontSize: 16),
-                              )),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Flexible(
-                      child: Container(
-                        height: 2,
-                        padding: EdgeInsets.all(0),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            color: button_on == "All"
-                                ? MyColor.mainAppColor
-                                : Colors.transparent),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 2,
-                    ),
-                    Flexible(
-                      child: Container(
-                        height: 2,
-                        padding: EdgeInsets.all(0),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            color: button_on == "In Review"
-                                ? MyColor.mainAppColor
-                                : Colors.transparent),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 2,
-                    ),
-                    Flexible(
-                      child: Container(
-                        height: 2,
-                        padding: EdgeInsets.all(0),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            color: button_on == "approved"
-                                ? MyColor.mainAppColor
-                                : Colors.transparent),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 2,
-                    ),
-                    Flexible(
-                      child: Container(
-                        height: 2,
-                        padding: EdgeInsets.all(0),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            color: button_on == "reject"
-                                ? MyColor.mainAppColor
-                                : Colors.transparent),
-                      ),
-                    ),
-                  ],
-                ),*/
+               
                 if (progress == '')
                   Padding(
                     padding: const EdgeInsets.only(top: 24.0),
@@ -549,13 +258,28 @@ class _OvertimeWorkflowState extends State<OvertimeWorkflow> {
                                             children: [
                                               Row(
                                                 children: [
-                                                  CircleAvatar(
+                                                   if (workflow_list[index]
+                                                                .Image ==
+                                                  " ") ...[
+                                                SuperProfilePicture(
+                                                  label: workflow_list[index]
+                                                                .EmpName,
+                                                  radius: 20,
+                                                  textDecorationProperties:
+                                                      TextDecorationProperties(
+                                                    maxLabelLength: 3,fontWeight: FontWeight.normal,
+                                                  ),
+                                                ),
+                                              ] else ...[
+                                                CircleAvatar(
                                                     radius: 30,
                                                     child: ClipOval(
                                                         child: Image.network(
                                                             '${workflow_list[index]
                                                                 .Image}')),
                                                   ),
+                                              ],
+                                                 
                                                   const SizedBox(
                                                     width: 8,
                                                   ),

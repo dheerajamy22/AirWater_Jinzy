@@ -9,6 +9,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:super_profile_picture/super_profile_picture.dart';
 
 import '../new_dashboard_2024/updated_dashboard_2024.dart';
 import '../team_request_access_panel/team_request_model.dart';
@@ -25,7 +26,7 @@ class My_Work_flow_Request extends StatefulWidget {
 class _My_Work_flow_RequestState extends State<My_Work_flow_Request> {
   TextEditingController _comment = TextEditingController();
   List<Workflow> work_flow_data = [];
-  String progress='';
+  String progress = '';
 
   Future<void> _customProgress(String msg) async {
     return showDialog<void>(
@@ -56,11 +57,12 @@ class _My_Work_flow_RequestState extends State<My_Work_flow_Request> {
       },
     );
   }
+
   void send_Status_Approvel(String wtxn_id, String wtxn_status,
       String wtxn_comments, String ccl_action) async {
     ProgressDialog pr = await ProgressDialog(context);
-  //  pr.show();
-_customProgress('Please wait...');
+    //  pr.show();
+    _customProgress('Please wait...');
     print(
         "id ${wtxn_id} status ${wtxn_status} ccla ${ccl_action} comment ${wtxn_comments}");
     SharedPreferences pref = await SharedPreferences.getInstance();
@@ -87,7 +89,6 @@ _customProgress('Please wait...');
               EncryptData.decryptAES(element.wtxn_ref_request_no) == wtxn_id);
         });
 
-
         if (work_flow_data.isEmpty) {
           Navigator.pop(context);
           Navigator.of(context)
@@ -97,9 +98,9 @@ _customProgress('Please wait...');
         _showMyDialog('${jsonObject['message']}', Colors.green, 'success');
       } else {
         Navigator.pop(context);
-      _showMyDialog('${jsonObject['message']}', Color(0xFF861F41), 'error');
+        _showMyDialog('${jsonObject['message']}', Color(0xFF861F41), 'error');
 
-       // Navigator.of(context).pop(context);
+        // Navigator.of(context).pop(context);
       }
     } else if (response.statusCode == 401) {
       Navigator.pop(context);
@@ -108,7 +109,8 @@ _customProgress('Please wait...');
       preferences.commit();
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => Login_Activity()));
-    } if (response.statusCode == 422) {
+    }
+    if (response.statusCode == 422) {
       Navigator.of(context).pop();
 
       _showMyDialog(jsonObject['message'], MyColor.dialog_error_color, 'error');
@@ -318,7 +320,7 @@ _customProgress('Please wait...');
             scrollable: true,
             shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10.0))),
-            insetPadding: const EdgeInsets.only(left: 8, right: 8,bottom: 12),
+            insetPadding: const EdgeInsets.only(left: 8, right: 8, bottom: 12),
             contentPadding: EdgeInsets.only(bottom: 10),
             clipBehavior: Clip.antiAliasWithSaveLayer,
             content: StatefulBuilder(
@@ -330,7 +332,7 @@ _customProgress('Please wait...');
                       padding: const EdgeInsets.only(top: 16.0),
                       child: SvgPicture.asset('${image_url}'),
                     ),
-                     Padding(
+                    Padding(
                       padding: EdgeInsets.only(top: 8.0),
                       child: Text(
                         'Are you sure want to ${ccl_action}?',
@@ -356,8 +358,7 @@ _customProgress('Please wait...');
                     //   ),
                     // ),
                     Padding(
-                      padding: const EdgeInsets.only(
-                          top: 4, right: 8, left: 8),
+                      padding: const EdgeInsets.only(top: 4, right: 8, left: 8),
                       child: Container(
                         height: 90,
                         width: MediaQuery.of(context).size.width,
@@ -365,8 +366,7 @@ _customProgress('Please wait...');
                             border: Border.all(color: Colors.grey),
                             borderRadius: BorderRadius.circular(10)),
                         child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 4, right: 4),
+                          padding: const EdgeInsets.only(left: 4, right: 4),
                           child: TextField(
                             controller: _comment,
                             decoration: InputDecoration(
@@ -380,8 +380,7 @@ _customProgress('Please wait...');
                       ),
                     ),
                     Padding(
-                      padding:
-                          const EdgeInsets.only(top: 16, right: 8),
+                      padding: const EdgeInsets.only(top: 16, right: 8),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         mainAxisAlignment: MainAxisAlignment.end,
@@ -391,8 +390,7 @@ _customProgress('Please wait...');
                               height: 48,
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.circular(5),
+                                  borderRadius: BorderRadius.circular(5),
                                   color: Colors.grey),
                               child: const Padding(
                                 padding: EdgeInsets.all(8.0),
@@ -417,8 +415,7 @@ _customProgress('Please wait...');
                               height: 48,
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.circular(5),
+                                  borderRadius: BorderRadius.circular(5),
                                   color: ccl_action == 'Rejected'
                                       ? Colors.red
                                       : Colors.green),
@@ -435,18 +432,11 @@ _customProgress('Please wait...');
                             ),
                             onTap: () {
                               if (_comment.text == '') {
-                                send_Status_Approvel(
-                                    request_number,
-                                    w_status,
-                                    '${w_status}',
-                                    ccl_action);
-                    
+                                send_Status_Approvel(request_number, w_status,
+                                    '${w_status}', ccl_action);
                               } else {
-                                send_Status_Approvel(
-                                    request_number,
-                                    w_status,
-                                    _comment.text,
-                                    ccl_action);
+                                send_Status_Approvel(request_number, w_status,
+                                    _comment.text, ccl_action);
                               }
                               Navigator.of(context).pop(context);
                             },
@@ -463,29 +453,27 @@ _customProgress('Please wait...');
   }
 
   void getWorkFlowRequest() async {
-
     SharedPreferences pref = await SharedPreferences.getInstance();
     String? e_id = pref.getString('e_id');
     String? emp_id = pref.getString('emp_id');
     String? token = pref.getString('user_access_token');
-    var response =
-        await http.post(Uri.parse('${baseurl.url}workflow-list-for-attendence'), body: {
+    var response = await http
+        .post(Uri.parse('${baseurl.url}workflow-list-for-attendence'), body: {
       'emp_code': '${widget.emp_code}',
     }, headers: {
       'Authorization': 'Bearer $token'
     });
     print(token);
 
-
     print('ff ' + response.body);
     print('ff ' + '${response.statusCode}');
-    List<String> req_no= [];
+    List<String> req_no = [];
     var jsonObject = json.decode(response.body);
     if (response.statusCode == 200) {
       setState(() {
         progress = '1';
       });
-      
+
       if (jsonObject['status'] == '1') {
         var jsonArray = jsonObject['requested_Tasks'];
         work_flow_data.clear();
@@ -500,7 +488,6 @@ _customProgress('Please wait...');
             checkio_reason: flow['Reason'],
             wtxn_ref_request_no: flow['ReqNo'],
             emp_photo: flow['Image'],
-
           );
           req_no.add(EncryptData.decryptAES(flow['ReqNo']));
 
@@ -512,42 +499,58 @@ _customProgress('Please wait...');
           });
         }
       }
-    }
-    else if (response.statusCode == 401) {
+    } else if (response.statusCode == 401) {
       SharedPreferences preferences = await SharedPreferences.getInstance();
       await preferences.setString("login_check", "false");
       preferences.commit();
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => Login_Activity()));
-    } if (response.statusCode == 422) {
+    }
+    if (response.statusCode == 422) {
       Navigator.of(context).pop();
 
       _showMyDialog(jsonObject['message'], MyColor.dialog_error_color, 'error');
-    }else{
+    } else {
       setState(() {
         progress = '1';
       });
     }
 
-
-
     // return work_flow_data;
   }
-Future<void> _showMyDialog(String msg,Color color_dynamic,String success) async {
-     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Row(
-       children: [
-         if(success=='success')...[
-          Icon(Icons.check,color: MyColor.white_color,),
-         ]else...[
-Icon(Icons.error,color: MyColor.white_color,),
-         ],
-         SizedBox(width: 8,),
-         Flexible(child: Text(msg,style: TextStyle(color: MyColor.white_color),maxLines: 2,))
-       ],
-     ),backgroundColor: color_dynamic,
-    behavior: SnackBarBehavior.floating,
-    elevation: 3,));
-    }
+
+  Future<void> _showMyDialog(
+      String msg, Color color_dynamic, String success) async {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Row(
+        children: [
+          if (success == 'success') ...[
+            Icon(
+              Icons.check,
+              color: MyColor.white_color,
+            ),
+          ] else ...[
+            Icon(
+              Icons.error,
+              color: MyColor.white_color,
+            ),
+          ],
+          SizedBox(
+            width: 8,
+          ),
+          Flexible(
+              child: Text(
+            msg,
+            style: TextStyle(color: MyColor.white_color),
+            maxLines: 2,
+          ))
+        ],
+      ),
+      backgroundColor: color_dynamic,
+      behavior: SnackBarBehavior.floating,
+      elevation: 3,
+    ));
+  }
 
   callme() async {
     await Future.delayed(Duration(seconds: 3));
@@ -555,12 +558,14 @@ Icon(Icons.error,color: MyColor.white_color,),
       progress = '1';
     });
   }
+
   @override
   void initState() {
     //callme();
     getWorkFlowRequest();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -568,63 +573,63 @@ Icon(Icons.error,color: MyColor.white_color,),
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(60.0),
           child: AppBar(
-             elevation: 0.0,
-          automaticallyImplyLeading: false,
-          backgroundColor: const Color(0xFF0054A4),
-         title: Row(
-             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-
-               Row(
-                 children: [
+            elevation: 0.0,
+            automaticallyImplyLeading: false,
+            backgroundColor: const Color(0xFF0054A4),
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
                     GestureDetector(
                       onTap: () {
-                         Navigator.of(context).pop();
+                        Navigator.of(context).pop();
                       },
                       child: Icon(
-                      Icons.arrow_back,
-                      color: MyColor.white_color,
-                                   ),
+                        Icons.arrow_back,
+                        color: MyColor.white_color,
+                      ),
                     ),
-
-                                  Container(
-                  padding: const EdgeInsets.only(left: 8.0),
-                  child: const Text(
-                    'Attendance Request',
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontFamily: 'pop',
-                        color: MyColor.white_color),
-                  )),
-                 ],
-               ),
-             
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 0.0),
-                    child: Image.asset(
-                      'assets/images/powered_by_tag.png',
-                      width: 90,
-                      height: 20,
+                    Container(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: const Text(
+                          'Attendance Request',
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontFamily: 'pop',
+                              color: MyColor.white_color),
+                        )),
+                  ],
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 0.0),
+                      child: Image.asset(
+                        'assets/images/powered_by_tag.png',
+                        width: 90,
+                        height: 20,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ],
-          ),),
+                  ],
+                ),
+              ],
+            ),
+          ),
         ),
         body: Column(
           children: [
-            if (progress=='') Padding(
-              padding: const EdgeInsets.only(top: 24.0),
-              child: Center(
-                  child: CircularProgressIndicator(
-                    color: MyColor.mainAppColor,
-                  )),
-            )else if (work_flow_data.length == 0) ...[
+            if (progress == '')
+              Padding(
+                padding: const EdgeInsets.only(top: 24.0),
+                child: Center(
+                    child: CircularProgressIndicator(
+                  color: MyColor.mainAppColor,
+                )),
+              )
+            else if (work_flow_data.length == 0) ...[
               // Navigator.pop(context);
               Center(
                 child: Column(
@@ -653,8 +658,8 @@ Icon(Icons.error,color: MyColor.white_color,),
                       return Padding(
                         padding: const EdgeInsets.all(4.0),
                         child: Card(
-                           elevation: 4,
-                              shadowColor: MyColor.mainAppColor,
+                          elevation: 4,
+                          shadowColor: MyColor.mainAppColor,
                           child: InkWell(
                             onTap: () {
                               _viewdetailsdrawer(
@@ -664,8 +669,8 @@ Icon(Icons.error,color: MyColor.white_color,),
                                       work_flow_data[index].checkio_reason),
                                   EncryptData.decryptAES(work_flow_data[index]
                                       .wtxn_requester_emp_name),
-                                  EncryptData.decryptAES(
-                                      work_flow_data[index].wtxn_ref_request_no),
+                                  EncryptData.decryptAES(work_flow_data[index]
+                                      .wtxn_ref_request_no),
                                   EncryptData.decryptAES(work_flow_data[index]
                                       .wtxn_request_datetime),
                                   EncryptData.decryptAES(
@@ -673,12 +678,12 @@ Icon(Icons.error,color: MyColor.white_color,),
                             },
                             child: Container(
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                 color: MyColor.white_color
-                                // color: (index % 2 == 0)
-                                //     ? MyColor.mainAppColor.withOpacity(0.2)
-                                //     : MyColor.light_gray.withOpacity(0.2),
-                              ),
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: MyColor.white_color
+                                  // color: (index % 2 == 0)
+                                  //     ? MyColor.mainAppColor.withOpacity(0.2)
+                                  //     : MyColor.light_gray.withOpacity(0.2),
+                                  ),
                               padding: EdgeInsets.all(8.0),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -687,17 +692,36 @@ Icon(Icons.error,color: MyColor.white_color,),
                                     padding: const EdgeInsets.only(top: 0.0),
                                     child: Row(
                                       children: [
-                                        CircleAvatar(
-                                          radius: 30,
-                                          child: ClipOval(
-                                            child: Image.network(
-                                              '${EncryptData.decryptAES(work_flow_data[index].emp_photo.toString())}',
-                                              fit: BoxFit.cover,
-                                              width: 60,
-                                              height: 60,
+                                        if (EncryptData.decryptAES(
+                                                work_flow_data[index]
+                                                    .emp_photo
+                                                    .toString()) ==
+                                            " ") ...[
+                                          SuperProfilePicture(
+                                            label: EncryptData.decryptAES(
+                                                work_flow_data[index]
+                                                    .wtxn_requester_emp_name
+                                                    .toString()),
+                                            radius: 20,
+                                            textDecorationProperties:
+                                                TextDecorationProperties(
+                                              maxLabelLength: 3,
+                                              fontWeight: FontWeight.normal,
                                             ),
                                           ),
-                                        ),
+                                        ] else ...[
+                                          CircleAvatar(
+                                            radius: 30,
+                                            child: ClipOval(
+                                              child: Image.network(
+                                                '${EncryptData.decryptAES(work_flow_data[index].emp_photo.toString())}',
+                                                fit: BoxFit.cover,
+                                                width: 60,
+                                                height: 60,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                         const SizedBox(
                                           width: 16,
                                         ),
@@ -712,9 +736,8 @@ Icon(Icons.error,color: MyColor.white_color,),
                                                   fontFamily: 'pop'),
                                             ),
                                             Padding(
-                                              padding:
-                                                  const EdgeInsets.only(
-                                                      top: 2.0),
+                                              padding: const EdgeInsets.only(
+                                                  top: 2.0),
                                               child: Text(
                                                 '${EncryptData.decryptAES(work_flow_data[index].wtxn_request_datetime.toString())}',
                                                 style: const TextStyle(
@@ -722,34 +745,29 @@ Icon(Icons.error,color: MyColor.white_color,),
                                                     fontFamily: 'pop'),
                                               ),
                                             ),
-                                            
-                                            
                                           ],
                                         )
                                       ],
                                     ),
                                   ),
-                                   const SizedBox(
-                                      height: 10,
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Container(
+                                    height: 2,
+                                    color: Colors.black38,
+                                  ),
+                                  const SizedBox(
+                                    height: 4,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 2.0),
+                                    child: Text(
+                                      '${EncryptData.decryptAES(work_flow_data[index].ccl_type.toString())}',
+                                      style: const TextStyle(
+                                          fontSize: 16, fontFamily: 'pop'),
                                     ),
-                                    Container(
-                                      height: 2,
-                                      color: Colors.black38,
-                                    ),
-                                    const SizedBox(
-                                      height: 4,
-                                    ),
-                                    Padding(
-                                              padding:
-                                                  const EdgeInsets.only(
-                                                      top: 2.0),
-                                              child: Text(
-                                                '${EncryptData.decryptAES(work_flow_data[index].ccl_type.toString())}',
-                                                style: const TextStyle(
-                                                    fontSize: 16,
-                                                    fontFamily: 'pop'),
-                                              ),
-                                            ),
+                                  ),
                                 ],
                               ),
                             ),

@@ -10,6 +10,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:super_profile_picture/super_profile_picture.dart';
 
 class employee_EGLC extends StatefulWidget {
   final String emp_code;
@@ -112,106 +113,7 @@ class _employee_EGLCState extends State<employee_EGLC> {
     }
   }
 
-  /*void getleavelist(String status) async {
-    LCEG_workflow_list = [];
-    print(widget.emp_code);
-    SharedPreferences p = await SharedPreferences.getInstance();
-    String? token = p.getString('user_access_token');
-    var response = await http.post(
-      Uri.parse("${baseurl.url}lceg-request-workflow-list"),
-      body: {'emp_code': '${widget.emp_code}'},
-      headers: {
-        'Authorization': 'Bearer $token',
-      },
-    );
-
-  var jsonObject = jsonDecode(response.body);
-    print(response.body);
-    if (response.statusCode == 200) {
-      setState(() {
-        progress = '1';
-      });
-    
-      if (jsonObject['status'] == "1") {
-        // leaverqst_details.clear();
-        LCEG_workflow_list.clear();
-        var jsonarray = jsonObject['requested_Tasks'];
-        for (var array_data in jsonarray) {
-          leave_workflow leave_list = leave_workflow(
-            ReqNo: array_data['ReqNo'],
-            AssignDate: array_data['AssignDate'],
-            EmpCode: array_data['EmpCode'],
-            EmpId: array_data['EmpId'],
-            EmpName: array_data['EmpName'],
-            Image: array_data['Image'],
-            Type: array_data['Type'],
-            created_at: array_data['created_at'],
-            lr_from_date: "",
-            lr_ref_no: array_data['ref_no'],
-            lr_status: array_data['status'],
-            lr_to_date: "",
-            lr_total_days: "",
-            req_type: "",
-            requester_id: array_data['requester_id'],
-            tbl_employee_id: array_data['tbl_employee_id'],
-            tbl_leavecode_id: "",
-            lr_reason: array_data['reason'],
-            leave_type: "",
-            lr_leave_planed: "",
-          );
-
-          List<leave_workflow> data = [];
-          data.add(leave_list);
-          if (status == 'Approved') {
-            for (int i = 0; i < data.length; i++) {
-              if (data[i].lr_status == 'Approved') {
-                setState(() {
-                  LCEG_workflow_list.add(leave_list);
-                });
-              }
-            }
-          } else if (status == 'Declined') {
-            for (int i = 0; i < data.length; i++) {
-              if (data[i].lr_status == 'Rejected') {
-                setState(() {
-                  LCEG_workflow_list.add(leave_list);
-                  print('rtyuiop[');
-                });
-              }
-            }
-          } else if (status == 'In Review') {
-            for (int i = 0; i < data.length; i++) {
-              if (data[i].lr_status == 'Pending') {
-                setState(() {
-                  LCEG_workflow_list.add(leave_list);
-                });
-              }
-            }
-          } else if (status == 'All') {
-            setState(() {
-              LCEG_workflow_list.add(leave_list);
-            });
-          }
-        }
-      } else {}
-    }
-    else if (response.statusCode == 401) {
-      SharedPreferences preferences = await SharedPreferences.getInstance();
-      await preferences.setString("login_check", "false");
-      preferences.commit();
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => Login_Activity()));
-    }else{
-      setState(() {
-        progress = '1';
-      });
-    } if (response.statusCode == 422) {
-      Navigator.of(context).pop();
-
-      _showMyDialog(jsonObject['message'], MyColor.dialog_error_color, 'error');
-    }
-    // return workflow_list;
-  }*/
+ 
 
   @override
   void initState() {
@@ -280,196 +182,7 @@ class _employee_EGLCState extends State<employee_EGLC> {
                 const EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 32),
             child: Column(
               children: [
-             /*   Row(
-                  children: [
-                    Flexible(
-                      child: InkWell(
-                        onTap: () {
-                          getleavelist('All');
-                          setState(() {
-                            button_on = "All";
-                          });
-                        },
-                        child: Container(
-                          height: MediaQuery.of(context).size.height * 0.06,
-                          padding: EdgeInsets.all(0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            *//* color: button_on == "All"
-                                  ? MyColor.mainAppColor
-                                  : MyColor.white_color*//*
-                          ),
-                          child: Center(
-                              child: Text(
-                            "All",
-                            style: TextStyle(
-                                color: button_on == "All"
-                                    ? Colors.black
-                                    : Colors.black,
-                                fontFamily: "pop",
-                                fontSize: 16),
-                          )),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 2,
-                    ),
-                    Flexible(
-                      child: InkWell(
-                        onTap: () {
-                          getleavelist('In Review');
-                          setState(() {
-                            button_on = "In Review";
-                          });
-                        },
-                        child: Container(
-                          height: MediaQuery.of(context).size.height * 0.06,
-                          padding: EdgeInsets.all(0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            *//* color: button_on == "In Review"
-                                  ? MyColor.mainAppColor
-                                  : MyColor.white_color*//*
-                          ),
-                          child: Center(
-                              child: Text(
-                            "Pending",
-                            style: TextStyle(
-                                color: button_on == "In Review"
-                                    ? Colors.black
-                                    : Colors.black,
-                                fontFamily: "pop",
-                                fontSize: 16),
-                          )),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 2,
-                    ),
-                    Flexible(
-                      child: InkWell(
-                        onTap: () {
-                          getleavelist('Approved');
-                          setState(() {
-                            button_on = "approved";
-                          });
-                        },
-                        child: Container(
-                          height: MediaQuery.of(context).size.height * 0.06,
-                          padding: EdgeInsets.all(0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            *//* color: button_on == "approved"
-                                  ? MyColor.mainAppColor
-                                  : MyColor.white_color*//*
-                          ),
-                          child: Center(
-                              child: Text(
-                            "Approve",
-                            style: TextStyle(
-                                color: button_on == "approved"
-                                    ? Colors.black
-                                    : Colors.black,
-                                fontFamily: "pop",
-                                fontSize: 16),
-                          )),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 2,
-                    ),
-                    Flexible(
-                      child: InkWell(
-                        onTap: () {
-                          getleavelist('Declined');
-                          setState(() {
-                            button_on = "reject";
-                          });
-                        },
-                        child: Container(
-                          height: MediaQuery.of(context).size.height * 0.06,
-                          padding: EdgeInsets.all(0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            *//*color: button_on == "reject"
-                                  ? MyColor.mainAppColor
-                                  : MyColor.white_color*//*
-                          ),
-                          child: Center(
-                              child: Text(
-                            "Reject",
-                            style: TextStyle(
-                                color: button_on == "reject"
-                                    ? Colors.black
-                                    : Colors.black,
-                                fontFamily: "pop",
-                                fontSize: 16),
-                          )),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Flexible(
-                      child: Container(
-                        height: 2,
-                        padding: EdgeInsets.all(0),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            color: button_on == "All"
-                                ? MyColor.mainAppColor
-                                : Colors.transparent),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 2,
-                    ),
-                    Flexible(
-                      child: Container(
-                        height: 2,
-                        padding: EdgeInsets.all(0),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            color: button_on == "In Review"
-                                ? MyColor.mainAppColor
-                                : Colors.transparent),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 2,
-                    ),
-                    Flexible(
-                      child: Container(
-                        height: 2,
-                        padding: EdgeInsets.all(0),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            color: button_on == "approved"
-                                ? MyColor.mainAppColor
-                                : Colors.transparent),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 2,
-                    ),
-                    Flexible(
-                      child: Container(
-                        height: 2,
-                        padding: EdgeInsets.all(0),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            color: button_on == "reject"
-                                ? MyColor.mainAppColor
-                                : Colors.transparent),
-                      ),
-                    ),
-                  ],
-                ),*/
+          
                 if (progress == '')
                   Padding(
                     padding: const EdgeInsets.only(top: 24.0),
@@ -543,12 +256,25 @@ class _employee_EGLCState extends State<employee_EGLC> {
                                         children: [
                                           Row(
                                             children: [
-                                              CircleAvatar(
+                                               if (LCEG_workflow_list[index].Image ==
+                                                  " ") ...[
+                                                SuperProfilePicture(
+                                                  label: LCEG_workflow_list[index].EmpName,
+                                                  radius: 20,
+                                                  textDecorationProperties:
+                                                      TextDecorationProperties(
+                                                    maxLabelLength: 3,fontWeight: FontWeight.normal,
+                                                  ),
+                                                ),
+                                              ] else ...[
+                                                CircleAvatar(
                                                 radius: 30,
                                                 child: ClipOval(
                                                     child: Image.network(
                                                         '${LCEG_workflow_list[index].Image}')),
                                               ),
+                                              ],
+                                              
                                               const SizedBox(
                                                 width: 8,
                                               ),

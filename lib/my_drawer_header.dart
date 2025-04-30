@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 
 
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:super_profile_picture/super_profile_picture.dart';
  
 import 'app_color/color_constants.dart';
  
@@ -75,51 +76,28 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
                 children: [
 
                   InkWell(
-
-                    child: CircleAvatar(
-
-                      radius: 35,
-
-                      child: ClipOval(
-
-                        child: decryptSafe(user_profile).isNotEmpty
-
-                            ? Image.network(
-
-                          decryptSafe(user_profile),
-
-                          fit: BoxFit.cover,
-
-                          width: 80,
-
-                          height: 80,
-
-                        )
-
-                            : Image.network(
-
-                          'https://jinzyairwater.kefify.com/build/images/jinzy_img/profile-img.jpg',
-
-                          fit: BoxFit.cover,
-
-                          width: 70,
-
-                          height: 70,
-
-                        ),
-
-                      ),
-
-                    ),
-
+                    child: decryptSafe(user_profile) == " "
+                        ? SuperProfilePicture(
+                            label: decryptSafe(user_name),
+                            radius: 24,
+                            textDecorationProperties: TextDecorationProperties(
+                              maxLabelLength: 3,fontWeight: FontWeight.normal,
+                            ),
+                          )
+                        : CircleAvatar(
+                            radius: 35,
+                            child: ClipOval(
+                                child: Image.network(
+                              decryptSafe(user_profile),
+                              fit: BoxFit.cover,
+                              width: 80,
+                              height: 80,
+                            )),
+                          ),
                     onTap: () {
-
                       Navigator.of(context).push(MaterialPageRoute(
-
                           builder: (context) => const My_Profile()));
-
                     },
-
                   ),
 
                   const SizedBox(width: 8),

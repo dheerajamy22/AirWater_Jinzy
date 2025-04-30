@@ -5,6 +5,7 @@ import 'package:demo/new_dashboard_2024/updated_dashboard_2024.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:super_profile_picture/super_profile_picture.dart';
 
 import '../_login_part/login_activity.dart';
 import '../app_color/color_constants.dart';
@@ -155,17 +156,34 @@ class _AllAttandanceApprovePageState extends State<AllAttandanceApprovePage> {
                                     padding: const EdgeInsets.only(top: 0.0),
                                     child: Row(
                                       children: [
-                                        CircleAvatar(
-                                          radius: 30,
-                                          child: ClipOval(
-                                            child: Image.network(
-                                              '${EncryptData.decryptAES(widget.work_flow_data[index].emp_photo.toString())}',
-                                              fit: BoxFit.cover,
-                                              width: 60,
-                                              height: 60,
+                                       if (EncryptData.decryptAES(widget
+                                                .work_flow_data[index].emp_photo
+                                                .toString()) ==
+                                            " ") ...[
+                                          SuperProfilePicture(
+                                            label: EncryptData.decryptAES(widget
+                                                .work_flow_data[index]
+                                                .wtxn_requester_emp_name
+                                                .toString()),
+                                            radius: 20,
+                                            textDecorationProperties:
+                                                TextDecorationProperties(
+                                              maxLabelLength: 3,fontWeight: FontWeight.normal,
                                             ),
                                           ),
-                                        ),
+                                        ] else ...[
+                                          CircleAvatar(
+                                            radius: 30,
+                                            child: ClipOval(
+                                              child: Image.network(
+                                                '${EncryptData.decryptAES(widget.work_flow_data[index].emp_photo.toString())}',
+                                                fit: BoxFit.cover,
+                                                width: 60,
+                                                height: 60,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                         const SizedBox(
                                           width: 16,
                                         ),
