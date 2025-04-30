@@ -1,5 +1,6 @@
 import UIKit
 import Flutter
+import FirebaseCore
 
 @main
 @objc class AppDelegate: FlutterAppDelegate {
@@ -7,7 +8,7 @@ import Flutter
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
-   // FirebaseApp.configure()
+    FirebaseApp.configure()
     GeneratedPluginRegistrant.register(with: self)
    // GMSServices.provideAPIKey("AIzaSyBkrNLp172wmSS5otyJH7xedzNMs4t_59o")
     application.statusBarStyle = .lightContent
