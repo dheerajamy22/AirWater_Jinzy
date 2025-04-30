@@ -1021,7 +1021,7 @@ class _expenseClaimState extends State<expenseClaim> {
                                               curr.currency_name == value)
                                           .id
                                           .toString();
-                                          print("id oye $_slectedCurrencyId");
+                                      print("id oye $_slectedCurrencyId");
                                     });
                                   },
                                 ),
@@ -1324,18 +1324,16 @@ class _expenseClaimState extends State<expenseClaim> {
         });
       }
       for (var i in jsonObject['currency']) {
-        if(i['currency_name']=="UAE Dirham"){
-  currency data = currency(
-          id: i['id'],
-          currency_name: i['currency_name'],
-          currency_code: i['currency_code'],
-        );
-         setState(() {
-          currencyList.add(data);
-        });
+        if (i['currency_name'] == "UAE Dirham") {
+          currency data = currency(
+            id: i['id'],
+            currency_name: i['currency_name'],
+            currency_code: i['currency_code'],
+          );
+          setState(() {
+            currencyList.add(data);
+          });
         }
-      
-       
       }
     } else if (response.statusCode == 401) {
       print("Unauthorized");

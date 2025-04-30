@@ -37,6 +37,7 @@ import 'package:linear_progress_bar/linear_progress_bar.dart';
 import 'package:network_info_plus/network_info_plus.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:super_profile_picture/super_profile_picture.dart';
 import 'package:upgrader/upgrader.dart';
 import '../app_color/color_constants.dart';
 import '../team_request_access_panel/team_request_model.dart';
@@ -336,22 +337,25 @@ class _upcoming_dashState extends State<upcoming_dash> {
                 IconButton(
                     onPressed: () => _scaffoldKey.currentState?.openDrawer(),
                     icon: Icon(Icons.menu)),
-                CircleAvatar(
-                  radius: 25,
-                  child: ClipOval(
-                    child: emp_img != "" && emp_img.isNotEmpty
-                        ? Image.network(
-                            emp_img,
-                            fit: BoxFit.cover,
-                            width: 70,
-                            height: 70,
-                          )
-                        : Icon(
-                            Icons.person, // Fallback icon
-                            size: 50,
-                          ),
+                if (emp_img == "") ...[
+                  SuperProfilePicture(
+                    label: emp_name,
+                    radius: 25,
+                    textDecorationProperties: TextDecorationProperties(
+                      maxLabelLength: 3,
+                    ),
                   ),
-                ),
+                ] else
+                  CircleAvatar(
+                    radius: 25,
+                    child: ClipOval(
+                        child: Image.network(
+                      emp_img,
+                      fit: BoxFit.cover,
+                      width: 70,
+                      height: 70,
+                    )),
+                  ),
                 const SizedBox(
                   width: 12,
                 ),
@@ -1318,12 +1322,12 @@ class _upcoming_dashState extends State<upcoming_dash> {
                                             'assets/images/pr_request.png',
                                             color: MyColor.white_color,
                                             width: MediaQuery.of(context)
-                                                .size
-                                                .width *
+                                                    .size
+                                                    .width *
                                                 0.07,
                                             height: MediaQuery.of(context)
-                                                .size
-                                                .height *
+                                                    .size
+                                                    .height *
                                                 0.07,
                                           ),
                                           decoration: BoxDecoration(
@@ -1371,12 +1375,12 @@ class _upcoming_dashState extends State<upcoming_dash> {
                                             'assets/images/pay_slip.png',
                                             color: MyColor.white_color,
                                             width: MediaQuery.of(context)
-                                                .size
-                                                .width *
+                                                    .size
+                                                    .width *
                                                 0.07,
                                             height: MediaQuery.of(context)
-                                                .size
-                                                .height *
+                                                    .size
+                                                    .height *
                                                 0.07,
                                           ),
                                           decoration: BoxDecoration(
@@ -2811,7 +2815,6 @@ class _upcoming_dashState extends State<upcoming_dash> {
 
     return balance_list;
   }
-  
 
   void check_In_Dialog(String type, String msg) async {
     return await showDialog(
