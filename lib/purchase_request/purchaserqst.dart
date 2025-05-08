@@ -59,34 +59,31 @@ class _purchaseRequestState extends State<purchaseRequest> {
           elevation: 0.0,
           automaticallyImplyLeading: false,
           backgroundColor: const Color(0xFF0054A4),
-         title: Row(
-             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-
-               Row(
-                 children: [
-                    GestureDetector(
-                      onTap: () {
-                         Navigator.of(context).pop();
-                      },
-                      child: Icon(
+              Row(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Icon(
                       Icons.arrow_back,
                       color: MyColor.white_color,
-                                   ),
                     ),
-
-                                  Container(
-                  padding: const EdgeInsets.only(left: 8.0),
-                  child: const Text(
-                    'Purchase Request',
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontFamily: 'pop',
-                        color: MyColor.white_color),
-                  )),
-                 ],
-               ),
-             
+                  ),
+                  Container(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: const Text(
+                        'Purchase Request',
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontFamily: 'pop',
+                            color: MyColor.white_color),
+                      )),
+                ],
+              ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -109,14 +106,16 @@ class _purchaseRequestState extends State<purchaseRequest> {
         children: [
           SingleChildScrollView(
             child: Padding(
-              padding:
-                  const EdgeInsets.only(left: 12, right: 12, top: 16, bottom: 30),
+              padding: const EdgeInsets.only(
+                  left: 12, right: 12, top: 16, bottom: 30),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text("Purchase Request",
                       style: TextStyle(
-                          fontSize: 16, fontFamily: 'pop_m', color: Colors.black)),
+                          fontSize: 16,
+                          fontFamily: 'pop_m',
+                          color: Colors.black)),
                   const SizedBox(
                     height: 10,
                   ),
@@ -175,8 +174,8 @@ class _purchaseRequestState extends State<purchaseRequest> {
                               padding: const EdgeInsets.only(left: 10),
                               height: MediaQuery.of(context).size.height * 0.06,
                               decoration: BoxDecoration(
-                                  border:
-                                      Border.all(color: const Color(0xFF0054A4)),
+                                  border: Border.all(
+                                      color: const Color(0xFF0054A4)),
                                   borderRadius: BorderRadius.circular(5.0)),
                               child: Text(
                                   DateTime.now().toString().split(" ").first,
@@ -217,8 +216,8 @@ class _purchaseRequestState extends State<purchaseRequest> {
                               padding: const EdgeInsets.only(left: 10),
                               height: MediaQuery.of(context).size.height * 0.06,
                               decoration: BoxDecoration(
-                                  border:
-                                      Border.all(color: const Color(0xFF0054A4)),
+                                  border: Border.all(
+                                      color: const Color(0xFF0054A4)),
                                   borderRadius: BorderRadius.circular(5.0)),
                               child: Text(_total,
                                   style: TextStyle(
@@ -236,7 +235,9 @@ class _purchaseRequestState extends State<purchaseRequest> {
                   ),
                   Text("Financial Dimension",
                       style: TextStyle(
-                          fontSize: 16, fontFamily: 'pop_m', color: Colors.black)),
+                          fontSize: 16,
+                          fontFamily: 'pop_m',
+                          color: Colors.black)),
                   const SizedBox(
                     height: 16,
                   ),
@@ -285,7 +286,7 @@ class _purchaseRequestState extends State<purchaseRequest> {
                     ),
                   ),
                   const SizedBox(height: 16),
-          
+
                   // Country Dropdown
                   Row(
                     children: [
@@ -320,7 +321,8 @@ class _purchaseRequestState extends State<purchaseRequest> {
                       }).toList(),
                       onChanged: (value) {
                         setState(() {
-                          selectedCountry = value; // Update the correct variable
+                          selectedCountry =
+                              value; // Update the correct variable
                           for (var i in countryList) {
                             if (i.id == value) {
                               _selectedCountryId = i.id;
@@ -330,54 +332,54 @@ class _purchaseRequestState extends State<purchaseRequest> {
                       },
                     ),
                   ),
+                  // const SizedBox(height: 16),
+
+                  // // Department Dropdown
+                  // Row(
+                  //   children: [
+                  //     Text("Department",
+                  //         style: TextStyle(
+                  //             fontSize: 14,
+                  //             fontFamily: 'pop',
+                  //             color: Colors.black)),
+                  //     Text(" *",
+                  //         style: TextStyle(
+                  //             fontSize: 16,
+                  //             fontFamily: 'pop_m',
+                  //             color: Colors.red)),
+                  //   ],
+                  // ),
+                  // const SizedBox(height: 6),
+                  // Container(
+                  //   padding: const EdgeInsets.only(left: 10),
+                  //   height: MediaQuery.of(context).size.height * 0.06,
+                  //   decoration: BoxDecoration(
+                  //       border: Border.all(color: const Color(0xFF0054A4)),
+                  //       borderRadius: BorderRadius.circular(5.0)),
+                  //   child: DropdownButton<String>(
+                  //     value: selectedDepartment, // Use the correct variable
+                  //     hint: Text("Please Select"),
+                  //     isExpanded: true,
+                  //     items: departmentList.map((depart) {
+                  //       return DropdownMenuItem<String>(
+                  //         value: depart.id,
+                  //         child: Text(depart.dept_name),
+                  //       );
+                  //     }).toList(),
+                  //     onChanged: (value) {
+                  //       setState(() {
+                  //         selectedDepartment = value; // Update the correct variable
+                  //         for (var i in departmentList) {
+                  //           if (i.id == value) {
+                  //             _selectedDepartmentId = i.id;
+                  //           }
+                  //         }
+                  //       });
+                  //     },
+                  //   ),
+                  // ),
                   const SizedBox(height: 16),
-          
-                  // Department Dropdown
-                  Row(
-                    children: [
-                      Text("Department",
-                          style: TextStyle(
-                              fontSize: 14,
-                              fontFamily: 'pop',
-                              color: Colors.black)),
-                      Text(" *",
-                          style: TextStyle(
-                              fontSize: 16,
-                              fontFamily: 'pop_m',
-                              color: Colors.red)),
-                    ],
-                  ),
-                  const SizedBox(height: 6),
-                  Container(
-                    padding: const EdgeInsets.only(left: 10),
-                    height: MediaQuery.of(context).size.height * 0.06,
-                    decoration: BoxDecoration(
-                        border: Border.all(color: const Color(0xFF0054A4)),
-                        borderRadius: BorderRadius.circular(5.0)),
-                    child: DropdownButton<String>(
-                      value: selectedDepartment, // Use the correct variable
-                      hint: Text("Please Select"),
-                      isExpanded: true,
-                      items: departmentList.map((depart) {
-                        return DropdownMenuItem<String>(
-                          value: depart.id,
-                          child: Text(depart.dept_name),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          selectedDepartment = value; // Update the correct variable
-                          for (var i in departmentList) {
-                            if (i.id == value) {
-                              _selectedDepartmentId = i.id;
-                            }
-                          }
-                        });
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-          
+
                   // Entity Dropdown
                   Row(
                     children: [
@@ -423,7 +425,7 @@ class _purchaseRequestState extends State<purchaseRequest> {
                     ),
                   ),
                   const SizedBox(height: 16),
-          
+
                   // Facility Dropdown
                   Row(
                     children: [
@@ -469,7 +471,7 @@ class _purchaseRequestState extends State<purchaseRequest> {
                     ),
                   ),
                   const SizedBox(height: 16),
-          
+
                   // Project Dropdown
                   Row(
                     children: [
@@ -504,11 +506,11 @@ class _purchaseRequestState extends State<purchaseRequest> {
                       }).toList(),
                       onChanged: (value) {
                         setState(() {
-                          selectedProject = value; // Update the correct variable
+                          selectedProject =
+                              value; // Update the correct variable
                           print(selectedProject);
                           for (var i in projectList) {
                             if (i.description == value) {
-
                               _selectedProjectId = i.id;
                               print("check $_selectedProjectId");
                             }
@@ -527,7 +529,7 @@ class _purchaseRequestState extends State<purchaseRequest> {
                             context,
                             MaterialPageRoute(builder: (context) => addItem()),
                           );
-          
+
                           setState(() {
                             additemlist.add(newItem);
                             print(additemlist[0].quantity);
@@ -543,7 +545,8 @@ class _purchaseRequestState extends State<purchaseRequest> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.add, color: MyColor.white_color, size: 16),
+                              Icon(Icons.add,
+                                  color: MyColor.white_color, size: 16),
                               const Text(
                                 'Item',
                                 style: TextStyle(
@@ -562,9 +565,10 @@ class _purchaseRequestState extends State<purchaseRequest> {
                         onTap: () async {
                           List<serachItemModel>? data = await Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => searchItem()),
+                            MaterialPageRoute(
+                                builder: (context) => searchItem()),
                           );
-          
+
                           // Check if data is not null before proceeding
                           if (data != null) {
                             setState(() {
@@ -614,7 +618,7 @@ class _purchaseRequestState extends State<purchaseRequest> {
                   const SizedBox(
                     height: 16,
                   ),
-          
+
                   if (additemlist.isEmpty)
                     ...[
           
@@ -636,8 +640,9 @@ class _purchaseRequestState extends State<purchaseRequest> {
                               additemlist[index].quantity.toString();
                           TextEditingController estimatepriceController =
                               TextEditingController(
-                                  text:
-                                      additemlist[index].estimatePrice.toString());
+                                  text: additemlist[index]
+                                      .estimatePrice
+                                      .toString());
                           return Padding(
                             padding: const EdgeInsets.only(left: 8.0, right: 8),
                             child: Column(
@@ -648,7 +653,8 @@ class _purchaseRequestState extends State<purchaseRequest> {
                                       borderRadius: BorderRadius.circular(5),
                                       color: MyColor.background_light_blue),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Align(
                                         alignment: Alignment.topRight,
@@ -659,21 +665,30 @@ class _purchaseRequestState extends State<purchaseRequest> {
                                             });
                                           },
                                           child: Icon(Icons.delete,
-                                              color: MyColor.red_color, size: 16),
+                                              color: MyColor.red_color,
+                                              size: 16),
                                         ),
                                       ),
-                                      Text(
-                                          'Item Name: ${additemlist[index].itemName}',
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              fontFamily: 'pop',
-                                              color: Colors.black)),
-                                      Text(
-                                          'Item Code: ${additemlist[index].itemCode}',
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              fontFamily: 'pop',
-                                              color: Colors.black)),
+                                      if (additemlist[index]
+                                          .itemName
+                                          .isNotEmpty) ...[
+                                        Text(
+                                            'Item Name: ${additemlist[index].itemName}',
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                fontFamily: 'pop',
+                                                color: Colors.black)),
+                                      ],
+                                      if (additemlist[index]
+                                          .itemCode
+                                          .isNotEmpty) ...[
+                                        Text(
+                                            'Item Code: ${additemlist[index].itemCode}',
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                fontFamily: 'pop',
+                                                color: Colors.black)),
+                                      ],
                                       Text(
                                           'Category: ${additemlist[index].category}',
                                           style: TextStyle(
@@ -695,7 +710,8 @@ class _purchaseRequestState extends State<purchaseRequest> {
                                           Expanded(
                                             child: TextField(
                                               controller: quantityController,
-                                              keyboardType: TextInputType.number,
+                                              keyboardType:
+                                                  TextInputType.number,
                                               // decoration: InputDecoration(
                                               //   border: InputBorder.none
                                               // ),
@@ -727,22 +743,25 @@ class _purchaseRequestState extends State<purchaseRequest> {
                                                   color: Colors.black)),
                                           Expanded(
                                             child: TextField(
-                                              controller: estimatepriceController,
-                                              keyboardType: TextInputType.number,
+                                              controller:
+                                                  estimatepriceController,
+                                              keyboardType:
+                                                  TextInputType.number,
                                               // decoration: InputDecoration(
                                               //   border: InputBorder.none
                                               // ),
                                               onChanged: (value) {
                                                 setState(() {
-                                                  additemlist[index].estimatePrice =
+                                                  additemlist[index]
+                                                          .estimatePrice =
                                                       value.toString();
                                                   if (quantityController
                                                       .text.isNotEmpty) {
-                                                    additemlist[index].price =
-                                                        (double.parse(
-                                                                quantityController
-                                                                    .text) *
-                                                            double.parse(value));
+                                                    additemlist[index]
+                                                        .price = (double.parse(
+                                                            quantityController
+                                                                .text) *
+                                                        double.parse(value));
                                                   }
                                                   _calculateTotal();
                                                 });
@@ -802,28 +821,28 @@ class _purchaseRequestState extends State<purchaseRequest> {
             ),
           ),
           if (_isLoading) // Step 3: Conditionally render the loading widget
-          Center(
-            child: SpinKitWave(
-              size: 50,
-              itemBuilder: (BuildContext context, int index) {
-                return DecoratedBox(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: MyColor.mainAppColor,
-                  ),
-                );
-              },
+            Center(
+              child: SpinKitWave(
+                size: 50,
+                itemBuilder: (BuildContext context, int index) {
+                  return DecoratedBox(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: MyColor.mainAppColor,
+                    ),
+                  );
+                },
+              ),
             ),
-          ),
         ],
       ),
     );
   }
 
   void _sendPurchaseRequestData() async {
-       setState(() {
-    _isLoading = true; // Start loading
-  });
+    setState(() {
+      _isLoading = true; // Start loading
+    });
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('user_access_token');
     print(additemlist[0].quantity);
@@ -868,9 +887,9 @@ class _purchaseRequestState extends State<purchaseRequest> {
       },
       body: jsonEncode(purchaseRequest.toJson()),
     );
-setState(() {
-    _isLoading = false; // Stop loading
-  });
+    setState(() {
+      _isLoading = false; // Stop loading
+    });
     print(response.statusCode);
     print(response.body);
     var jsonObject = jsonDecode(response.body);
@@ -909,11 +928,13 @@ setState(() {
       _showMyDialog(
           'Please Select Country', MyColor.dialog_error_color, 'error');
       return false;
-    } else if (_selectedDepartmentId == null) {
-      _showMyDialog(
-          'Please Select Department', MyColor.dialog_error_color, 'error');
-      return false;
-    } else if (_selectedEntityId == null) {
+    }
+    //  else if (_selectedDepartmentId == null) {
+    //   _showMyDialog(
+    //       'Please Select Department', MyColor.dialog_error_color, 'error');
+    //   return false;
+    // }
+    else if (_selectedEntityId == null) {
       _showMyDialog(
           'Please Select Entity', MyColor.dialog_error_color, 'error');
       return false;

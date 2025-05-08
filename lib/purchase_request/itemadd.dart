@@ -32,7 +32,7 @@ class _addItemState extends State<addItem> {
 
   @override
   void initState() {
-quantity.text="1";
+    quantity.text = "1";
     getvalue();
     super.initState();
   }
@@ -91,32 +91,32 @@ quantity.text="1";
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Row(
-                children: [
-                  Text("Item Code",
-                      style: TextStyle(
-                          fontSize: 14,
-                          fontFamily: 'pop',
-                          color: Colors.black)),
-                  Text(" *",
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontFamily: 'pop_m',
-                          color: Colors.red)),
-                ],
-              ),
-              const SizedBox(
-                height: 6,
-              ),
-              CustomTextField(
-                controller: itemcode,
-                hintText: "Item Code",
-                obscureText: false,
-                keyboardType: TextInputType.text,
-              ),
-              const SizedBox(
-                height: 8,
-              ),
+              // Row(
+              //   children: [
+              //     Text("Item Code",
+              //         style: TextStyle(
+              //             fontSize: 14,
+              //             fontFamily: 'pop',
+              //             color: Colors.black)),
+              //     Text(" *",
+              //         style: TextStyle(
+              //             fontSize: 16,
+              //             fontFamily: 'pop_m',
+              //             color: Colors.red)),
+              //   ],
+              // ),
+              // const SizedBox(
+              //   height: 6,
+              // ),
+              // CustomTextField(
+              //   controller: itemcode,
+              //   hintText: "Item Code",
+              //   obscureText: false,
+              //   keyboardType: TextInputType.text,
+              // ),
+              // const SizedBox(
+              //   height: 8,
+              // ),
               Row(
                 children: [
                   Text("Item Name",
@@ -234,7 +234,7 @@ quantity.text="1";
                           fontSize: 14,
                           fontFamily: 'pop',
                           color: Colors.black)),
-                  Text(" *",
+                  Text(" ",
                       style: TextStyle(
                           fontSize: 16,
                           fontFamily: 'pop_m',
@@ -255,12 +255,12 @@ quantity.text="1";
               ),
               Row(
                 children: [
-                  Text("Estimate Price",
+                  Text("Estimate Price(AED)",
                       style: TextStyle(
                           fontSize: 14,
                           fontFamily: 'pop',
                           color: Colors.black)),
-                  Text(" *",
+                  Text(" ",
                       style: TextStyle(
                           fontSize: 16,
                           fontFamily: 'pop_m',
@@ -286,10 +286,14 @@ quantity.text="1";
                   ),
                   onChanged: (value) {
                     setState(() {
-                      netamount = (double.parse(quantity.text) *
-                              double.parse(estimateprice.text))
-                          .toStringAsFixed(2);
-                      print(netamount);
+                      if (estimateprice.text.isEmpty) {
+                        netamount = "0.00";
+                      } else {
+                        netamount = (double.parse(quantity.text) *
+                                double.parse(estimateprice.text))
+                            .toStringAsFixed(2);
+                        print(netamount);
+                      }
                     });
                   },
                 ),
@@ -304,7 +308,7 @@ quantity.text="1";
                           fontSize: 14,
                           fontFamily: 'pop',
                           color: Colors.black)),
-                  Text(" *",
+                  Text(" ",
                       style: TextStyle(
                           fontSize: 16,
                           fontFamily: 'pop_m',
@@ -341,21 +345,27 @@ quantity.text="1";
                     //     estimateprice: estimateprice.text,
                     //     netamount: netamount);
 
-                    addItemModel newItem = addItemModel(
-                      itemCode: itemcode.text,
-                      itemName: itemname.text,
-                      category: selectedCategory!,
-                      unit: selectedUnit!,
-                      quantity: double.parse(quantity.text),
-                      estimatePrice: estimateprice.text,
-                      price: double.parse(netamount),
-                    );
+                    if (validation()) {
+                      addItemModel newItem = addItemModel(
+                        itemCode: "",
+                        itemName: itemname.text.toString().trim(),
+                        category: selectedCategory!,
+                        unit: selectedUnit!,
+                        quantity: double.parse(quantity.text),
+                        estimatePrice: estimateprice.text.isEmpty
+                            ? "0"
+                            : estimateprice.text,
+                        price: estimateprice.text.isEmpty
+                            ? double.parse("0.0")
+                            : double.parse(netamount),
+                      );
 
-                    setState(() {
-                      addItemList.add(newItem);
-                    });
+                      setState(() {
+                        addItemList.add(newItem);
+                      });
 
-                    Navigator.pop(context, newItem);
+                      Navigator.pop(context, newItem);
+                    }
                   },
                   child: Container(
                     padding: EdgeInsets.all(10),
@@ -377,6 +387,58 @@ quantity.text="1";
         ),
       ),
     );
+  }
+
+  bool validation() {
+    if (itemname.text.toString().trim() == "") {
+      _showMyDialog(
+          'Please Enter Item Name', MyColor.dialog_error_color, 'error');
+
+      return false;
+    } else if (selectedCategory == null) {
+      _showMyDialog(
+          'Please Select Category', MyColor.dialog_error_color, 'error');
+
+      return false;
+    } else if (selectedUnit == null) {
+      _showMyDialog('Please Select Unit', MyColor.dialog_error_color, 'error');
+
+      return false;
+    }
+    return true;
+  }
+
+  Future<void> _showMyDialog(
+      String msg, Color color_dynamic, String success) async {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Row(
+        children: [
+          if (success == 'success') ...[
+            Icon(
+              Icons.check,
+              color: MyColor.white_color,
+            ),
+          ] else ...[
+            Icon(
+              Icons.error,
+              color: MyColor.white_color,
+            ),
+          ],
+          SizedBox(
+            width: 8,
+          ),
+          Flexible(
+              child: Text(
+            msg,
+            style: TextStyle(color: MyColor.white_color),
+            maxLines: 2,
+          ))
+        ],
+      ),
+      backgroundColor: color_dynamic,
+      behavior: SnackBarBehavior.floating,
+      elevation: 3,
+    ));
   }
 
   void getvalue() async {

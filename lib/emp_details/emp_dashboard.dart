@@ -68,8 +68,8 @@ class _EmployeeDetailsState extends State<EmployeeDetails> {
     print('${token}');
     print(months[selectedMonthIndex].toString().split(" ").first);
     print(selectedYear);
-    var response = await http
-        .post(Uri.parse('${baseurl.url}attendence-log'), body: {
+    var response =
+        await http.post(Uri.parse('${baseurl.url}attendence-log'), body: {
       'emp_code': '${widget.emp_code}',
       'month_number':
           '${months[selectedMonthIndex].toString().split(" ").first}',
@@ -100,7 +100,8 @@ class _EmployeeDetailsState extends State<EmployeeDetails> {
       preferences.commit();
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => Login_Activity()));
-    } if (response.statusCode == 422) {
+    }
+    if (response.statusCode == 422) {
       Navigator.of(context).pop();
 
       _showMyDialog(jsonObject['message'], MyColor.dialog_error_color, 'error');
@@ -153,7 +154,8 @@ class _EmployeeDetailsState extends State<EmployeeDetails> {
                                 radius: 20,
                                 textDecorationProperties:
                                     TextDecorationProperties(
-                                  maxLabelLength: 3,fontWeight: FontWeight.normal,
+                                  maxLabelLength: 3,
+                                  fontWeight: FontWeight.normal,
                                 ),
                               ),
                             ] else ...[
@@ -517,7 +519,6 @@ class _EmployeeDetailsState extends State<EmployeeDetails> {
                       padding: const EdgeInsets.only(top: 8.0),
                       child: Row(
                         children: [
-                        
                           Flexible(
                               child: Container(
                             alignment: Alignment.center,
@@ -635,7 +636,7 @@ class _EmployeeDetailsState extends State<EmployeeDetails> {
                               ],
                             ),
                           )),
-                            Flexible(
+                          Flexible(
                               child: Container(
                             alignment: Alignment.center,
                             child: Column(
@@ -676,11 +677,10 @@ class _EmployeeDetailsState extends State<EmployeeDetails> {
                         ],
                       ),
                     ),
-                     Padding(
+                    Padding(
                       padding: const EdgeInsets.only(top: 8.0),
                       child: Row(
                         children: [
-                        
                           Flexible(
                               child: Container(
                             alignment: Alignment.center,
@@ -701,14 +701,11 @@ class _EmployeeDetailsState extends State<EmployeeDetails> {
                                     child: Image.asset(
                                       'assets/images/overtime.png',
                                       color: MyColor.white_color,
-                                      width: MediaQuery.of(context)
-                                          .size
-                                          .width *
+                                      width: MediaQuery.of(context).size.width *
                                           0.07,
-                                      height: MediaQuery.of(context)
-                                          .size
-                                          .height *
-                                          0.07,
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.07,
                                     ),
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(30),
@@ -736,9 +733,7 @@ class _EmployeeDetailsState extends State<EmployeeDetails> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                PurchaseRequestWorkflow(
-
-                                                )));
+                                                PurchaseRequestWorkflow()));
                                   },
                                   child: Container(
                                     width: 50,
@@ -747,14 +742,11 @@ class _EmployeeDetailsState extends State<EmployeeDetails> {
                                     child: Image.asset(
                                       'assets/images/pr_request.png',
                                       color: MyColor.white_color,
-                                      width: MediaQuery.of(context)
-                                          .size
-                                          .width *
+                                      width: MediaQuery.of(context).size.width *
                                           0.07,
-                                      height: MediaQuery.of(context)
-                                          .size
-                                          .height *
-                                          0.07,
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.07,
                                     ),
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(30),
@@ -781,9 +773,8 @@ class _EmployeeDetailsState extends State<EmployeeDetails> {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => ExpenseClaimWorkflow(
-
-                                                )));
+                                            builder: (context) =>
+                                                ExpenseClaimWorkflow()));
                                   },
                                   child: Container(
                                     width: 50,
@@ -792,14 +783,11 @@ class _EmployeeDetailsState extends State<EmployeeDetails> {
                                     child: Image.asset(
                                       'assets/images/expenses_cla.png',
                                       color: MyColor.white_color,
-                                      width: MediaQuery.of(context)
-                                          .size
-                                          .width *
+                                      width: MediaQuery.of(context).size.width *
                                           0.066,
-                                      height: MediaQuery.of(context)
-                                          .size
-                                          .height *
-                                          0.04,
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.04,
                                     ),
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(30),
@@ -817,13 +805,11 @@ class _EmployeeDetailsState extends State<EmployeeDetails> {
                               ],
                             ),
                           )),
-                            Flexible(
+                          Flexible(
                               child: Container(
                             alignment: Alignment.center,
                             child: Column(
-                              children: [
-                              
-                              ],
+                              children: [],
                             ),
                           )),
                         ],
@@ -840,7 +826,7 @@ class _EmployeeDetailsState extends State<EmployeeDetails> {
     );
   }
 
-   Future<void> _showMyDialog(
+  Future<void> _showMyDialog(
       String msg, Color color_dynamic, String success) async {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Row(
