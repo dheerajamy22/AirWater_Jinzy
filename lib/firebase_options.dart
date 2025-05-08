@@ -36,11 +36,11 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDn4-I5rBjtzMdiWeApEUd1Qj69R1YUlzA',
-    appId: '1:187330311049:ios:0185a94301039944eba758',
+    apiKey: 'AIzaSyCa1qzkkMSe0CRjPjvqyR-5802H68nqADU',
+    appId: '1:924997518061:ios:ef36daf6b3880b1dba42e4',
     messagingSenderId: '924997518061',
     projectId: 'airwater-jinzy',
     storageBucket: 'airwater-jinzy.firebasestorage.app',
-    iosBundleId: 'com.salehi-jinzy.alsalehi',
+    iosBundleId: 'com.a1r-jinzy.amysoftech',
   );
 }

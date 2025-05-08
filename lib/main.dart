@@ -82,7 +82,7 @@ class FirebaseApi {
     String emp_code = message.data['emp_code'] ?? '';
     String emp_name = message.data['emp_name'] ?? '';
     String emp_photo = message.data['emp_photo'] ?? '';
-    if (screenToNavigate.isNotEmpty) {
+   /* if (screenToNavigate.isNotEmpty) {
       // Store the data in SharedPreferences for later use in case the app is backgrounded
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString('notification_screen', screenToNavigate);
@@ -119,7 +119,7 @@ class FirebaseApi {
           print("Navigator key is null. Cannot navigate to screen.");
         }
       });
-    }
+    }*/
   }
 }
 

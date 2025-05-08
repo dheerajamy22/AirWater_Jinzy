@@ -1,4 +1,5 @@
 class baseurl{
+<<<<<<< Updated upstream
 //local
 //static final String url="http://10.10.10.30/jinzydasapi.kefify.com/jinzyapi.kefify.com/public/api/";
 // static final String url="10.10.10.142/AirWaterProject/Jinzyairwater/public/api/";
@@ -15,4 +16,11 @@ class baseurl{
 //http://10.10.10.62/JINZY_PROJECT/jinzylivegitrepo/Jinzyco/public/api/
 //static final String url="http://10.10.10.62/JINZY_PROJECT/jinzylivegitrepo/Jinzyco/public/api/";
 
+=======
+//uat
+static final String url="https://jinzy-uat.a1rwater.com/api/mobile/";
+//prod
+ //static final String url="https://jinzy.a1rwater.com/api/mobile/";
+//a1r_jinzy key
+>>>>>>> Stashed changes
 }

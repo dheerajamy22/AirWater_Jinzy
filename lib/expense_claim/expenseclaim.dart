@@ -1047,6 +1047,7 @@ class _expenseClaimState extends State<expenseClaim> {
                                   encodeImage = base64Encode(bytes);
                                   File file = File(images.path);
                                   setState(() {
+                                    media.clear();
                                     media.add({'type': 'images', 'file': file});
                                   });
                                 }
@@ -1064,6 +1065,7 @@ class _expenseClaimState extends State<expenseClaim> {
                                   encodeImage = base64Encode(bytes);
                                   File file = File(images.path);
                                   setState(() {
+                                    media.clear();
                                     media.add({'type': 'images', 'file': file});
                                   });
                                 }

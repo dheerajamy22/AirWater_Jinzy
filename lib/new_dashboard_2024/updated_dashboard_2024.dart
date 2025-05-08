@@ -177,6 +177,10 @@ class _upcoming_dashState extends State<upcoming_dash> {
               currentPage == DrawerSections.leave_request ? true : false),
           menuItem(8, "Log out", "assets/svgs/Logout.svg",
               currentPage == DrawerSections.logout ? true : false),
+          if ("$loginEmail" == "airjinzy@gmail.com") ...[
+            menuItem(3, "Delete account", "assets/new_svgs/delete.svg",
+                currentPage == DrawerSections.events ? true : false),
+          ],
           /*       menuItem(3, "Travel request", "assets/images/travel_req.png",
               currentPage == DrawerSections.events ? true : false),
           menuItem(4, "Training request", "assets/images/training_req.png",
@@ -221,6 +225,40 @@ class _upcoming_dashState extends State<upcoming_dash> {
               }
             } else if (id == 3) {
               currentPage = DrawerSections.events;
+
+              final value = await showDialog<bool>(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: const Text('Alert'),
+                      content: const Text(
+                        'Do you want to Delete Account',
+                        style: TextStyle(fontSize: 16, fontFamily: 'i_medium'),
+                      ),
+                      actions: [
+                        ElevatedButton(
+                            onPressed: () => Navigator.of(context).pop(null),
+                            child: const Text(
+                              'No',
+                              style: TextStyle(
+                                  fontSize: 14, fontFamily: 'i_medium'),
+                            )),
+                        ElevatedButton(
+                            onPressed: () => Navigator.of(context).pop(true),
+                            child: const Text(
+                              'Yes',
+                              style: TextStyle(
+                                  fontSize: 14, fontFamily: 'i_medium'),
+                            )),
+                      ],
+                    );
+                  });
+
+              if (value != null) {
+                sendDeleteUserRequest();
+              } else {
+                return Future.value(false);
+              }
             } else if (id == 4) {
               currentPage = DrawerSections.notes;
             } else if (id == 5) {
@@ -293,6 +331,42 @@ class _upcoming_dashState extends State<upcoming_dash> {
     );
   }
 
+  void sendDeleteUserRequest() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    _customProgress('Please wait...');
+    String? id = pref.getString('id');
+    String? token = pref.getString('user_access_token');
+
+    var response = await http.post(
+        Uri.parse('${baseurl.url}deactivate_user_account'),
+        headers: {'Authorization': 'Bearer $token'});
+    print('${response.statusCode}');
+    print('${response.body}');
+
+    if (response.statusCode == 200) {
+      var jsonObject = json.decode(response.body);
+      if (jsonObject['status'] == '1') {
+        await pref.clear();
+
+        Navigator.pop(context);
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => new Login_Activity()));
+      }
+    } else if (response.statusCode == 404) {
+      var jsonObject = json.decode(response.body);
+
+      Navigator.pop(context);
+      _showMyDialog(jsonObject['message'], MyColor.dialog_error_color, 'error');
+    } else if (response.statusCode == 500) {
+      //var jsonObject = json.decode(response.body);
+      // Navigator.of(context).push(MaterialPageRoute(builder: (context)=>new InspectionActivity()));
+      Navigator.pop(context);
+      //  Navigator.of(context).push(MaterialPageRoute(builder: (context)=>new HCW_Customer()));
+      _showMyDialog(
+          'Something went wrong', MyColor.dialog_error_color, 'error');
+    }
+  }
+
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
@@ -355,6 +429,7 @@ class _upcoming_dashState extends State<upcoming_dash> {
                     imageDecorationProperties: ImageDecorationProperties(),
                   )
                 ],
+
                 const SizedBox(
                   width: 12,
                 ),
@@ -362,7 +437,7 @@ class _upcoming_dashState extends State<upcoming_dash> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Hi, $emp_name",
+                      "Hi, ${emp_name.split(' ').first}",
                       style: TextStyle(fontFamily: 'pop_m', fontSize: 16),
                     ),
                     Text(
@@ -2061,12 +2136,13 @@ class _upcoming_dashState extends State<upcoming_dash> {
       print(exception.message);
     }
   }
-
+String loginEmail="";
   void getvalues() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     setState(() {
       emp_name = EncryptData.decryptAES(pref.getString("user_name")!);
       emp_img = EncryptData.decryptAES(pref.getString("user_profile")!);
+      loginEmail = EncryptData.decryptAES(pref.getString("login_email")!);
       //print('profile $emp_img');
     });
   }

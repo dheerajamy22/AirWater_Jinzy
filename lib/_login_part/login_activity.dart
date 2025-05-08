@@ -548,6 +548,8 @@ class _Login_ActivityState extends State<Login_Activity> {
   }
 
   Future<void> CallSingInApi() async {
+    final SharedPreferences preferences =
+    await SharedPreferences.getInstance();
     final ProgressDialog pr = ProgressDialog(
       context,
       isDismissible: true,
@@ -578,8 +580,7 @@ class _Login_ActivityState extends State<Login_Activity> {
       print("200 code");
       if (jsonObject['status'] == "1") {
         pr.hide();
-        final SharedPreferences preferences =
-            await SharedPreferences.getInstance();
+
 
         await preferences.setString("user_name", jsonObject['emp_fullName']);
         await preferences.setString("user_id", jsonObject['id']);
@@ -624,12 +625,15 @@ class _Login_ActivityState extends State<Login_Activity> {
         await pr.hide();
         _showMyDialog(jsonObject['message'], Color(0xFF861F41), 'error');
       }
-    } else if (response.statusCode == 422) {
+    }
+    else if (response.statusCode == 422) {
+
+
       Navigator.of(context).pop();
       _showMyDialog(jsonObject['message'], Color(0xFF861F41), 'error');
     } else if (response.statusCode == 500) {
       Navigator.of(context).pop();
-      _showMyDialog('Something Went Wrong', Color(0xFF861F41), 'error');
+        _showMyDialog('Something Went Wrong', Color(0xFF861F41), 'error');
     } else {
       print("else part");
     pr.hide().then((isHidden) {
